@@ -1,10 +1,9 @@
 [package]
-name = "app"
+name = "arc-gl"
 version = "0.1.0"
 edition = "2021"
-build="build.rs"
 
 [dependencies]
 sdl2 = "*"
 gl = "*"
-arc-gl = { path = "../arc-gl" }
+arc = { path = "../arc" }
