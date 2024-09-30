@@ -3,39 +3,19 @@ extern crate sdl2;
 
 use sdl2::event::Event;
 use sdl2::keyboard::Keycode;
-use sdl2::video::{GLProfile, SwapInterval};
-use sdl2::VideoSubsystem;
 
 fn main() {
-    let sdl_context = sdl2::init().unwrap();
-    let video_subsystem = sdl_context.video().unwrap();
+    let mut window = arc_gl::window::Window::new("Arc | OpenGL", 800, 480);
+    window.set_vsync(true);
 
-    let gl_attr = video_subsystem.gl_attr();
-    gl_attr.set_context_profile(GLProfile::Core);
-    gl_attr.set_context_version(4, 0);
-
-    let window = video_subsystem
-        .window("Arc | OpenGL", 800, 480)
-        .opengl()
-        .build()
-        .unwrap();
-
-    // Unlike the other example above, nobody created a context for your window, so you need to create one.
-    let _ctx = window.gl_create_context().unwrap();
-    gl::load_with(|name| video_subsystem.gl_get_proc_address(name) as *const _);
-
-    let vsync_result = VideoSubsystem::gl_set_swap_interval(&&video_subsystem, SwapInterval::VSync);
-    if vsync_result.is_err() {
-        panic!("VSync set failed")
-    }
-
-    let mut event_pump = sdl_context.event_pump().unwrap();
+    let context = window.get_render_context();
+    let mut event_pump = context.create_event_pump();
     'running: loop {
         unsafe {
             gl::ClearColor(1.0, 1.0, 1.0, 1.0);
             gl::Clear(gl::COLOR_BUFFER_BIT);
         }
-
+        
         for event in event_pump.poll_iter() {
             match event {
                 Event::Quit { .. }
@@ -46,6 +26,6 @@ fn main() {
                 _ => {}
             }
         }
-        window.gl_swap_window();
+        context.swap_window();
     }
 }
