@@ -10,7 +10,6 @@ fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
-
     let gl_attr = video_subsystem.gl_attr();
     gl_attr.set_context_profile(GLProfile::Core);
     gl_attr.set_context_version(4, 0);
@@ -29,11 +28,8 @@ fn main() {
     if vsync_result.is_err() {
         panic!("VSync set failed")
     }
-    // debug_assert_eq!(gl_attr.context_profile(), GLProfile::Core);
-    // debug_assert_eq!(gl_attr.context_version(), (2, 0));
 
     let mut event_pump = sdl_context.event_pump().unwrap();
-
     'running: loop {
         unsafe {
             gl::ClearColor(1.0, 1.0, 1.0, 1.0);
@@ -51,7 +47,5 @@ fn main() {
             }
         }
         window.gl_swap_window();
-        
-        // ::std::thread::sleep(::std::time::Duration::from_millis(1000 / 60));
     }
 }
