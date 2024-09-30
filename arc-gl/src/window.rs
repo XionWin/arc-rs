@@ -1,5 +1,3 @@
-use sdl2::EventPump;
-
 use crate::render_context::RenderContext;
 
 pub struct Window {
