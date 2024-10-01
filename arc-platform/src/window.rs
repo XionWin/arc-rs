@@ -1,9 +1,10 @@
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
-use crate::render_context::RenderContext;
-
 pub struct Window {
-    context: RenderContext,
+    pub(crate) sdl_context: sdl2::Sdl,
+    pub(crate) video_subsystem: sdl2::VideoSubsystem,
+    pub(crate) raw_window: sdl2::video::Window,
+    pub(crate) _gl_content: sdl2::video::GLContext,
 }
 
 impl Window {
@@ -25,18 +26,16 @@ impl Window {
         let _gl_content = raw_window.gl_create_context().unwrap();
 
         Window {
-            context: RenderContext {
-                sdl_context,
-                video_subsystem,
-                raw_window,
-                _gl_content,
-            },
+            sdl_context,
+            video_subsystem,
+            raw_window,
+            _gl_content,
         }
     }
 
     pub fn set_vsync(&self, is_open: bool) {
         let vsync_result = sdl2::VideoSubsystem::gl_set_swap_interval(
-            &self.context.video_subsystem,
+            &self.video_subsystem,
             if is_open {
                 sdl2::video::SwapInterval::VSync
             } else {
@@ -48,8 +47,8 @@ impl Window {
         }
     }
 
-    pub fn get_render_context(&mut self) -> &mut RenderContext {
-        &mut self.context
+    pub fn swap_window(&self) {
+        self.raw_window.gl_swap_window();
     }
 
     pub fn run<T1, T2>(&mut self, on_load: T1, on_render: T2)
@@ -57,9 +56,8 @@ impl Window {
         T1: Fn(&VideoSubsystem),
         T2: Fn(),
     {
-        let context = self.get_render_context();
-        on_load(&context.video_subsystem);
-        let mut event_pump = context.create_event_pump();
+        on_load(&self.video_subsystem);
+        let mut event_pump = self.sdl_context.event_pump().unwrap();
         'running: loop {
             for event in event_pump.poll_iter() {
                 match event {
@@ -72,7 +70,7 @@ impl Window {
                 }
             }
             on_render();
-            context.swap_window();
+            self.swap_window();
         }
     }
 }
