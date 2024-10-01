@@ -1,3 +1,5 @@
+use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
+
 use crate::render_context::RenderContext;
 
 pub struct Window {
@@ -21,7 +23,6 @@ impl Window {
 
         // Unlike the other example above, nobody created a context for your window, so you need to create one.
         let _gl_content = raw_window.gl_create_context().unwrap();
-        gl::load_with(|name| video_subsystem.gl_get_proc_address(name) as *const _);
 
         Window {
             context: RenderContext {
@@ -49,5 +50,29 @@ impl Window {
 
     pub fn get_render_context(&mut self) -> &mut RenderContext {
         &mut self.context
+    }
+
+    pub fn run<T1, T2>(&mut self, on_load: T1, on_render: T2)
+    where
+        T1: Fn(&VideoSubsystem),
+        T2: Fn(),
+    {
+        let context = self.get_render_context();
+        on_load(&context.video_subsystem);
+        let mut event_pump = context.create_event_pump();
+        'running: loop {
+            for event in event_pump.poll_iter() {
+                match event {
+                    Event::Quit { .. }
+                    | Event::KeyDown {
+                        keycode: Some(Keycode::Escape),
+                        ..
+                    } => break 'running,
+                    _ => {}
+                }
+            }
+            on_render();
+            context.swap_window();
+        }
     }
 }

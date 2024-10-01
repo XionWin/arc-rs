@@ -6,9 +6,8 @@ version = 3
 name = "app"
 version = "0.1.0"
 dependencies = [
- "arc-gl",
+ "arc-platform",
  "gl",
- "sdl2",
 ]
 
 [[package]]
@@ -16,11 +15,10 @@ name = "arc"
 version = "0.1.0"
 
 [[package]]
-name = "arc-gl"
+name = "arc-platform"
 version = "0.1.0"
 dependencies = [
  "arc",
- "gl",
  "sdl2",
 ]
 

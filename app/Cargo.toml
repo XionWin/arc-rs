@@ -5,6 +5,5 @@ edition = "2021"
 build="build.rs"
 
 [dependencies]
-sdl2 = "*"
 gl = "*"
-arc-gl = { path = "../arc-gl" }
+arc-platform = { path = "../arc-platform" }

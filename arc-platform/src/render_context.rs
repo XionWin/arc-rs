@@ -1,7 +1,6 @@
 use sdl2::EventPump;
 
-pub struct RenderContext
-{
+pub struct RenderContext {
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) raw_window: sdl2::video::Window,
