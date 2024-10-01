@@ -3,7 +3,7 @@ use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 pub struct Window {
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
-    pub(crate) raw_window: sdl2::video::Window,
+    pub(crate) sdl_window: sdl2::video::Window,
     pub(crate) _gl_context: sdl2::video::GLContext,
 }
 
@@ -16,21 +16,22 @@ impl Window {
         gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
         gl_attr.set_context_version(4, 0);
 
-        let raw_window = video_subsystem
+        let sdl_window = video_subsystem
             .window(title, width.into(), height.into())
             .opengl()
             .build()
             .expect("Window create failed");
 
-        // Unlike the other example above, nobody created a context for your window, so you need to create one.
-        let _gl_context = raw_window
+        // Unlike the other example above, nobody created a context for your window,
+        // so you need to create one.
+        let _gl_context = sdl_window
             .gl_create_context()
             .expect("GlContext create failed");
 
         Window {
             sdl_context,
             video_subsystem,
-            raw_window,
+            sdl_window,
             _gl_context,
         }
     }
@@ -50,7 +51,7 @@ impl Window {
     }
 
     pub fn swap_window(&self) {
-        self.raw_window.gl_swap_window();
+        self.sdl_window.gl_swap_window();
     }
 
     pub fn run<TLOAD, TRENDER>(&mut self, on_load: TLOAD, on_render: TRENDER)
