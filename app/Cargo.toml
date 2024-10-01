@@ -6,4 +6,4 @@ build="build.rs"
 
 [dependencies]
 gl = "*"
-arc-platform = { path = "../arc-platform" }
+platform = { path = "../platform" }

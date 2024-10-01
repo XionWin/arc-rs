@@ -2,5 +2,5 @@
 members = [
     "app",
     "arc",
-    "arc-platform"
+    "platform"
 ]

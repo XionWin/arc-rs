@@ -4,13 +4,13 @@ pub struct Window {
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) raw_window: sdl2::video::Window,
-    pub(crate) _gl_content: sdl2::video::GLContext,
+    pub(crate) _gl_context: sdl2::video::GLContext,
 }
 
 impl Window {
     pub fn new(title: &str, width: u16, height: u16) -> Self {
-        let sdl_context = sdl2::init().unwrap();
-        let video_subsystem = sdl_context.video().unwrap();
+        let sdl_context = sdl2::init().expect("SDLContext create failed");
+        let video_subsystem = sdl_context.video().expect("VideoSubsystem create failed");
 
         let gl_attr = video_subsystem.gl_attr();
         gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
@@ -20,16 +20,18 @@ impl Window {
             .window(title, width.into(), height.into())
             .opengl()
             .build()
-            .unwrap();
+            .expect("Window create failed");
 
         // Unlike the other example above, nobody created a context for your window, so you need to create one.
-        let _gl_content = raw_window.gl_create_context().unwrap();
+        let _gl_context = raw_window
+            .gl_create_context()
+            .expect("GlContext create failed");
 
         Window {
             sdl_context,
             video_subsystem,
             raw_window,
-            _gl_content,
+            _gl_context,
         }
     }
 
@@ -51,13 +53,16 @@ impl Window {
         self.raw_window.gl_swap_window();
     }
 
-    pub fn run<T1, T2>(&mut self, on_load: T1, on_render: T2)
+    pub fn run<TLOAD, TRENDER>(&mut self, on_load: TLOAD, on_render: TRENDER)
     where
-        T1: Fn(&VideoSubsystem),
-        T2: Fn(),
+        TLOAD: Fn(&VideoSubsystem),
+        TRENDER: Fn(),
     {
         on_load(&self.video_subsystem);
-        let mut event_pump = self.sdl_context.event_pump().unwrap();
+        let mut event_pump = self
+            .sdl_context
+            .event_pump()
+            .expect("Event pump get failed");
         'running: loop {
             for event in event_pump.poll_iter() {
                 match event {

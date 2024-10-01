@@ -6,21 +6,13 @@ version = 3
 name = "app"
 version = "0.1.0"
 dependencies = [
- "arc-platform",
  "gl",
+ "platform",
 ]
 
 [[package]]
 name = "arc"
 version = "0.1.0"
-
-[[package]]
-name = "arc-platform"
-version = "0.1.0"
-dependencies = [
- "arc",
- "sdl2",
-]
 
 [[package]]
 name = "bitflags"
@@ -77,6 +69,14 @@ name = "log"
 version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
+
+[[package]]
+name = "platform"
+version = "0.1.0"
+dependencies = [
+ "arc",
+ "sdl2",
+]
 
 [[package]]
 name = "sdl2"

@@ -3,7 +3,7 @@ extern crate gl;
 const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
 fn main() {
-    let mut window = arc_platform::window::Window::new("Arc | OpenGL", 800, 480);
+    let mut window = platform::Window::new("Arc | OpenGL", 800, 480);
     window.set_vsync(true);
 
     window.run(
