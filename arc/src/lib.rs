@@ -12,3 +12,9 @@
 //         assert_eq!(result, 4);
 //     }
 // }
+
+pub mod location;
+pub mod rect;
+pub mod size;
+pub mod skyline;
+pub mod vertex;
