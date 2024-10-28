@@ -36,18 +36,16 @@ impl Window {
         }
     }
 
-    pub fn set_vsync(&self, is_open: bool) {
+    pub fn set_vsync(&self, switch: bool) -> bool {
         let vsync_result = sdl2::VideoSubsystem::gl_set_swap_interval(
             &self.video_subsystem,
-            if is_open {
+            if switch {
                 sdl2::video::SwapInterval::VSync
             } else {
                 sdl2::video::SwapInterval::Immediate
             },
         );
-        if vsync_result.is_err() {
-            panic!("VSync set failed")
-        }
+        vsync_result.is_ok()
     }
 
     pub fn swap_window(&self) {
