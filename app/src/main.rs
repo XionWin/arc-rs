@@ -4,8 +4,9 @@ const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112
 
 fn main() {
     let mut window = platform::Window::new("Arc | OpenGL", 800, 480);
-    if window.set_vsync(true) {
-        println!("VSync set failed")
+    match window.set_vsync(true) {
+        Ok(_) => {},
+        Err(msg) => println!("VSync set failed, Msg: {msg:?}")
     }
 
     window.run(
