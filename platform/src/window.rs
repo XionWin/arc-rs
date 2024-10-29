@@ -36,7 +36,7 @@ impl Window {
         }
     }
 
-    pub fn set_vsync(&self, switch: bool) -> bool {
+    pub fn set_vsync(&self, switch: bool) -> Result<bool, String> {
         let vsync_result = sdl2::VideoSubsystem::gl_set_swap_interval(
             &self.video_subsystem,
             if switch {
@@ -45,7 +45,10 @@ impl Window {
                 sdl2::video::SwapInterval::Immediate
             },
         );
-        vsync_result.is_ok()
+        match vsync_result {
+            Ok(_) => Result::Ok(true),
+            Err(msg) => Result::Err(msg)
+        }
     }
 
     pub fn swap_window(&self) {
