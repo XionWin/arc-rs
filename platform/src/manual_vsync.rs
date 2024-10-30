@@ -15,8 +15,14 @@ impl ManualVSync {
 
     pub fn delay(&mut self) {
         let now_time = std::time::SystemTime::now();
-        let duration = now_time.duration_since(self._last_update_time).expect("ManualVSync delay error.");
-        let wait_duration = if self._duration > duration {Some(self._duration - duration)} else {Option::None};
+        let duration = now_time
+            .duration_since(self._last_update_time)
+            .expect("ManualVSync delay error.");
+        let wait_duration = if self._duration > duration {
+            Some(self._duration - duration)
+        } else {
+            Option::None
+        };
 
         match wait_duration {
             Some(dur) => std::thread::sleep(dur),

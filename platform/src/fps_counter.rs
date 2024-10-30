@@ -1,5 +1,3 @@
-
-
 pub struct FpsCounter {
     start_time: std::time::SystemTime,
     counter: u32,
@@ -11,7 +9,7 @@ impl FpsCounter {
         FpsCounter {
             start_time: std::time::SystemTime::now(),
             counter: 0,
-            max_counter
+            max_counter,
         }
     }
 
@@ -23,11 +21,10 @@ impl FpsCounter {
                     let fps = self.counter as f32 / duration.as_secs_f32();
                     println!("Fps: {fps:.1}");
                     self.reset();
-                },
-                Err(msg) => panic!("FpsCounter update error, Msg: {:?}", msg.duration())
+                }
+                Err(msg) => panic!("FpsCounter update error, Msg: {:?}", msg.duration()),
             }
-        }
-        else {
+        } else {
             self.counter += 1;
         }
     }
