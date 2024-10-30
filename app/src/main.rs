@@ -1,5 +1,4 @@
 extern crate gl;
-
 const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
 fn main() {
@@ -9,8 +8,10 @@ fn main() {
     let (r, g, b, a) = MIDNIGHT_BLUE;
     window.run(
         |video_subsystem| {
+            // let loader = platform::loader::Loader::new("libGLESv2.so.2");
             gl::load_with(|name| {
                 println!("name: {name}");
+                // loader.get_proc_address(name)
                 video_subsystem.gl_get_proc_address(name) as *const _
             });
         },

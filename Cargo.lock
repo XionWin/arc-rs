@@ -75,6 +75,7 @@ name = "platform"
 version = "0.1.0"
 dependencies = [
  "arc",
+ "libc",
  "sdl2",
 ]
 

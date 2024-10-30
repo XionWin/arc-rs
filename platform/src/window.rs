@@ -1,6 +1,7 @@
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
-use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter};
+use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, loader::Loader};
+
 
 pub struct Window {
     pub(crate) sdl_context: sdl2::Sdl,
