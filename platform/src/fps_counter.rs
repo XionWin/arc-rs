@@ -15,7 +15,7 @@ impl FpsCounter {
         }
     }
 
-    pub fn update(&mut self) -> Result<(), String> {
+    pub fn update(&mut self) {
         let now_time = std::time::SystemTime::now();
         if self.counter >= self.max_counter {
             match now_time.duration_since(self.start_time) {
@@ -23,15 +23,12 @@ impl FpsCounter {
                     let fps = self.counter as f32 / duration.as_secs_f32();
                     println!("Fps: {fps:?}");
                     self.reset();
-                    // reset
-                    Ok(())
                 },
-                Err(msg) => Err(String::from(format!("FpsCounter update error, Msg: {:?}", msg.duration())))
+                Err(msg) => panic!("FpsCounter update error, Msg: {:?}", msg.duration())
             }
         }
         else {
             self.counter += 1;
-            Ok(())
         }
     }
 

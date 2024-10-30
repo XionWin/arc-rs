@@ -86,7 +86,7 @@ impl Window {
                     _ => {}
                 }
             }
-            let _ = fps_counter.update();
+            fps_counter.update();
             on_render();
             self.swap_window();
         }
