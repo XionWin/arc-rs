@@ -1,13 +1,13 @@
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
-use crate::{fps_counter::FpsCounter, manual_vsync::ManualVSync};
+use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter};
 
 pub struct Window {
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) sdl_window: sdl2::video::Window,
     pub(crate) _gl_context: sdl2::video::GLContext,
-    pub(crate) manual_vsync: Option<ManualVSync>,
+    pub(crate) fps_limiter: Option<FpsLimiter>,
 }
 
 impl Window {
@@ -41,7 +41,7 @@ impl Window {
             video_subsystem,
             sdl_window,
             _gl_context,
-            manual_vsync: None,
+            fps_limiter: None,
         }
     }
 
@@ -54,8 +54,8 @@ impl Window {
                 sdl2::video::SwapInterval::Immediate
             },
         );
-        self.manual_vsync = if vsync_result.is_err() {
-            Some(ManualVSync::new(60))
+        self.fps_limiter = if vsync_result.is_err() {
+            Some(FpsLimiter::new(60))
         } else {
             None
         }
@@ -91,8 +91,8 @@ impl Window {
             fps_counter.update();
             on_render();
             self.swap_window();
-            match &mut self.manual_vsync {
-                Some(manual_vsync) => manual_vsync.delay(),
+            match &mut self.fps_limiter {
+                Some(fps_limiter) => fps_limiter.delay(),
                 None => {}
             };
         }

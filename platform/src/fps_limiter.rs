@@ -1,12 +1,12 @@
-pub struct ManualVSync {
+pub struct FpsLimiter {
     _fps: u32,
     _duration: std::time::Duration,
     _last_update_time: std::time::SystemTime,
 }
 
-impl ManualVSync {
+impl FpsLimiter {
     pub fn new(fps: u32) -> Self {
-        ManualVSync {
+        FpsLimiter {
             _fps: fps,
             _duration: std::time::Duration::from_secs(1) / fps,
             _last_update_time: std::time::SystemTime::now(),
