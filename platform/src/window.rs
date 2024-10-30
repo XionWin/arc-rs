@@ -1,13 +1,14 @@
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
-use crate::{fps_counter, manual_vsync};
+use crate::{fps_counter::FpsCounter, manual_vsync::ManualVSync};
+
 
 pub struct Window {
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) sdl_window: sdl2::video::Window,
     pub(crate) _gl_context: sdl2::video::GLContext,
-    pub(crate) is_need_manual_vsync: bool
+    pub(crate) manual_vsync: Option<ManualVSync>
 }
 
 impl Window {
@@ -42,7 +43,7 @@ impl Window {
             video_subsystem,
             sdl_window,
             _gl_context,
-            is_need_manual_vsync: false
+            manual_vsync: None
         }
     }
 
@@ -55,7 +56,12 @@ impl Window {
                 sdl2::video::SwapInterval::Immediate
             },
         );
-        self.is_need_manual_vsync = vsync_result.is_err();
+        self.manual_vsync = if vsync_result.is_err() {
+            Some(ManualVSync::new(60))
+        }
+        else {
+            None
+        }
     }
 
     pub fn swap_window(&self) {
@@ -67,8 +73,7 @@ impl Window {
         TLOAD: Fn(&VideoSubsystem),
         TRENDER: Fn(),
     {
-        let mut fps_counter = fps_counter::FpsCounter::new(100);
-        let mut manual_vsync = manual_vsync::ManualVSync::new(60);
+        let mut fps_counter = FpsCounter::new(100);
 
         on_load(&self.video_subsystem);
         let mut event_pump = self
@@ -89,9 +94,10 @@ impl Window {
             fps_counter.update();
             on_render();
             self.swap_window();
-            if self.is_need_manual_vsync {
-                manual_vsync.delay();
-            }
+            match &mut self.manual_vsync {
+                Some(manual_vsync) => manual_vsync.delay(),
+                None => {}
+            };
         }
     }
 }
