@@ -9,17 +9,17 @@ fn main() {
         Err(msg) =>  println!("VSync set failed, Msg: {msg:?}")
     }
 
+    let (r, g, b, a) = MIDNIGHT_BLUE;
     window.run(
         |video_subsystem| {
-            gl::load_with(|name| video_subsystem.gl_get_proc_address(name) as *const _);
+            gl::load_with(|name| {
+                println!("name: {name}");
+                video_subsystem.gl_get_proc_address(name) as *const _
+            });
         },
+
         || unsafe {
-            gl::ClearColor(
-                MIDNIGHT_BLUE.0,
-                MIDNIGHT_BLUE.1,
-                MIDNIGHT_BLUE.2,
-                MIDNIGHT_BLUE.3,
-            );
+            gl::ClearColor(r, g, b, a);
             gl::Clear(gl::COLOR_BUFFER_BIT | gl::DEPTH_BUFFER_BIT);
         },
     );

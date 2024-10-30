@@ -1,5 +1,7 @@
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
+use crate::fps_counter;
+
 pub struct Window {
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
@@ -13,8 +15,14 @@ impl Window {
         let video_subsystem = sdl_context.video().expect("VideoSubsystem create failed");
 
         let gl_attr = video_subsystem.gl_attr();
-        gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
-        gl_attr.set_context_version(4, 0);
+        if cfg!(target_os = "macos") {
+            gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
+            gl_attr.set_context_version(4, 0);
+        }
+        else {
+            gl_attr.set_context_profile(sdl2::video::GLProfile::GLES);
+            gl_attr.set_context_version(2, 0);
+        }
 
         let sdl_window = video_subsystem
             .window(title, width.into(), height.into())
@@ -60,6 +68,8 @@ impl Window {
         TLOAD: Fn(&VideoSubsystem),
         TRENDER: Fn(),
     {
+        let mut fps_counter = fps_counter::FpsCounter::new(100);
+
         on_load(&self.video_subsystem);
         let mut event_pump = self
             .sdl_context
@@ -76,6 +86,7 @@ impl Window {
                     _ => {}
                 }
             }
+            let _ = fps_counter.update();
             on_render();
             self.swap_window();
         }
