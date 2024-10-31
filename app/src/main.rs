@@ -10,7 +10,6 @@ fn main() {
         |video_subsystem| {
             // let loader = platform::loader::Loader::new("libGLESv2.so.2");
             gl::load_with(|name| {
-                println!("name: {name}");
                 // loader.get_proc_address(name)
                 video_subsystem.gl_get_proc_address(name) as *const _
             });

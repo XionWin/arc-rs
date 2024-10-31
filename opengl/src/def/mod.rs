@@ -1,4 +1,5 @@
 mod string_name;
+mod enable_cap;
 mod shader_type;
 mod buffer_target;
 mod buffer_usage_hint;
@@ -16,8 +17,13 @@ mod texture_parameter_name;
 mod texture_wrap_mode;
 mod draw_element_type;
 mod blending_factor;
+mod pixel_store_parameter;
+mod stencil_face;
+mod stencil_op;
+mod stencil_function;
 
 pub use string_name::*;
+pub use enable_cap::*;
 pub use shader_type::*;
 pub use buffer_target::*;
 pub use buffer_usage_hint::*;
@@ -35,3 +41,7 @@ pub use texture_parameter_name::*;
 pub use texture_wrap_mode::*;
 pub use draw_element_type::*;
 pub use blending_factor::*;
+pub use pixel_store_parameter::*;
+pub use stencil_face::*;
+pub use stencil_op::*;
+pub use stencil_function::*;
