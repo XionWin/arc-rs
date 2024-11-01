@@ -19,7 +19,7 @@ impl FpsCounter {
             match now_time.duration_since(self.start_time) {
                 Ok(duration) => {
                     let fps = self.counter as f32 / duration.as_secs_f32();
-                    println!("Fps: {fps:.1}");
+                    println!("Fps: {fps:.0}");
                     self.reset();
                 }
                 Err(msg) => panic!("FpsCounter update error, Msg: {:?}", msg.duration()),

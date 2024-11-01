@@ -1,6 +1,5 @@
 mod def;
 mod library_loader;
-mod opengl;
+pub mod gl;
 
 pub use def::*;
-pub use opengl::*;

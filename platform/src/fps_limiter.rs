@@ -9,7 +9,7 @@ impl FpsLimiter {
     pub fn new(fps: u32) -> Self {
         FpsLimiter {
             fps,
-            _duration: std::time::Duration::from_secs(1) / fps - std::time::Duration::from_micros(440),
+            _duration: std::time::Duration::from_secs(1) / fps - std::time::Duration::from_micros(350),
             _last_update_time: std::time::SystemTime::now(),
         }
     }
