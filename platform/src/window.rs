@@ -92,8 +92,7 @@ impl Window {
                     _ => {}
                 }
             }
-            fps_counter.update();
-            self.refresh();
+            self.frame_init(&mut fps_counter);
             on_render();
             self.swap_window();
             match &mut self.fps_limiter {
@@ -102,7 +101,9 @@ impl Window {
             };
         }
     }
-    fn refresh(&self) {
+
+    fn frame_init(&self, fps_counter: &mut FpsCounter) {
+        fps_counter.update();
         let (r, g, b, a) = MIDNIGHT_BLUE;
         gl::clear_color(r, g, b, a);
         gl::clear(opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT);
