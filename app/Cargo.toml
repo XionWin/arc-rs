@@ -7,4 +7,3 @@ build="build.rs"
 [dependencies]
 gl = "*"
 platform = { path = "../platform" }
-opengl = { path = "../opengl" }

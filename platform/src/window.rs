@@ -1,7 +1,10 @@
+use opengl::gl;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter};
 
+
+const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
 pub struct Window {
     pub(crate) sdl_context: sdl2::Sdl,
@@ -90,6 +93,7 @@ impl Window {
                 }
             }
             fps_counter.update();
+            self.refresh();
             on_render();
             self.swap_window();
             match &mut self.fps_limiter {
@@ -97,5 +101,10 @@ impl Window {
                 None => {}
             };
         }
+    }
+    fn refresh(&self) {
+        let (r, g, b, a) = MIDNIGHT_BLUE;
+        gl::clear_color(r, g, b, a);
+        gl::clear(opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT);
     }
 }

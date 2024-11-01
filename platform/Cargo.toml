@@ -7,3 +7,4 @@ edition = "2021"
 libc="*"
 sdl2 = "*"
 arc = { path = "../arc" }
+opengl = { path = "../opengl" }

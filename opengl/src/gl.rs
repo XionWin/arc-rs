@@ -1,4 +1,4 @@
-use crate::{def::StringName, library_loader::LibraryLoader};
+use crate::{def::StringName, library_loader::LibraryLoader, ClearBufferMask};
 use libc::{c_char, c_float, c_int, c_uint};
 use std::{
     ffi::{CStr, CString},
@@ -8,6 +8,14 @@ use std::{
 pub fn load() {
     let loader = LibraryLoader::new("libGLESv2.so.2");
     gl::load_with(|name| loader.get_proc_address(name));
+}
+
+pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {
+    unsafe { gl::ClearColor(r, g, b, a) };
+}
+
+pub fn clear(mask: ClearBufferMask) {
+    unsafe { gl::Clear(mask.into()) };
 }
 
 pub fn get_string(name: StringName) -> Option<String> {
@@ -171,14 +179,6 @@ pub fn uniform_1f(location: c_int, v: c_float) {
 
 pub fn viewport(x: c_int, y: c_int, width: c_int, height: c_int) {
     unsafe { gl::Viewport(x, y, width, height) }
-}
-
-pub fn clear(mask: c_uint) {
-    unsafe { gl::Clear(mask) }
-}
-
-pub fn clear_color(red: c_float, green: c_float, blue: c_float, alpha: c_float) {
-    unsafe { gl::ClearColor(red, green, blue, alpha) }
 }
 
 pub fn gen_vertex_arrays(n: c_int, array: *mut c_uint) {
