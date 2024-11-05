@@ -7,5 +7,22 @@ macro_rules! function {
         }
         let name = type_name_of(f);
         &name[..name.len() - 3]
-    }}
+    }};
+}
+
+#[macro_export]
+macro_rules! expect {
+    ($t: expr) => {{
+        match $t {
+            Ok(v) => v,
+            Err(msg) => panic!(
+                "Unexpect {} (in {} [{}:{}:{}])",
+                util::function!(),
+                module_path!(),
+                file!(),
+                line!(),
+                column!()
+            ),
+        }
+    }};
 }

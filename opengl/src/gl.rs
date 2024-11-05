@@ -69,8 +69,8 @@ pub fn delete_shader(shader_id: c_uint) {
 }
 
 pub fn shader_source(shader_id: c_uint, source_code: &str) {
-    let c_str =
-        CString::new(source_code).expect(format!("Unexpect in {}", util::function!()).as_str());
+
+    let c_str = util::expect!(CString::new(source_code));
     let sources = vec![c_str.as_ptr()];
     unsafe { gl::ShaderSource(shader_id, 1, sources.as_ptr() as _, sources.len() as _) }
 }
@@ -133,7 +133,7 @@ pub fn get_program_information(program_id: c_uint) -> Option<String> {
                     buf.as_mut_ptr() as _,
                 );
             }
-            Some(String::from_utf8(buf).expect("GLES glGetProgramInfoLog error"))
+            Some(util::expect!(String::from_utf8(buf)))
         }
         _ => None,
     }
@@ -155,7 +155,7 @@ pub fn get_shader_information(shader_id: c_uint) -> Option<String> {
                     buf.as_mut_ptr() as _,
                 );
             }
-            Some(String::from_utf8(buf).expect("GLES glGetShaderInfoLog error"))
+            Some(util::expect!(String::from_utf8(buf)))
         }
         _ => None,
     }

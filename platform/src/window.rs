@@ -16,8 +16,8 @@ pub struct Window {
 
 impl Window {
     pub fn new(title: &str, width: u16, height: u16) -> Self {
-        let sdl_context = sdl2::init().expect("SDLContext create failed");
-        let video_subsystem = sdl_context.video().expect("VideoSubsystem create failed");
+        let sdl_context = util::expect!(sdl2::init());
+        let video_subsystem = util::expect!(sdl_context.video());
 
         let gl_attr = video_subsystem.gl_attr();
         if cfg!(target_os = "macos") {
@@ -28,17 +28,19 @@ impl Window {
             gl_attr.set_context_version(2, 0);
         }
 
-        let sdl_window = video_subsystem
+        let sdl_window = util::expect!(
+            video_subsystem
             .window(title, width.into(), height.into())
             .opengl()
             .build()
-            .expect("Window create failed");
+        );
 
         // Unlike the other example above, nobody created a context for your window,
         // so you need to create one.
-        let _gl_context = sdl_window
+        let _gl_context = util::expect!(
+            sdl_window
             .gl_create_context()
-            .expect("GlContext create failed");
+        );
 
         Window {
             sdl_context,
@@ -77,10 +79,11 @@ impl Window {
         let mut fps_counter = FpsCounter::new(100);
 
         on_load(&self.video_subsystem);
-        let mut event_pump = self
+        let mut event_pump = util::expect!(
+            self
             .sdl_context
             .event_pump()
-            .expect("Event pump get failed");
+        );
         'running: loop {
             for event in event_pump.poll_iter() {
                 match event {

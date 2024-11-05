@@ -89,6 +89,7 @@ dependencies = [
  "libc",
  "opengl",
  "sdl2",
+ "util",
 ]
 
 [[package]]
