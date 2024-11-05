@@ -7,3 +7,4 @@ edition = "2021"
 libc="*"
 gl="*"
 bitflags="*"
+util = { path = "../util" }

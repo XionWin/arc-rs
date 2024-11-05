@@ -6,8 +6,9 @@ version = 3
 name = "app"
 version = "0.1.0"
 dependencies = [
- "gl",
+ "opengl",
  "platform",
+ "util",
 ]
 
 [[package]]
@@ -77,6 +78,7 @@ dependencies = [
  "bitflags",
  "gl",
  "libc",
+ "util",
 ]
 
 [[package]]
@@ -111,6 +113,10 @@ dependencies = [
  "libc",
  "version-compare",
 ]
+
+[[package]]
+name = "util"
+version = "0.1.0"
 
 [[package]]
 name = "version-compare"

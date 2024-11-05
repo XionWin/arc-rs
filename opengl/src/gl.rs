@@ -1,13 +1,20 @@
 use crate::{def::StringName, library_loader::LibraryLoader, ClearBufferMask};
 use libc::{c_char, c_float, c_int, c_uint};
 use std::{
-    ffi::{CStr, CString},
+    ffi::{c_void, CStr, CString},
     str::from_utf8,
 };
 
 pub fn load() {
     let loader = LibraryLoader::new("libGLESv2.so.2");
     gl::load_with(|name| loader.get_proc_address(name));
+}
+
+pub fn load_with<F>(loadfn: F)
+where
+    F: FnMut(&'static str) -> *const c_void,
+{
+    gl::load_with(loadfn)
 }
 
 pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {
@@ -62,10 +69,10 @@ pub fn delete_shader(shader_id: c_uint) {
 }
 
 pub fn shader_source(shader_id: c_uint, source_code: &str) {
-    let mut source = source_code.bytes().collect::<Vec<_>>();
-    source.push(b'\0');
-    let sources = vec![source.as_ptr()];
-    unsafe { gl::ShaderSource(shader_id, 1, sources.as_ptr() as _, std::ptr::null()) }
+    let c_str =
+        CString::new(source_code).expect(format!("Unexpect in {}", util::function!()).as_str());
+    let sources = vec![c_str.as_ptr()];
+    unsafe { gl::ShaderSource(shader_id, 1, sources.as_ptr() as _, sources.len() as _) }
 }
 
 pub fn compile_shader(shader_id: c_uint) {
@@ -452,7 +459,11 @@ pub fn color_mask(red: bool, green: bool, blue: bool, alpha: bool) {
     unsafe { gl::ColorMask(red as _, green as _, blue as _, alpha as _) }
 }
 
-pub fn stencil_op(fail: crate::def::StencilOp, zfail: crate::def::StencilOp, zpass: crate::def::StencilOp) {
+pub fn stencil_op(
+    fail: crate::def::StencilOp,
+    zfail: crate::def::StencilOp,
+    zpass: crate::def::StencilOp,
+) {
     unsafe { gl::StencilOp(fail as _, zfail as _, zpass as _) }
 }
 

@@ -5,5 +5,6 @@ edition = "2021"
 build="build.rs"
 
 [dependencies]
-gl = "*"
+util = { path = "../util" }
 platform = { path = "../platform" }
+opengl = { path = "../opengl" }
