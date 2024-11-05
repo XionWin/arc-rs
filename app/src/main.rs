@@ -1,4 +1,5 @@
 fn main() {
+    util::print_hight_light!("====================[ARC DEMO]====================");
     let mut window = platform::Window::new("Arc | OpenGL", 800, 480);
     window.set_vsync(true);
   

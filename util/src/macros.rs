@@ -15,14 +15,22 @@ macro_rules! expect {
     ($t: expr) => {{
         match $t {
             Ok(v) => v,
-            Err(msg) => panic!(
-                "Unexpect {} (in {} [{}:{}:{}])",
-                util::function!(),
-                module_path!(),
-                file!(),
-                line!(),
-                column!()
-            ),
+            Err(msg) => {
+                util::print_error!("Unexpect {} (in {} [{}:{}:{}])",
+                    util::function!(),
+                    module_path!(),
+                    file!(),
+                    line!(),
+                    column!());
+                panic!(
+                    "Unexpect {} (in {} [{}:{}:{}])",
+                    util::function!(),
+                    module_path!(),
+                    file!(),
+                    line!(),
+                    column!()
+                )
+            }
         }
     }};
 }
