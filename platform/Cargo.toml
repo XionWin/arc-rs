@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 libc="*"
-sdl2 = "*"
+sdl2 = { version = "*", features = ["image"] }
 util = { path = "../util" }
 arc = { path = "../arc" }
 opengl = { path = "../opengl" }

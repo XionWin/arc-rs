@@ -3,7 +3,6 @@ use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter};
 
-
 const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
 pub struct Window {
@@ -15,7 +14,7 @@ pub struct Window {
 }
 
 impl Window {
-    pub fn new(title: &str, width: u16, height: u16) -> Self {
+    pub fn new(title: &str, width: u16, height: u16) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
 
@@ -28,27 +27,27 @@ impl Window {
             gl_attr.set_context_version(2, 0);
         }
 
-        let sdl_window = util::expect!(
-            video_subsystem
+        let mut sdl_window = util::expect!(video_subsystem
             .window(title, width.into(), height.into())
             .opengl()
-            .build()
-        );
+            .build());
+
+        let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file("resources/images/icon96.png")?;
+        sdl_window.set_icon(window_icon);
+
+        sdl_window.set_resizable(false);
 
         // Unlike the other example above, nobody created a context for your window,
         // so you need to create one.
-        let _gl_context = util::expect!(
-            sdl_window
-            .gl_create_context()
-        );
+        let _gl_context = util::expect!(sdl_window.gl_create_context());
 
-        Window {
+        Ok(Window {
             sdl_context,
             video_subsystem,
             sdl_window,
             _gl_context,
             fps_limiter: None,
-        }
+        })
     }
 
     pub fn set_vsync(&mut self, switch: bool) {
@@ -79,11 +78,7 @@ impl Window {
         let mut fps_counter = FpsCounter::new(100);
 
         on_load(&self.video_subsystem);
-        let mut event_pump = util::expect!(
-            self
-            .sdl_context
-            .event_pump()
-        );
+        let mut event_pump = util::expect!(self.sdl_context.event_pump());
         'running: loop {
             for event in event_pump.poll_iter() {
                 match event {
@@ -109,6 +104,8 @@ impl Window {
         fps_counter.update();
         let (r, g, b, a) = MIDNIGHT_BLUE;
         gl::clear_color(r, g, b, a);
-        gl::clear(opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT);
+        gl::clear(
+            opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT,
+        );
     }
 }

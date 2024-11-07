@@ -30,7 +30,7 @@
 #![warn(missing_docs)]
 
 mod color;
-pub mod control;
+mod control;
 #[allow(dead_code)]
 mod error;
 mod style;

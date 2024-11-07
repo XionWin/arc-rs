@@ -16,19 +16,23 @@ macro_rules! expect {
         match $t {
             Ok(v) => v,
             Err(msg) => {
-                util::print_error!("Unexpect {} (in {} [{}:{}:{}])",
+                util::print_error!(
+                    "Error in {} (in {} [{}:{}:{}]) Message: {}",
                     util::function!(),
                     module_path!(),
                     file!(),
                     line!(),
-                    column!());
+                    column!(),
+                    msg
+                );
                 panic!(
-                    "Unexpect {} (in {} [{}:{}:{}])",
+                    "Error in {} (in {} [{}:{}:{}]) Message: {}",
                     util::function!(),
                     module_path!(),
                     file!(),
                     line!(),
-                    column!()
+                    column!(),
+                    msg
                 )
             }
         }

@@ -1,5 +1,5 @@
 mod macros;
-mod color_console;
+#[allow(dead_code)]
+mod c_term;
 
-
-pub use color_console::*;
+pub use c_term::*;
