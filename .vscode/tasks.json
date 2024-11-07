@@ -7,7 +7,7 @@
             "type": "shell",
             "args": [
                 "-r",
-                "resources",
+                "resource",
                 "${workspaceFolder}/target/debug",
             ]
         }
