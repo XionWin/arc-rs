@@ -1,0 +1,11 @@
+[package]
+name = "platform-sdl2"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+libc="*"
+sdl2 = { version = "*", features = ["image"] }
+util = { path = "../../util" }
+arc = { path = "../../arc" }
+opengl = { path = "../../opengl" }

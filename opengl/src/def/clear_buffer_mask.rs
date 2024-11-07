@@ -10,6 +10,6 @@ bitflags! {
 
 impl Into<u32> for ClearBufferMask {
     fn into(self) -> u32 {
-        self.bits
+        self.bits()
     }
 }

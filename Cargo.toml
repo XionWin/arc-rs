@@ -2,8 +2,8 @@
 resolver = "2"
 members = [
     "app",
-    "util",
+    "platform/platform-sdl2",
     "arc",
     "opengl",
-    "platform"
+    "util",
 ]

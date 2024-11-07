@@ -6,5 +6,5 @@ build="build.rs"
 
 [dependencies]
 util = { path = "../util" }
-platform = { path = "../platform" }
+platform-sdl2 = { path = "../platform/platform-sdl2" }
 opengl = { path = "../opengl" }
