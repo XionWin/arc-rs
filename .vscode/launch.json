@@ -21,6 +21,7 @@
             },
             "args": [],
             "cwd": "${workspaceFolder}",
+            "preLaunchTask": "copy resources"
         },
         {
             "type": "lldb",

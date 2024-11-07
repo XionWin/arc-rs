@@ -1,0 +1,15 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "copy resources",
+            "command": "cp",
+            "type": "shell",
+            "args": [
+                "-r",
+                "resources",
+                "${workspaceFolder}/target/debug",
+            ]
+        }
+    ]
+}
