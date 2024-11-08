@@ -18,7 +18,9 @@ pub struct Window {
 
 impl Window {
     pub fn new<T>(title_function: T, width: u16, height: u16) -> Result<Self, String>
-    where T: Fn(&str, &Version) -> String {
+    where
+        T: Fn(&str, &Version) -> String,
+    {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
 
@@ -34,11 +36,17 @@ impl Window {
         };
 
         let mut sdl_window = util::expect!(video_subsystem
-            .window(&title_function(&profile, &version), width.into(), height.into())
+            .window(
+                &title_function(&profile, &version),
+                width.into(),
+                height.into()
+            )
             .opengl()
             .build());
 
-        let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file("resource/image/icon96.png")?;
+        let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file(
+            "resource/image/icon96.png",
+        )?;
         sdl_window.set_icon(window_icon);
         sdl_window.set_resizable(false);
 
