@@ -1,3 +1,5 @@
+use core::Version;
+
 use opengl::gl;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
@@ -6,6 +8,7 @@ use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter};
 const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
 pub struct Window {
+    pub version: core::Version,
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) sdl_window: sdl2::video::Window,
@@ -14,27 +17,29 @@ pub struct Window {
 }
 
 impl Window {
-    pub fn new(title: &str, width: u16, height: u16) -> Result<Self, String> {
+    pub fn new<T>(title_function: T, width: u16, height: u16) -> Result<Self, String>
+    where T: Fn(&str, &Version) -> String {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
 
         let gl_attr = video_subsystem.gl_attr();
-        if cfg!(target_os = "macos") {
+        let (profile, version) = if cfg!(target_os = "macos") {
             gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
             gl_attr.set_context_version(4, 0);
+            (String::from("Core"), Version::new(4u8, 0u8))
         } else {
             gl_attr.set_context_profile(sdl2::video::GLProfile::GLES);
             gl_attr.set_context_version(2, 0);
-        }
+            (String::from("GLES"), Version::new(2u8, 0u8))
+        };
 
         let mut sdl_window = util::expect!(video_subsystem
-            .window(title, width.into(), height.into())
+            .window(&title_function(&profile, &version), width.into(), height.into())
             .opengl()
             .build());
 
         let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file("resource/image/icon96.png")?;
         sdl_window.set_icon(window_icon);
-
         sdl_window.set_resizable(false);
 
         // Unlike the other example above, nobody created a context for your window,
@@ -42,6 +47,7 @@ impl Window {
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
         Ok(Window {
+            version: core::Version::new(4u8, 0u8),
             sdl_context,
             video_subsystem,
             sdl_window,

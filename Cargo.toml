@@ -5,5 +5,5 @@ members = [
     "platform/platform-sdl2",
     "arc",
     "opengl",
-    "util",
+    "util", "core",
 ]
