@@ -23,17 +23,7 @@ impl Window {
     {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
-
-        let gl_attr = video_subsystem.gl_attr();
-        let (profile, version) = if cfg!(target_os = "macos") {
-            gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
-            gl_attr.set_context_version(4, 0);
-            (String::from("Core"), Version::new(4u8, 0u8))
-        } else {
-            gl_attr.set_context_profile(sdl2::video::GLProfile::GLES);
-            gl_attr.set_context_version(2, 0);
-            (String::from("GLES"), Version::new(2u8, 0u8))
-        };
+        let (profile, version) = set_gl_perfile_and_version(&video_subsystem);
 
         let mut sdl_window = util::expect!(video_subsystem
             .window(
@@ -55,7 +45,7 @@ impl Window {
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
         Ok(Window {
-            version: core::Version::new(4u8, 0u8),
+            version,
             sdl_context,
             video_subsystem,
             sdl_window,
@@ -121,5 +111,18 @@ impl Window {
         gl::clear(
             opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT,
         );
+    }
+}
+
+fn set_gl_perfile_and_version(video_subsystem: &VideoSubsystem) -> (String, Version) {
+    let gl_attr = video_subsystem.gl_attr();
+    if cfg!(target_os = "macos") {
+        gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
+        gl_attr.set_context_version(4, 0);
+        (String::from("Core"), Version::new(4u8, 0u8, 0u8))
+    } else {
+        gl_attr.set_context_profile(sdl2::video::GLProfile::GLES);
+        gl_attr.set_context_version(2, 0);
+        (String::from("GLES"), Version::new(2u8, 0u8, 0u8))
     }
 }

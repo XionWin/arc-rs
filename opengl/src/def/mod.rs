@@ -21,6 +21,7 @@ mod pixel_store_parameter;
 mod stencil_face;
 mod stencil_op;
 mod stencil_function;
+mod get_p_name;
 
 pub use string_name::*;
 pub use clear_buffer_mask::*;
@@ -45,3 +46,4 @@ pub use pixel_store_parameter::*;
 pub use stencil_face::*;
 pub use stencil_op::*;
 pub use stencil_function::*;
+pub use get_p_name::*;
