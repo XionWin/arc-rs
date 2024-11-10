@@ -2,11 +2,13 @@ use core::Version;
 
 use opengl::gl;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
+use util::print_debug;
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter};
 
 const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
+type TitleCallback = fn(&str, &Version) -> String;
 pub struct Window {
     pub version: core::Version,
     pub(crate) sdl_context: sdl2::Sdl,
@@ -14,12 +16,11 @@ pub struct Window {
     pub(crate) sdl_window: sdl2::video::Window,
     pub(crate) _gl_context: sdl2::video::GLContext,
     pub(crate) fps_limiter: Option<FpsLimiter>,
+    pub title_function: TitleCallback
 }
 
 impl Window {
-    pub fn new<T>(title_function: T, width: u16, height: u16) -> Result<Self, String>
-    where
-        T: Fn(&str, &Version) -> String,
+    pub fn new(title_function: TitleCallback, width: u16, height: u16) -> Result<Self, String>
     {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
@@ -51,6 +52,7 @@ impl Window {
             sdl_window,
             _gl_context,
             fps_limiter: None,
+            title_function
         })
     }
 
@@ -64,6 +66,7 @@ impl Window {
             },
         );
         self.fps_limiter = if vsync_result.is_err() {
+            print_debug!("set vsync error, try use fpslimiter at 60 fps");
             Some(FpsLimiter::new(60))
         } else {
             None
@@ -104,8 +107,8 @@ impl Window {
         }
     }
 
-    fn frame_init(&self, fps_counter: &mut FpsCounter) {
-        fps_counter.update();
+    fn frame_init(&mut self, fps_counter: &mut FpsCounter) {
+        fps_counter.update(|fps| util::expect!(self.sdl_window.set_title(&format!("{} {}", &(self.title_function)("Core", &self.version), fps))));
         let (r, g, b, a) = MIDNIGHT_BLUE;
         gl::clear_color(r, g, b, a);
         gl::clear(
