@@ -16,12 +16,11 @@ pub struct Window {
     pub(crate) sdl_window: sdl2::video::Window,
     pub(crate) _gl_context: sdl2::video::GLContext,
     pub(crate) fps_limiter: Option<FpsLimiter>,
-    pub title_function: TitleCallback
+    pub title_function: TitleCallback,
 }
 
 impl Window {
-    pub fn new(title_function: TitleCallback, width: u16, height: u16) -> Result<Self, String>
-    {
+    pub fn new(title_function: TitleCallback, width: u16, height: u16) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
         let (profile, version) = set_gl_perfile_and_version(&video_subsystem);
@@ -52,7 +51,7 @@ impl Window {
             sdl_window,
             _gl_context,
             fps_limiter: None,
-            title_function
+            title_function,
         })
     }
 
@@ -108,7 +107,14 @@ impl Window {
     }
 
     fn frame_init(&mut self, fps_counter: &mut FpsCounter) {
-        fps_counter.update(|fps| util::expect!(self.sdl_window.set_title(&format!("{} {}", &(self.title_function)("Core", &self.version), fps))));
+        fps_counter.update(|fps| {
+            util::print_debug!("fps: {fps:.0}");
+            // util::expect!(self.sdl_window.set_title(&format!(
+            //     "{} fps: {:#.0}",
+            //     &(self.title_function)("Core", &self.version),
+            //     fps
+            // )))
+        });
         let (r, g, b, a) = MIDNIGHT_BLUE;
         gl::clear_color(r, g, b, a);
         gl::clear(

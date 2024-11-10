@@ -20,7 +20,6 @@ impl FpsCounter {
             match now_time.duration_since(self.start_time) {
                 Ok(duration) => {
                     let fps = self.counter as f32 / duration.as_secs_f32();
-                    util::print_debug!("fps: {fps:.0}");
                     callback(fps);
                     self.reset();
                 }
