@@ -1,3 +1,5 @@
+use arc::window::Window;
+
 fn main() {
     util::print_hight_light!("====================[ARC DEMO]====================");
     let mut window = util::expect!(platform_sdl2::Window::new(
@@ -13,8 +15,8 @@ fn main() {
     window.set_vsync(true);
 
     window.run(
-        |video_subsystem| {
-            opengl::gl::load_with(|name| video_subsystem.gl_get_proc_address(name) as *const _);
+        |window| {
+            opengl::gl::load_with(|name| window.gl_get_proc_address(name) as *const _);
         },
         || {},
     );

@@ -18,6 +18,12 @@ pub struct Window {
     pub title_function: TitleCallback,
 }
 
+impl arc::window::Window for Window {
+    fn gl_get_proc_address(&self, procname: &str) -> *const std::ffi::c_void {
+        self.video_subsystem.gl_get_proc_address(procname) as _
+    }
+}
+
 impl Window {
     pub fn new(title_function: TitleCallback, width: u16, height: u16) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
@@ -80,10 +86,10 @@ impl Window {
 
     pub fn run<TLOAD, TRENDER>(&mut self, on_load: TLOAD, on_render: TRENDER)
     where
-        TLOAD: Fn(&VideoSubsystem),
+        TLOAD: Fn(&Window),
         TRENDER: Fn(),
     {
-        on_load(&self.video_subsystem);
+        on_load(self);
         let mut event_pump = util::expect!(self.sdl_context.event_pump());
         'running: loop {
             for event in event_pump.poll_iter() {
