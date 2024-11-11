@@ -1,5 +1,3 @@
-use core::Version;
-
 use opengl::gl;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 use util::print_debug;
@@ -15,6 +13,7 @@ pub struct Window {
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) sdl_window: sdl2::video::Window,
     pub(crate) _gl_context: sdl2::video::GLContext,
+    pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
 }
@@ -56,6 +55,7 @@ impl Window {
             video_subsystem,
             sdl_window,
             _gl_context,
+            fps_counter: FpsCounter::new(100),
             fps_limiter: None,
             title_function,
         })
@@ -87,8 +87,6 @@ impl Window {
         TLOAD: Fn(&VideoSubsystem),
         TRENDER: Fn(),
     {
-        let mut fps_counter = FpsCounter::new(100);
-
         on_load(&self.video_subsystem);
         let mut event_pump = util::expect!(self.sdl_context.event_pump());
         'running: loop {
@@ -102,7 +100,7 @@ impl Window {
                     _ => {}
                 }
             }
-            self.frame_init(&mut fps_counter);
+            self.frame_init();
             on_render();
             self.swap_window();
             match &mut self.fps_limiter {
@@ -112,8 +110,8 @@ impl Window {
         }
     }
 
-    fn frame_init(&mut self, fps_counter: &mut FpsCounter) {
-        fps_counter.update(|fps| {
+    fn frame_init(&mut self) {
+        self.fps_counter.update(|fps| {
             util::print_debug!("fps: {fps:.0}");
             // util::expect!(self.sdl_window.set_title(&format!(
             //     "{} fps: {:#.0}",

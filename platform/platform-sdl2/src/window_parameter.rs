@@ -1,5 +1,3 @@
-use sdl2::sys::Display;
-
 #[derive(Debug, Clone, Copy)]
 pub enum VideoProfile {
     Core,
