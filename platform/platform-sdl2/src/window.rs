@@ -28,7 +28,7 @@ impl Window {
         } else {
             WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8))
         };
-        set_gl_perfile_and_version(&video_subsystem, &parameter);
+        set_gl_version(&video_subsystem, &parameter);
 
         let mut sdl_window = util::expect!(video_subsystem
             .window(
@@ -127,7 +127,7 @@ impl Window {
     }
 }
 
-fn set_gl_perfile_and_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter) {
+fn set_gl_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter) {
     let gl_attr = video_subsystem.gl_attr();
 
     gl_attr.set_context_profile(parameter.profile.into());
