@@ -4,13 +4,13 @@ use opengl::gl;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 use util::print_debug;
 
-use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter};
+use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 
 const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
-type TitleCallback = fn(&str, &Version) -> String;
+type TitleCallback = fn(&WindowParameter) -> String;
 pub struct Window {
-    pub version: core::Version,
+    pub parameter: WindowParameter,
     pub(crate) sdl_context: sdl2::Sdl,
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) sdl_window: sdl2::video::Window,
@@ -23,11 +23,17 @@ impl Window {
     pub fn new(title_function: TitleCallback, width: u16, height: u16) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
-        let (profile, version) = set_gl_perfile_and_version(&video_subsystem);
+        let parameter = 
+        if cfg!(target_os = "macos") {
+            WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
+        } else {
+            WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8))
+        };
+        set_gl_perfile_and_version(&video_subsystem, &parameter);
 
         let mut sdl_window = util::expect!(video_subsystem
             .window(
-                &title_function(&profile, &version),
+                &title_function(&parameter),
                 width.into(),
                 height.into()
             )
@@ -45,7 +51,7 @@ impl Window {
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
         Ok(Window {
-            version,
+            parameter,
             sdl_context,
             video_subsystem,
             sdl_window,
@@ -123,15 +129,9 @@ impl Window {
     }
 }
 
-fn set_gl_perfile_and_version(video_subsystem: &VideoSubsystem) -> (String, Version) {
+fn set_gl_perfile_and_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter) {
     let gl_attr = video_subsystem.gl_attr();
-    if cfg!(target_os = "macos") {
-        gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
-        gl_attr.set_context_version(4, 0);
-        (String::from("Core"), Version::new(4u8, 0u8, 0u8))
-    } else {
-        gl_attr.set_context_profile(sdl2::video::GLProfile::GLES);
-        gl_attr.set_context_version(2, 0);
-        (String::from("GLES"), Version::new(2u8, 0u8, 0u8))
-    }
+
+    gl_attr.set_context_profile(parameter.profile.into());
+    gl_attr.set_context_version(parameter.version.major, parameter.version.minor);
 }

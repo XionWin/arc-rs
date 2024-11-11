@@ -1,10 +1,10 @@
 fn main() {
     util::print_hight_light!("====================[ARC DEMO]====================");
     let mut window = util::expect!(platform_sdl2::Window::new(
-        |profile, version| {
+        |parameter| {
             String::from(format!(
-                "Arc | {} {}.{}",
-                profile, version.major, version.minor
+                "Arc | {:?} {}.{}",
+                parameter.profile, parameter.version.major, parameter.version.minor
             ))
         },
         800,
