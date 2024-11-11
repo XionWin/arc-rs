@@ -1,22 +1,22 @@
 pub struct FpsCounter {
     start_time: std::time::SystemTime,
     counter: u32,
-    max_counter: u32,
+    update_duration: std::time::Duration,
 }
 
 impl FpsCounter {
-    pub fn new(max_counter: u32) -> Self {
+    pub fn new(update_duration: std::time::Duration) -> Self {
         FpsCounter {
             start_time: std::time::SystemTime::now(),
             counter: 0,
-            max_counter,
+            update_duration,
         }
     }
 
     pub fn update<T>(&mut self, mut callback: T)
         where T: FnMut(f32) {
         let now_time = std::time::SystemTime::now();
-        if self.counter >= self.max_counter {
+        if (now_time.duration_since(self.start_time)).unwrap() >= self.update_duration {
             match now_time.duration_since(self.start_time) {
                 Ok(duration) => {
                     let fps = self.counter as f32 / duration.as_secs_f32();

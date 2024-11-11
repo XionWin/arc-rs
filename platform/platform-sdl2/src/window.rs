@@ -85,7 +85,7 @@ impl Window {
             video_subsystem,
             sdl_window,
             _gl_context,
-            fps_counter: FpsCounter::new(100),
+            fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
             fps_limiter: None,
             title_function,
         })
