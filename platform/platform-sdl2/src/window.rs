@@ -78,10 +78,6 @@ impl Window {
         }
     }
 
-    pub fn swap_window(&self) {
-        self.sdl_window.gl_swap_window();
-    }
-
     pub fn run<TLOAD, TRENDER>(&mut self, on_load: TLOAD, on_render: TRENDER)
     where
         TLOAD: Fn(&VideoSubsystem),
@@ -124,6 +120,10 @@ impl Window {
         gl::clear(
             opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT,
         );
+    }
+
+    fn swap_window(&self) {
+        self.sdl_window.gl_swap_window();
     }
 }
 
