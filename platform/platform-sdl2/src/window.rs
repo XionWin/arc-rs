@@ -22,6 +22,30 @@ impl arc::window::Window for Window {
     fn gl_get_proc_address(&self, procname: &str) -> *const std::ffi::c_void {
         self.video_subsystem.gl_get_proc_address(procname) as _
     }
+    
+    fn run(&mut self, on_load: fn(&Self), on_render: fn()) {
+            on_load(self);
+            let mut event_pump = util::expect!(self.sdl_context.event_pump());
+            'running: loop {
+                for event in event_pump.poll_iter() {
+                    match event {
+                        Event::Quit { .. }
+                        | Event::KeyDown {
+                            keycode: Some(Keycode::Escape),
+                            ..
+                        } => break 'running,
+                        _ => {}
+                    }
+                }
+                self.frame_init();
+                on_render();
+                self.swap_window();
+                match &mut self.fps_limiter {
+                    Some(fps_limiter) => fps_limiter.delay(),
+                    None => {}
+                };
+            }
+    }
 }
 
 impl Window {
@@ -84,33 +108,33 @@ impl Window {
         }
     }
 
-    pub fn run<TLOAD, TRENDER>(&mut self, on_load: TLOAD, on_render: TRENDER)
-    where
-        TLOAD: Fn(&Window),
-        TRENDER: Fn(),
-    {
-        on_load(self);
-        let mut event_pump = util::expect!(self.sdl_context.event_pump());
-        'running: loop {
-            for event in event_pump.poll_iter() {
-                match event {
-                    Event::Quit { .. }
-                    | Event::KeyDown {
-                        keycode: Some(Keycode::Escape),
-                        ..
-                    } => break 'running,
-                    _ => {}
-                }
-            }
-            self.frame_init();
-            on_render();
-            self.swap_window();
-            match &mut self.fps_limiter {
-                Some(fps_limiter) => fps_limiter.delay(),
-                None => {}
-            };
-        }
-    }
+    // pub fn run<TLOAD, TRENDER>(&mut self, on_load: TLOAD, on_render: TRENDER)
+    // where
+    //     TLOAD: Fn(&Window),
+    //     TRENDER: Fn(),
+    // {
+    //     on_load(self);
+    //     let mut event_pump = util::expect!(self.sdl_context.event_pump());
+    //     'running: loop {
+    //         for event in event_pump.poll_iter() {
+    //             match event {
+    //                 Event::Quit { .. }
+    //                 | Event::KeyDown {
+    //                     keycode: Some(Keycode::Escape),
+    //                     ..
+    //                 } => break 'running,
+    //                 _ => {}
+    //             }
+    //         }
+    //         self.frame_init();
+    //         on_render();
+    //         self.swap_window();
+    //         match &mut self.fps_limiter {
+    //             Some(fps_limiter) => fps_limiter.delay(),
+    //             None => {}
+    //         };
+    //     }
+    // }
 
     fn frame_init(&mut self) {
         self.fps_counter.update(|fps| {
