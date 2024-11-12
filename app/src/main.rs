@@ -1,4 +1,4 @@
-use arc::window::Window;
+use arc::Window;
 
 fn main() {
     util::print_hight_light!("====================[ARC DEMO]====================");

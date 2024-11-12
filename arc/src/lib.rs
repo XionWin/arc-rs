@@ -13,11 +13,20 @@
 //     }
 // }
 
-pub mod location;
-pub mod rect;
-pub mod size;
-pub mod skyline;
-pub mod vertex;
-pub mod window;
-pub mod color;
-pub mod graphic;
+mod location;
+mod rect;
+mod size;
+mod skyline;
+mod vertex;
+mod window;
+mod color;
+mod graphic;
+
+pub use location::*;
+pub use rect::*;
+pub use size::*;
+pub use skyline::*;
+pub use vertex::*;
+pub use window::*;
+pub use color::*;
+pub use graphic::*;

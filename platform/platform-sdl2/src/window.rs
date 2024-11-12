@@ -18,7 +18,7 @@ pub struct Window {
     pub title_function: TitleCallback,
 }
 
-impl arc::window::Window for Window {
+impl arc::Window for Window {
     fn gl_get_proc_address(&self, procname: &str) -> *const std::ffi::c_void {
         self.video_subsystem.gl_get_proc_address(procname) as _
     }
