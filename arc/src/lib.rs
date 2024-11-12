@@ -19,3 +19,5 @@ pub mod size;
 pub mod skyline;
 pub mod vertex;
 pub mod window;
+pub mod color;
+pub mod graphic;

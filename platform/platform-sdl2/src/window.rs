@@ -22,38 +22,71 @@ impl arc::window::Window for Window {
     fn gl_get_proc_address(&self, procname: &str) -> *const std::ffi::c_void {
         self.video_subsystem.gl_get_proc_address(procname) as _
     }
-    
-    fn run(&mut self, on_load: fn(&Self), on_render: fn()) {
-            on_load(self);
-            let mut event_pump = util::expect!(self.sdl_context.event_pump());
-            'running: loop {
-                for event in event_pump.poll_iter() {
-                    match event {
-                        Event::Quit { .. }
-                        | Event::KeyDown {
-                            keycode: Some(Keycode::Escape),
-                            ..
-                        } => break 'running,
-                        _ => {}
-                    }
+
+    fn run(&mut self, on_load: fn(&Self), on_render: fn(&Self)) {
+        on_load(self);
+        let mut event_pump = util::expect!(self.sdl_context.event_pump());
+        'running: loop {
+            for event in event_pump.poll_iter() {
+                match event {
+                    Event::Quit { .. }
+                    | Event::KeyDown {
+                        keycode: Some(Keycode::Escape),
+                        ..
+                    } => break 'running,
+                    _ => {}
                 }
-                self.frame_init();
-                on_render();
-                self.swap_window();
-                match &mut self.fps_limiter {
-                    Some(fps_limiter) => fps_limiter.delay(),
-                    None => {}
-                };
             }
+            self.frame_init();
+            on_render(self);
+            self.swap_window();
+            match &mut self.fps_limiter {
+                Some(fps_limiter) => fps_limiter.delay(),
+                None => {}
+            };
+        }
+    }
+
+    fn set_vsync(&mut self, is_vsync: bool) {
+        let vsync_result = sdl2::VideoSubsystem::gl_set_swap_interval(
+            &self.video_subsystem,
+            if is_vsync {
+                sdl2::video::SwapInterval::VSync
+            } else {
+                sdl2::video::SwapInterval::Immediate
+            },
+        );
+        self.fps_limiter = if vsync_result.is_err() {
+            print_debug!("set vsync error, try use fpslimiter at 60 fps");
+            Some(FpsLimiter::new(60))
+        } else {
+            None
+        }
     }
 }
 
 impl Window {
-    pub fn new(title_function: TitleCallback, width: u16, height: u16) -> Result<Self, String> {
+    pub fn new(width: u16, height: u16) -> Result<Self, String> {
+        Window::new_with_title_function(
+            |parameter| {
+                String::from(format!(
+                    "Arc | {:?} {}.{}",
+                    parameter.profile, parameter.version.major, parameter.version.minor
+                ))
+            },
+            width,
+            height,
+        )
+    }
+
+    pub fn new_with_title_function(
+        title_function: TitleCallback,
+        width: u16,
+        height: u16,
+    ) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
-        let parameter = 
-        if cfg!(target_os = "macos") {
+        let parameter = if cfg!(target_os = "macos") {
             WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
         } else {
             WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8))
@@ -61,11 +94,7 @@ impl Window {
         set_gl_version(&video_subsystem, &parameter);
 
         let mut sdl_window = util::expect!(video_subsystem
-            .window(
-                &title_function(&parameter),
-                width.into(),
-                height.into()
-            )
+            .window(&title_function(&parameter), width.into(), height.into())
             .opengl()
             .build());
 
@@ -90,51 +119,6 @@ impl Window {
             title_function,
         })
     }
-
-    pub fn set_vsync(&mut self, switch: bool) {
-        let vsync_result = sdl2::VideoSubsystem::gl_set_swap_interval(
-            &self.video_subsystem,
-            if switch {
-                sdl2::video::SwapInterval::VSync
-            } else {
-                sdl2::video::SwapInterval::Immediate
-            },
-        );
-        self.fps_limiter = if vsync_result.is_err() {
-            print_debug!("set vsync error, try use fpslimiter at 60 fps");
-            Some(FpsLimiter::new(60))
-        } else {
-            None
-        }
-    }
-
-    // pub fn run<TLOAD, TRENDER>(&mut self, on_load: TLOAD, on_render: TRENDER)
-    // where
-    //     TLOAD: Fn(&Window),
-    //     TRENDER: Fn(),
-    // {
-    //     on_load(self);
-    //     let mut event_pump = util::expect!(self.sdl_context.event_pump());
-    //     'running: loop {
-    //         for event in event_pump.poll_iter() {
-    //             match event {
-    //                 Event::Quit { .. }
-    //                 | Event::KeyDown {
-    //                     keycode: Some(Keycode::Escape),
-    //                     ..
-    //                 } => break 'running,
-    //                 _ => {}
-    //             }
-    //         }
-    //         self.frame_init();
-    //         on_render();
-    //         self.swap_window();
-    //         match &mut self.fps_limiter {
-    //             Some(fps_limiter) => fps_limiter.delay(),
-    //             None => {}
-    //         };
-    //     }
-    // }
 
     fn frame_init(&mut self) {
         self.fps_counter.update(|fps| {
