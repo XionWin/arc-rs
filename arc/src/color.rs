@@ -25,7 +25,7 @@ pub enum Color {
     BrightMagenta,
     BrightCyan,
     BrightWhite,
-    TrueColor { raw: Rgba },
+    TrueColor { r: u8, g: u8, b: u8, a: u8 },
 }
 
 impl Into<Rgba> for Color {
@@ -127,7 +127,7 @@ impl Into<Rgba> for Color {
                 b: 255u8,
                 a: 255u8,
             },
-            Color::TrueColor { raw } => raw,
+            Color::TrueColor { r, g, b, a } => Rgba { r, g, b, a},
         }
     }
 }
