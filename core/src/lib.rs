@@ -2,25 +2,18 @@ mod version;
 mod color_type;
 mod texture_filter;
 mod size;
+mod rect;
+mod rectf;
 mod image_data;
+mod texture;
+mod bolck_texture;
 
 pub use version::*;
 pub use color_type::*;
 pub use texture_filter::*;
 pub use size::*;
+pub use rect::*;
+pub use rectf::*;
 pub use image_data::*;
-
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub use texture::*;
+pub use bolck_texture::*;

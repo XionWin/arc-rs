@@ -21,6 +21,7 @@ mod vertex;
 mod window;
 mod color;
 mod graphic;
+mod texture;
 
 pub use location::*;
 pub use rect::*;
@@ -30,3 +31,4 @@ pub use vertex::*;
 pub use window::*;
 pub use color::*;
 pub use graphic::*;
+pub use texture::*;
