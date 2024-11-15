@@ -1,6 +1,6 @@
+use arc::Graphic;
 use opengl::gl;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
-use util::print_debug;
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 
@@ -16,9 +16,14 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
+    graphic: crate::Graphic
 }
 
 impl arc::Window for Window {
+    fn get_graphic(&self) -> &dyn Graphic {
+        &self.graphic
+    }
+
     fn gl_get_proc_address(&self, procname: &str) -> *const std::ffi::c_void {
         self.video_subsystem.gl_get_proc_address(procname) as _
     }
@@ -57,7 +62,7 @@ impl arc::Window for Window {
             },
         );
         self.fps_limiter = if vsync_result.is_err() {
-            print_debug!("set vsync error, try use fpslimiter at 60 fps");
+            util::print_debug!("set vsync error, try use fpslimiter at 60 fps");
             Some(FpsLimiter::new(60))
         } else {
             None
@@ -117,6 +122,7 @@ impl Window {
             fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
             fps_limiter: None,
             title_function,
+            graphic: crate::Graphic::new()
         })
     }
 

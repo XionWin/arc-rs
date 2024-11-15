@@ -1,3 +1,4 @@
+#[derive(Debug, Clone, Copy)]
 pub struct Version {
     pub major: u8,
     pub minor: u8,

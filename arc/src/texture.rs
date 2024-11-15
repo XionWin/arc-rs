@@ -1,14 +1,14 @@
 use crate::Graphic;
 
-pub struct Texture<'a> {
-    graphic: &'a dyn Graphic,
+pub struct Texture {
+    graphic: &'static dyn Graphic,
     id: i32,
     size: core::Size,
     color_type: core::ColorType,
     texture_filter: core::TextureFilter
 }
 
-impl<'a> core::Texture for Texture<'a> {
+impl core::Texture for Texture {
     fn get_id(&self) -> i32 {
         self.id
     }
@@ -30,8 +30,9 @@ impl<'a> core::Texture for Texture<'a> {
     }
 }
 
-impl<'a> Drop for Texture<'a> {
+impl Drop for Texture {
     fn drop(&mut self) {
+        util::print_debug!("texture {} droped", self.id);
         self.graphic.drop_texture(self)
     }
 }
