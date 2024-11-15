@@ -10,6 +10,12 @@ where T: crate::Renderer {
 
 impl<T> ArcGraphic<T>
 where T: crate::Renderer {
+    pub const fn const_new(renderer: T) -> Self {
+        Self {
+            renderer
+        }
+    }
+    
     pub fn new(renderer: T) -> Self {
         Self {
             renderer
@@ -31,15 +37,12 @@ where T: crate::Renderer {
     fn clear(&self) {
         self.renderer.clear();
     }
-
-    fn load_image(&self, path: &str, color_type: core::ColorType, color_filter: core::TextureFilter) {
+    fn load_image_from_file(&self, path: &str, color_type: core::ColorType, color_filter: core::TextureFilter) {
         self.renderer.load_image(path, color_type, color_filter);
     }
     fn load_image_data(&self, image_data: ImageData, color_filter: core::TextureFilter) {
         self.renderer.load_image_data(image_data, color_filter);
     }
-
-    
     fn drop_texture(&self, texture: &dyn Texture) {
         self.renderer.drop_texture(texture);
     }

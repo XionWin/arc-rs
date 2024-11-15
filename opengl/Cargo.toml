@@ -7,4 +7,6 @@ edition = "2021"
 libc="*"
 gl="*"
 bitflags="*"
+core = { path = "../core" }
 util = { path = "../util" }
+arc = { path = "../arc" }

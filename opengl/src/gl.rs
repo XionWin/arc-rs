@@ -10,11 +10,11 @@ pub fn load() {
     gl::load_with(|name| loader.get_proc_address(name));
 }
 
-pub fn load_with<F>(loadfn: F)
+pub fn load_with<F>(load_func: F)
 where
     F: FnMut(&'static str) -> *const c_void,
 {
-    gl::load_with(loadfn)
+    gl::load_with(load_func)
 }
 
 pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {

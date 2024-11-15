@@ -12,16 +12,12 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
-    graphic: arc::ArcGraphic<crate::Sdl2Renderer>,
+    graphic: arc::ArcGraphic<opengl::GLRenderer>,
 }
 
 impl arc::Window for Window {
     fn get_graphic(&self) -> &dyn Graphic {
         &self.graphic
-    }
-
-    fn gl_get_proc_address(&self, procname: &str) -> *const std::ffi::c_void {
-        self.video_subsystem.gl_get_proc_address(procname) as _
     }
 
     fn run(&mut self, on_load: fn(&Self), on_render: fn(&Self)) {
@@ -66,9 +62,7 @@ impl arc::Window for Window {
         }
     }
 
-    fn init(&mut self) {
-        opengl::gl::load_with(|name: &str| self.gl_get_proc_address(name) as *const _);
-    }
+    fn init(&mut self) {}
 
     fn frame_init(&mut self) {
         self.fps_counter.update(|fps| {
@@ -131,6 +125,10 @@ impl Window {
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
+        let renderer = opengl::GLRenderer::new();
+        renderer.load_with(|name| get_proc_address(&video_subsystem, name));
+        let graphic = arc::ArcGraphic::new(renderer);
+
         Ok(Window {
             parameter,
             sdl_context,
@@ -140,9 +138,13 @@ impl Window {
             fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
             fps_limiter: None,
             title_function,
-            graphic: arc::ArcGraphic::new(crate::Sdl2Renderer::new()),
+            graphic,
         })
     }
+}
+
+pub fn get_proc_address(video_subsystem: &VideoSubsystem, name: &str) -> *const std::ffi::c_void {
+    video_subsystem.gl_get_proc_address(name) as _
 }
 
 fn set_gl_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter) {

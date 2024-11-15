@@ -7,7 +7,9 @@ fn main() {
 
     window.run(
         |window| {
+            let _g = window.get_graphic();
             let _r = window.get_graphic().get_renderer();
+
         },
         |window| {
             let _r = window.get_graphic().get_renderer();

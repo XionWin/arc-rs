@@ -1,12 +1,24 @@
-pub struct Texture {
-    graphic: &'static dyn crate::Graphic,
+pub struct Texture<'a> {
+    graphic: &'a dyn crate::Graphic,
     id: i32,
     size: core::Size,
     color_type: core::ColorType,
     texture_filter: core::TextureFilter
 }
 
-impl core::Texture for Texture {
+impl<'a> Texture<'a> {
+    pub fn new(graphic: &'a dyn crate::Graphic) -> Self {
+        Self {
+            graphic,
+            id: -1,
+            size: core::Size::new(10, 10),
+            color_type: core::ColorType::Rgba,
+            texture_filter: core::TextureFilter::Linear
+        }
+    }
+}
+
+impl<'a> core::Texture for Texture<'a> {
     fn get_id(&self) -> i32 {
         self.id
     }
@@ -28,7 +40,7 @@ impl core::Texture for Texture {
     }
 }
 
-impl Drop for Texture {
+impl<'a> Drop for Texture<'a> {
     fn drop(&mut self) {
         util::print_debug!("texture {} droped", self.id);
         self.graphic.drop_texture(self)

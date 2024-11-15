@@ -4,7 +4,7 @@ pub trait Graphic {
     fn clear_color(&self, color: crate::Color);
     fn clear(&self, );
 
-    fn load_image(&self, path: &str, color_type: core::ColorType, color_filter: core::TextureFilter);
+    fn load_image_from_file(&self, path: &str, color_type: core::ColorType, color_filter: core::TextureFilter);
     fn load_image_data(&self, image_data: core::ImageData, color_filter: core::TextureFilter);
 
     

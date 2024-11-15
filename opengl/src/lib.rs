@@ -1,5 +1,8 @@
 mod def;
 mod library_loader;
-pub mod gl;
+#[allow(dead_code)]
+pub(crate) mod gl;
+mod gl_renderer;
 
 pub use def::*;
+pub use gl_renderer::*;
