@@ -18,4 +18,12 @@ impl<'a> Image<'a> {
     pub fn get_texture_mut(&mut self) -> &'a mut Texture {
         &mut self.texture
     }
+
+    pub fn get_color_type(&self) -> core::ColorType {
+        self.texture.color_type
+    }
+
+    pub fn get_texture_filter(&self) -> core::TextureFilter {
+        self.texture.texture_filter
+    }
 }

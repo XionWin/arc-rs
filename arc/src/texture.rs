@@ -1,9 +1,9 @@
 pub struct Texture<'a> {
     renderer: &'a dyn crate::Renderer,
     id: i32,
-    size: core::Size,
-    color_type: core::ColorType,
-    texture_filter: core::TextureFilter
+    pub(crate) size: core::Size,
+    pub(crate) color_type: core::ColorType,
+    pub(crate) texture_filter: core::TextureFilter
 }
 
 impl<'a> Texture<'a> {
