@@ -1,3 +1,5 @@
+use opengl::gl;
+
 pub struct Graphic {
 }
 
@@ -15,11 +17,13 @@ impl arc::Graphic for Graphic {
     }
 
     fn clear_color(&self, color: arc::Color) {
-        todo!()
+        let rgba: arc::Rgba = color.into();
+        let (r, g, b, a) = rgba.into();
+        gl::clear_color(r, g, b, a);
     }
 
     fn clear(&self, ) {
-        todo!()
+        gl::clear(opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT);
     }
 
     fn load_image(&self, path: &str, color_type: core::ColorType, color_filter: core::TextureFilter) {

@@ -6,6 +6,18 @@ pub struct Rgba {
     pub a: u8,
 }
 
+impl Into<(u8, u8, u8, u8)> for Rgba {
+    fn into(self) -> (u8, u8, u8, u8) {
+        (self.r, self.g, self.b, self.a)
+    }
+}
+
+impl Into<(f32, f32, f32, f32)> for Rgba {
+    fn into(self) -> (f32, f32, f32, f32) {
+        (self.r as f32 / 255f32, self.g as f32 / 255f32, self.b as f32 / 255f32, self.a as f32 / 255f32)
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[allow(missing_docs)]
 pub enum Color {
@@ -25,6 +37,7 @@ pub enum Color {
     BrightMagenta,
     BrightCyan,
     BrightWhite,
+    MidnightBlue,
     TrueColor { r: u8, g: u8, b: u8, a: u8 },
 }
 
@@ -126,6 +139,12 @@ impl Into<Rgba> for Color {
                 g: 255u8,
                 b: 255u8,
                 a: 255u8,
+            },
+            Color::MidnightBlue => Rgba {
+                r: 25u8,
+                g: 25u8,
+                b: 112u8,
+                a: 255u8
             },
             Color::TrueColor { r, g, b, a } => Rgba { r, g, b, a},
         }

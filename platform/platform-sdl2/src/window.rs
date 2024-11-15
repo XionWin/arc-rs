@@ -1,10 +1,7 @@
 use arc::Graphic;
-use opengl::gl;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
-
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 
-const MIDNIGHT_BLUE: (f32, f32, f32, f32) = (25f32 / 255f32, 25f32 / 255f32, 112f32 / 255f32, 1f32);
 
 type TitleCallback = fn(&WindowParameter) -> String;
 pub struct Window {
@@ -44,7 +41,7 @@ impl arc::Window for Window {
             }
             self.frame_init();
             on_render(self);
-            self.swap_window();
+            self.swap_buffers();
             match &mut self.fps_limiter {
                 Some(fps_limiter) => fps_limiter.delay(),
                 None => {}
@@ -67,6 +64,23 @@ impl arc::Window for Window {
         } else {
             None
         }
+    }
+
+    fn frame_init(&mut self) {
+        self.fps_counter.update(|fps| {
+            util::print_debug!("fps: {fps:.0}");
+            // util::expect!(self.sdl_window.set_title(&format!(
+            //     "{} fps: {:#.0}",
+            //     &(self.title_function)("Core", &self.version),
+            //     fps
+            // )))
+        });
+        self.get_graphic().clear_color(arc::Color::MidnightBlue);
+        self.get_graphic().clear();
+    }
+   
+    fn swap_buffers(&self) {
+        self.sdl_window.gl_swap_window();
     }
 }
 
@@ -126,25 +140,6 @@ impl Window {
         })
     }
 
-    fn frame_init(&mut self) {
-        self.fps_counter.update(|fps| {
-            util::print_debug!("fps: {fps:.0}");
-            // util::expect!(self.sdl_window.set_title(&format!(
-            //     "{} fps: {:#.0}",
-            //     &(self.title_function)("Core", &self.version),
-            //     fps
-            // )))
-        });
-        let (r, g, b, a) = MIDNIGHT_BLUE;
-        gl::clear_color(r, g, b, a);
-        gl::clear(
-            opengl::ClearBufferMask::COLOR_BUFFER_BIT | opengl::ClearBufferMask::DEPTH_BUFFER_BIT,
-        );
-    }
-
-    fn swap_window(&self) {
-        self.sdl_window.gl_swap_window();
-    }
 }
 
 fn set_gl_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter) {
