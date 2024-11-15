@@ -7,7 +7,7 @@ fn main() {
 
     window.run(
         |window| {
-            opengl::gl::load_with(|name| window.gl_get_proc_address(name) as *const _);
+            let _r = window.get_graphic().get_renderer();
         },
         |window| {
             let _r = window.get_graphic().get_renderer();

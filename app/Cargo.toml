@@ -9,4 +9,3 @@ util = { path = "../util" }
 core = { path = "../core" }
 arc = { path = "../arc" }
 platform-sdl2 = { path = "../platform/platform-sdl2" }
-opengl = { path = "../opengl" }

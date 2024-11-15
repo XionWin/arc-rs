@@ -25,6 +25,7 @@ impl arc::Window for Window {
     }
 
     fn run(&mut self, on_load: fn(&Self), on_render: fn(&Self)) {
+        self.init();
         on_load(self);
         let mut event_pump = util::expect!(self.sdl_context.event_pump());
         'running: loop {
@@ -63,6 +64,10 @@ impl arc::Window for Window {
         } else {
             None
         }
+    }
+
+    fn init(&mut self) {
+        opengl::gl::load_with(|name: &str| self.gl_get_proc_address(name) as *const _);
     }
 
     fn frame_init(&mut self) {

@@ -8,7 +8,6 @@ version = "0.1.0"
 dependencies = [
  "arc",
  "core",
- "opengl",
  "platform-sdl2",
  "util",
 ]
@@ -18,7 +17,6 @@ name = "arc"
 version = "0.1.0"
 dependencies = [
  "core",
- "opengl",
  "util",
 ]
 
