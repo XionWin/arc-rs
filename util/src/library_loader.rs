@@ -1,6 +1,6 @@
 use std::ffi::CString;
 
-pub struct Loader {
+pub struct LibraryLoader {
     _handle: *const libc::c_void,
 }
 
@@ -20,7 +20,7 @@ impl Into<libc::c_int> for OpenFlag {
     }
 }
 
-impl Loader {
+impl LibraryLoader {
     pub fn new(library_name: &str) -> Self {
         unsafe {
             let cstr = CString::new(library_name).unwrap();

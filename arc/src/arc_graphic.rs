@@ -1,6 +1,6 @@
-use core::{ImageData, Texture};
+use core::ImageData;
 
-use crate::{color::Color, Graphic};
+use crate::{color::Color, Graphic, Image};
 
 pub struct ArcGraphic<T>
 where T: crate::Renderer {
@@ -37,13 +37,13 @@ where T: crate::Renderer {
     fn clear(&self) {
         self.renderer.clear();
     }
-    fn load_image_from_file(&self, path: &str, color_type: core::ColorType, color_filter: core::TextureFilter) {
-        self.renderer.load_image(path, color_type, color_filter);
+    fn create_image(&self, size: core::Size, color_type: core::ColorType, color_filter: core::TextureFilter) -> Image {
+        Image::new(self.renderer.create_texture(size, color_type, color_filter))
     }
-    fn load_image_data(&self, image_data: ImageData, color_filter: core::TextureFilter) {
-        self.renderer.load_image_data(image_data, color_filter);
+    fn load_image_from_file(&self, path: &str, color_type: core::ColorType, color_filter: core::TextureFilter) -> Image {
+        todo!()
     }
-    fn drop_texture(&self, texture: &dyn Texture) {
-        self.renderer.drop_texture(texture);
+    fn load_image_data(&self, image_data: ImageData, color_filter: core::TextureFilter) -> Image {
+        todo!()
     }
 }

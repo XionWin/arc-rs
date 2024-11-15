@@ -1,5 +1,5 @@
 pub struct Texture<'a> {
-    graphic: &'a dyn crate::Graphic,
+    renderer: &'a dyn crate::Renderer,
     id: i32,
     size: core::Size,
     color_type: core::ColorType,
@@ -7,9 +7,9 @@ pub struct Texture<'a> {
 }
 
 impl<'a> Texture<'a> {
-    pub fn new(graphic: &'a dyn crate::Graphic) -> Self {
+    pub fn new(renderer: &'a dyn crate::Renderer) -> Self {
         Self {
-            graphic,
+            renderer,
             id: -1,
             size: core::Size::new(10, 10),
             color_type: core::ColorType::Rgba,
@@ -43,6 +43,6 @@ impl<'a> core::Texture for Texture<'a> {
 impl<'a> Drop for Texture<'a> {
     fn drop(&mut self) {
         util::print_debug!("texture {} droped", self.id);
-        self.graphic.drop_texture(self)
+        self.renderer.drop_texture(self)
     }
 }

@@ -9,7 +9,8 @@ fn main() {
         |window| {
             let _g = window.get_graphic();
             let _r = window.get_graphic().get_renderer();
-
+            
+            let i = _g.create_image(core::Size { width: 10, height: 10 }, core::ColorType::Rgba, core::TextureFilter::Linear);
         },
         |window| {
             let _r = window.get_graphic().get_renderer();

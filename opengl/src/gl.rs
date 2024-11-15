@@ -1,5 +1,6 @@
-use crate::{def::StringName, library_loader::LibraryLoader, ClearBufferMask};
+use crate::{def::StringName, ClearBufferMask};
 use libc::{c_char, c_float, c_int, c_uint};
+use util::LibraryLoader;
 use std::{
     ffi::{c_void, CStr, CString},
     str::from_utf8,
