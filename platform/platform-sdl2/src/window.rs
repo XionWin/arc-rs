@@ -1,7 +1,6 @@
+use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 use arc::Graphic;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
-use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
-
 
 type TitleCallback = fn(&WindowParameter) -> String;
 pub struct Window {
@@ -13,7 +12,7 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
-    graphic: crate::Graphic
+    graphic: crate::Graphic,
 }
 
 impl arc::Window for Window {
@@ -78,7 +77,7 @@ impl arc::Window for Window {
         self.get_graphic().clear_color(arc::Color::MidnightBlue);
         self.get_graphic().clear();
     }
-   
+
     fn swap_buffers(&self) {
         self.sdl_window.gl_swap_window();
     }
@@ -136,10 +135,9 @@ impl Window {
             fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
             fps_limiter: None,
             title_function,
-            graphic: crate::Graphic::new()
+            graphic: crate::Graphic::new(),
         })
     }
-
 }
 
 fn set_gl_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter) {
