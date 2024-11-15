@@ -10,7 +10,7 @@ fn main() {
             opengl::gl::load_with(|name| window.gl_get_proc_address(name) as *const _);
         },
         |window| {
-            let _g = window.get_graphic();
+            let _r = window.get_graphic().get_renderer();
         }
     );
 }

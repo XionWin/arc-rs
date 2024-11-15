@@ -1,5 +1,4 @@
-pub trait Graphic {
-    fn get_renderer(&self) -> &dyn crate::Renderer;
+pub trait Renderer {
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32);
     fn clear_color(&self, color: crate::Color);
     fn clear(&self, );

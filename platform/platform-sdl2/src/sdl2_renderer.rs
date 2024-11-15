@@ -1,16 +1,16 @@
 use opengl::gl;
 
-pub struct Graphic {
+pub struct Sdl2Renderer {
 }
 
-impl Graphic {
+impl Sdl2Renderer {
     pub fn new() -> Self {
         Self {
         }
     }
 }
 
-impl arc::Graphic for Graphic {
+impl arc::Renderer for Sdl2Renderer {
 
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         println!("call viewport function")

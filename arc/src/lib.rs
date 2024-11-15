@@ -21,6 +21,8 @@ mod vertex;
 mod window;
 mod color;
 mod graphic;
+mod arc_graphic;
+mod renderer;
 mod texture;
 
 pub use location::*;
@@ -31,4 +33,6 @@ pub use vertex::*;
 pub use window::*;
 pub use color::*;
 pub use graphic::*;
+pub use arc_graphic::*;
+pub use renderer::*;
 pub use texture::*;

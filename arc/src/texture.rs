@@ -1,7 +1,5 @@
-use crate::Graphic;
-
 pub struct Texture {
-    graphic: &'static dyn Graphic,
+    graphic: &'static dyn crate::Graphic,
     id: i32,
     size: core::Size,
     color_type: core::ColorType,

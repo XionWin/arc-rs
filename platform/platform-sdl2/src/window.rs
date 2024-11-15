@@ -12,7 +12,7 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
-    graphic: crate::Graphic,
+    graphic: arc::ArcGraphic<crate::Sdl2Renderer>,
 }
 
 impl arc::Window for Window {
@@ -135,7 +135,7 @@ impl Window {
             fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
             fps_limiter: None,
             title_function,
-            graphic: crate::Graphic::new(),
+            graphic: arc::ArcGraphic::new(crate::Sdl2Renderer::new()),
         })
     }
 }
