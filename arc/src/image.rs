@@ -1,12 +1,12 @@
 use core::Texture;
 use std::borrow::{Borrow, BorrowMut};
 
-pub struct Image {
-    texture: Box<dyn Texture>,
+pub struct Image<'a> {
+    texture: Box<dyn Texture + 'a>,
 }
 
-impl Image {
-    pub fn new(texture: Box<dyn Texture>) -> Self {
+impl<'a> Image<'a> {
+    pub fn new(texture: Box<dyn Texture + 'a>) -> Self {
         Self {
             texture
         }
