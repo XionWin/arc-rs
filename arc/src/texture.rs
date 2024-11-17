@@ -1,5 +1,7 @@
+use std::sync::Arc;
+
 pub struct Texture<'a> {
-    renderer: &'a dyn crate::Renderer,
+    renderer: Arc<&'a dyn crate::Renderer>,
     id: i32,
     pub(crate) size: core::Size,
     pub(crate) color_type: core::ColorType,
@@ -7,7 +9,7 @@ pub struct Texture<'a> {
 }
 
 impl<'a> Texture<'a> {
-    pub fn new(renderer: &'a dyn crate::Renderer) -> Self {
+    pub fn new(renderer: Arc<&'a dyn crate::Renderer>) -> Self {
         Self {
             renderer,
             id: -1,
@@ -43,6 +45,6 @@ impl<'a> core::Texture for Texture<'a> {
 impl<'a> Drop for Texture<'a> {
     fn drop(&mut self) {
         util::print_debug!("texture {} droped", self.id);
-        self.renderer.drop_texture(self)
+        self.renderer.drop_texture(self);
     }
 }

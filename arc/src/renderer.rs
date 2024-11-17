@@ -22,5 +22,6 @@ pub trait Renderer {
         image_data: core::ImageData,
         color_filter: core::TextureFilter,
     ) -> Texture;
-    fn drop_texture(&self, texture: &mut dyn core::Texture);
+    fn drop_texture(&self, texture: &dyn core::Texture);
+    fn drop_texture_by_id(&self, texture_id: i32);
 }
