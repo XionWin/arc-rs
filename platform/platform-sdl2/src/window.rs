@@ -1,3 +1,5 @@
+use std::borrow::Borrow;
+
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 use arc::Graphic;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
@@ -12,12 +14,12 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
-    graphic: arc::ArcGraphic,
+    graphic: Box<dyn arc::Graphic>,
 }
 
 impl arc::Window for Window {
     fn get_graphic(&self) -> &dyn Graphic {
-        &self.graphic
+        self.graphic.borrow()
     }
 
     fn run(&mut self, on_load: fn(&Self), on_render: fn(&Self)) {
@@ -138,7 +140,7 @@ impl Window {
             fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
             fps_limiter: None,
             title_function,
-            graphic,
+            graphic: Box::new(graphic),
         })
     }
 }
