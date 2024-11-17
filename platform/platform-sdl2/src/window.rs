@@ -12,7 +12,7 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
-    graphic: arc::ArcGraphic<opengl::GLRenderer>,
+    graphic: arc::ArcGraphic,
 }
 
 impl arc::Window for Window {
@@ -127,7 +127,7 @@ impl Window {
 
         let renderer = opengl::GLRenderer::new();
         renderer.load_with(|name| get_proc_address(&video_subsystem, name));
-        let graphic = arc::ArcGraphic::new(renderer);
+        let graphic = arc::ArcGraphic::new(Box::new(renderer));
 
         Ok(Window {
             parameter,

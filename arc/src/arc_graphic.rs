@@ -1,32 +1,30 @@
 use core::ImageData;
+use std::borrow::Borrow;
 
 use crate::{color::Color, Graphic, Image};
 
-pub struct ArcGraphic<T>
-where T: crate::Renderer {
-    renderer: T
+pub struct ArcGraphic {
+    renderer: Box<dyn crate::Renderer>
 }
 
 
-impl<T> ArcGraphic<T>
-where T: crate::Renderer {
-    pub const fn const_new(renderer: T) -> Self {
+impl ArcGraphic {
+    pub const fn const_new(renderer: Box<dyn crate::Renderer>) -> Self {
         Self {
             renderer
         }
     }
     
-    pub fn new(renderer: T) -> Self {
+    pub fn new(renderer: Box<dyn crate::Renderer>) -> Self {
         Self {
             renderer
         }
     }
 }
 
-impl<T> Graphic for ArcGraphic<T>
-where T: crate::Renderer {
+impl Graphic for ArcGraphic {
     fn get_renderer(&self) -> &dyn crate::Renderer {
-        &self.renderer
+        self.renderer.borrow()
     }
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         self.renderer.viewport(x, y, width, height);

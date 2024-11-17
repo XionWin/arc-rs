@@ -61,3 +61,9 @@ impl arc::Renderer for GLRenderer {
         gl::delete_texture(texture.get_id() as _);
     }
 }
+
+impl Drop for GLRenderer {
+    fn drop(&mut self) {
+        util::print_debug!("gl_renderer droped")
+    }
+}
