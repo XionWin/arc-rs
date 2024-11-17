@@ -1,6 +1,7 @@
 mod version;
 mod color_type;
 mod texture_filter;
+mod location;
 mod size;
 mod rect;
 mod rectf;
@@ -11,6 +12,7 @@ mod bolck_texture;
 pub use version::*;
 pub use color_type::*;
 pub use texture_filter::*;
+pub use location::*;
 pub use size::*;
 pub use rect::*;
 pub use rectf::*;

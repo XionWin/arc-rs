@@ -1,5 +1,7 @@
+use core::{Location, Rect, Size};
+
 use super::node::Node;
-use crate::{location::Location, rect::Rect, size::Size, skyline::atals_util};
+use crate::skyline::atals_util;
 
 pub struct Atlas {
     pub size: Size,

@@ -1,4 +1,6 @@
-use crate::{location::Location, rect::Rect, skyline::node::Node};
+use core::{Location, Rect};
+
+use crate::skyline::node::Node;
 
 use super::atlas::Atlas;
 

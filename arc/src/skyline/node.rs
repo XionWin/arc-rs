@@ -1,6 +1,5 @@
+use core::Location;
 use std::cmp;
-
-use crate::location::Location;
 
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct Node {

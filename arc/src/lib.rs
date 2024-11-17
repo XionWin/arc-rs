@@ -13,9 +13,6 @@
 //     }
 // }
 
-mod location;
-mod rect;
-mod size;
 mod skyline;
 mod vertex;
 mod window;
@@ -26,9 +23,6 @@ mod renderer;
 mod texture;
 mod image;
 
-pub use location::*;
-pub use rect::*;
-pub use size::*;
 pub use skyline::*;
 pub use vertex::*;
 pub use window::*;

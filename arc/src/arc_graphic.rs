@@ -45,3 +45,9 @@ impl Graphic for ArcGraphic {
     //     Image::new(Box::new(self.renderer.create_texture_with_image_data(image_data, color_filter)))
     // }
 }
+
+impl Drop for ArcGraphic {
+    fn drop(&mut self) {
+        util::print_debug!("arc_graphic droped")
+    }
+}
