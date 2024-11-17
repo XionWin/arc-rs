@@ -1,4 +1,3 @@
-use core::ImageData;
 use std::borrow::Borrow;
 
 use crate::{color::Color, Graphic, Image};
