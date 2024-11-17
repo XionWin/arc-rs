@@ -1,11 +1,15 @@
+use crate::Number;
+
 #[derive(Copy, Clone, Debug)]
-pub struct Location {
-    pub x: i32,
-    pub y: i32,
+pub struct Location<T>
+where T: Number {
+    pub x: T,
+    pub y: T,
 }
 
-impl Location {
-    pub fn new(x: i32, y: i32) -> Self {
+impl<T> Location<T> 
+where T: Number {
+    pub fn new(x: T, y: T) -> Self {
         Location { x, y }
     }
 }

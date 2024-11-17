@@ -4,7 +4,7 @@ use crate::skyline::node::Node;
 
 use super::atlas::Atlas;
 
-pub(crate) fn get_best_location(atlas: &Atlas, rect: &Rect) -> Option<Location> {
+pub(crate) fn get_best_location(atlas: &Atlas, rect: &Rect<i32>) -> Option<Location<i32>> {
     let mut best_node = Option::<Node>::None;
 
     for node in &atlas.nodes {

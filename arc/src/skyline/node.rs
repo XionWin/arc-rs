@@ -3,12 +3,12 @@ use std::cmp;
 
 #[derive(Clone, Copy, Debug)]
 pub(crate) struct Node {
-    pub(crate) location: Location,
+    pub(crate) location: Location<i32>,
     pub(crate) width: i32,
 }
 
 impl Node {
-    pub fn new(location: Location, width: i32) -> Self {
+    pub fn new(location: Location<i32>, width: i32) -> Self {
         Node { location, width }
     }
 

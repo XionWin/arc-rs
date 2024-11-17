@@ -37,7 +37,7 @@ impl arc::Renderer for GLRenderer {
 
     fn create_texture(
         &self,
-        size: core::Size,
+        size: core::Size<i32>,
         color_type: core::ColorType,
         color_filter: core::TextureFilter,
     ) -> arc::Texture {

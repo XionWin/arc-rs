@@ -1,15 +1,21 @@
-use crate::{Location, Size};
+use crate::{Location, Number, Size};
 
-pub struct Rect {
-    pub location: Location,
-    pub size: Size,
+pub struct Rect<T>
+where
+    T: Number,
+{
+    pub location: Location<T>,
+    pub size: Size<T>,
 }
 
-impl Rect {
-    pub fn new(x: i32, y: i32, width: i32, height: i32) -> Self {
+impl<T> Rect<T>
+where
+    T: Number,
+{
+    pub fn new(x: T, y: T, width: T, height: T) -> Self {
         Self {
             location: Location::new(x, y),
-            size: Size::new(width, height)
+            size: Size::new(width, height),
         }
     }
 }

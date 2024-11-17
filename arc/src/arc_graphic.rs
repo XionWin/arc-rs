@@ -34,7 +34,7 @@ impl Graphic for ArcGraphic {
     fn clear(&self) {
         self.renderer.clear();
     }
-    fn create_image(&self, size: core::Size, color_type: core::ColorType, color_filter: core::TextureFilter) -> Image {
+    fn create_image(&self, size: core::Size<i32>, color_type: core::ColorType, color_filter: core::TextureFilter) -> Image {
         let r = self.renderer.create_texture(size, color_type, color_filter);
         Image::new(Box::new(r))
     }

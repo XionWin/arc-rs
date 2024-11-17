@@ -3,13 +3,13 @@ use std::sync::Arc;
 pub struct Texture<'a> {
     renderer: Arc<&'a dyn crate::Renderer>,
     id: i32,
-    pub(crate) size: core::Size,
+    pub(crate) size: core::Size<i32>,
     pub(crate) color_type: core::ColorType,
     pub(crate) texture_filter: core::TextureFilter
 }
 
 impl<'a> Texture<'a> {
-    pub fn new(renderer: Arc<&'a dyn crate::Renderer>, size: core::Size, color_type: core::ColorType, texture_filter: core::TextureFilter) -> Self {
+    pub fn new(renderer: Arc<&'a dyn crate::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: core::TextureFilter) -> Self {
         Self {
             renderer,
             id: 1,
@@ -25,7 +25,7 @@ impl<'a> core::Texture for Texture<'a> {
         self.id
     }
 
-    fn get_size(&self) -> core::Size {
+    fn get_size(&self) -> core::Size<i32> {
         self.size
     }
 
