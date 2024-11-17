@@ -41,21 +41,21 @@ impl arc::Renderer for GLRenderer {
         color_type: core::ColorType,
         color_filter: core::TextureFilter,
     ) -> arc::Texture {
-        arc::Texture::new(std::sync::Arc::new(self))
+        arc::Texture::new(std::sync::Arc::new(self), size, color_type, color_filter)
     }
 
-    fn create_texture_with_file(
-        &self,
-        path: &str,
-        color_type: core::ColorType,
-        color_filter: core::TextureFilter,
-    ) -> arc::Texture {
-        todo!()
-    }
+    // fn create_texture_with_file(
+    //     &self,
+    //     path: &str,
+    //     color_type: core::ColorType,
+    //     color_filter: core::TextureFilter,
+    // ) -> arc::Texture {
+    //     todo!()
+    // }
 
-    fn create_texture_with_image_data(&self, image_data: core::ImageData, color_filter: core::TextureFilter) -> arc::Texture {
-        todo!()
-    }
+    // fn create_texture_with_image_data(&self, image_data: core::ImageData, color_filter: core::TextureFilter) -> arc::Texture {
+    //     todo!()
+    // }
 
     fn drop_texture(&self, texture: &dyn core::Texture) {
         gl::delete_texture(texture.get_id() as _);

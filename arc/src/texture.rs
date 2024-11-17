@@ -9,13 +9,13 @@ pub struct Texture<'a> {
 }
 
 impl<'a> Texture<'a> {
-    pub fn new(renderer: Arc<&'a dyn crate::Renderer>) -> Self {
+    pub fn new(renderer: Arc<&'a dyn crate::Renderer>, size: core::Size, color_type: core::ColorType, texture_filter: core::TextureFilter) -> Self {
         Self {
             renderer,
-            id: -1,
-            size: core::Size::new(10, 10),
-            color_type: core::ColorType::Rgba,
-            texture_filter: core::TextureFilter::Linear
+            id: 1,
+            size,
+            color_type,
+            texture_filter
         }
     }
 }
@@ -38,6 +38,7 @@ impl<'a> core::Texture for Texture<'a> {
     }
 
     fn export(&self, path: &str) {
+        println!("path: {}", path);
         todo!()
     }
 }

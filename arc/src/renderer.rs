@@ -11,17 +11,17 @@ pub trait Renderer {
         color_type: core::ColorType,
         color_filter: core::TextureFilter,
     ) -> Texture;
-    fn create_texture_with_file(
-        &self,
-        path: &str,
-        color_type: core::ColorType,
-        color_filter: core::TextureFilter,
-    ) -> Texture;
-    fn create_texture_with_image_data(
-        &self,
-        image_data: core::ImageData,
-        color_filter: core::TextureFilter,
-    ) -> Texture;
+    // fn create_texture_with_file(
+    //     &self,
+    //     path: &str,
+    //     color_type: core::ColorType,
+    //     color_filter: core::TextureFilter,
+    // ) -> Texture;
+    // fn create_texture_with_image_data(
+    //     &self,
+    //     image_data: core::ImageData,
+    //     color_filter: core::TextureFilter,
+    // ) -> Texture;
     fn drop_texture(&self, texture: &dyn core::Texture);
     fn drop_texture_by_id(&self, texture_id: i32);
 }
