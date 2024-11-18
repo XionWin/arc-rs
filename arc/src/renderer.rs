@@ -1,4 +1,4 @@
-use crate::Texture;
+use crate::{Texture, TextureFilter};
 
 pub trait Renderer {
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32);
@@ -9,18 +9,18 @@ pub trait Renderer {
         &self,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        color_filter: core::ImageFilter,
+        texture_filter: TextureFilter,
     ) -> Box<dyn Texture + '_>;
     // fn create_texture_with_file(
     //     &self,
     //     path: &str,
     //     color_type: core::ColorType,
-    //     color_filter: core::TextureFilter,
+    //     texture_filter: TextureFilter,
     // ) -> Texture;
     // fn create_texture_with_image_data(
     //     &self,
     //     image_data: core::ImageData,
-    //     color_filter: core::TextureFilter,
+    //     texture_filter: TextureFilter,
     // ) -> Texture;
     fn drop_texture(&self, texture: &dyn Texture);
     fn drop_texture_by_id(&self, texture_id: i32);

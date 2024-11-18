@@ -39,21 +39,21 @@ impl arc::Renderer for GLRenderer {
         &self,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        color_filter: core::ImageFilter,
+        texture_filter: arc::TextureFilter,
     ) -> Box<dyn arc::Texture + '_> {
-        Box::new(crate::Texture::new(std::sync::Arc::new(self), size, color_type, color_filter))
+        Box::new(crate::Texture::new(std::sync::Arc::new(self), size, color_type, texture_filter))
     }
 
     // fn create_texture_with_file(
     //     &self,
     //     path: &str,
     //     color_type: core::ColorType,
-    //     color_filter: core::TextureFilter,
+    //     texture_filter: arc::TextureFilter,
     // ) -> arc::Texture {
     //     todo!()
     // }
 
-    // fn create_texture_with_image_data(&self, image_data: core::ImageData, color_filter: core::TextureFilter) -> arc::Texture {
+    // fn create_texture_with_image_data(&self, image_data: core::ImageData, texture_filter: arc::TextureFilter) -> arc::Texture {
     //     todo!()
     // }
 

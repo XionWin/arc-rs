@@ -24,7 +24,7 @@ impl<'a> core::Image for Image<'a> {
     }
 
     fn get_filter(&self) -> core::ImageFilter {
-        self.texture.get_texture_filter()
+        self.texture.get_texture_filter().into()
     }
 }
 
