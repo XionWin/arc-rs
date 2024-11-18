@@ -3,9 +3,9 @@ use std::sync::Arc;
 pub struct Texture<'a> {
     renderer: Arc<&'a dyn arc::Renderer>,
     id: i32,
-    pub(crate) size: core::Size<i32>,
-    pub(crate) color_type: core::ColorType,
-    pub(crate) texture_filter: core::TextureFilter
+    size: core::Size<i32>,
+    color_type: core::ColorType,
+    texture_filter: core::TextureFilter
 }
 
 impl<'a> Texture<'a> {
