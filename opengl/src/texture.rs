@@ -1,4 +1,4 @@
-use std::{cell::RefCell, rc::{Rc, Weak}};
+use std::rc::Rc;
 
 pub struct Texture {
     renderer: Rc<dyn arc::Renderer>,

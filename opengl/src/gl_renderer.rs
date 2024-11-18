@@ -1,4 +1,4 @@
-use std::{cell::RefCell, ffi::c_void, rc::Rc};
+use std::{ffi::c_void, rc::Rc};
 
 use crate::gl;
 
