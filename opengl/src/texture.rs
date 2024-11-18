@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
 pub struct Texture<'a> {
-    renderer: Arc<&'a dyn crate::Renderer>,
+    renderer: Arc<&'a dyn arc::Renderer>,
     id: i32,
     pub(crate) size: core::Size<i32>,
     pub(crate) color_type: core::ColorType,
@@ -9,7 +9,7 @@ pub struct Texture<'a> {
 }
 
 impl<'a> Texture<'a> {
-    pub fn new(renderer: Arc<&'a dyn crate::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: core::TextureFilter) -> Self {
+    pub fn new(renderer: Arc<&'a dyn arc::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: core::TextureFilter) -> Self {
         Self {
             renderer,
             id: 1,

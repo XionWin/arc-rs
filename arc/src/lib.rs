@@ -20,7 +20,6 @@ mod color;
 mod graphic;
 mod arc_graphic;
 mod renderer;
-mod texture;
 mod image;
 
 pub use skyline::*;
@@ -30,5 +29,4 @@ pub use color::*;
 pub use graphic::*;
 pub use arc_graphic::*;
 pub use renderer::*;
-pub use texture::*;
 pub use image::*;

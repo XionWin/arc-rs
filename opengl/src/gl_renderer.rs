@@ -40,8 +40,8 @@ impl arc::Renderer for GLRenderer {
         size: core::Size<i32>,
         color_type: core::ColorType,
         color_filter: core::TextureFilter,
-    ) -> arc::Texture {
-        arc::Texture::new(std::sync::Arc::new(self), size, color_type, color_filter)
+    ) -> Box<dyn core::Texture + '_> {
+        Box::new(crate::Texture::new(std::sync::Arc::new(self), size, color_type, color_filter))
     }
 
     // fn create_texture_with_file(
