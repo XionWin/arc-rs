@@ -1,15 +1,15 @@
-use std::sync::Arc;
+use std::{cell::RefCell, rc::{Rc, Weak}};
 
-pub struct Texture<'a> {
-    renderer: Arc<&'a dyn arc::Renderer>,
+pub struct Texture {
+    renderer: Rc<dyn arc::Renderer>,
     id: i32,
     size: core::Size<i32>,
     color_type: core::ColorType,
     texture_filter: arc::TextureFilter
 }
 
-impl<'a> Texture<'a> {
-    pub fn new(renderer: Arc<&'a dyn arc::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: arc::TextureFilter) -> Self {
+impl Texture {
+    pub fn new(renderer: Rc<dyn arc::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: arc::TextureFilter) -> Self {
         Self {
             renderer,
             id: 1,
@@ -20,7 +20,7 @@ impl<'a> Texture<'a> {
     }
 }
 
-impl<'a> arc::Texture for Texture<'a> {
+impl arc::Texture for Texture {
     fn get_id(&self) -> i32 {
         self.id
     }
@@ -43,9 +43,9 @@ impl<'a> arc::Texture for Texture<'a> {
     }
 }
 
-impl<'a> Drop for Texture<'a> {
+impl Drop for Texture {
     fn drop(&mut self) {
-        util::print_debug!("texture {} droped", self.id);
         self.renderer.drop_texture(self);
+        util::print_debug!("texture {} droped", self.id);
     }
 }

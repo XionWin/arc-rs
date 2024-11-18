@@ -1,3 +1,5 @@
+use std::rc::Rc;
+
 use crate::{Texture, TextureFilter};
 
 pub trait Renderer {
@@ -6,11 +8,11 @@ pub trait Renderer {
     fn clear(&self);
 
     fn create_texture(
-        &self,
+        self: Rc<Self>,
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: TextureFilter,
-    ) -> Box<dyn Texture + '_>;
+    ) -> Box<dyn Texture>;
     // fn create_texture_with_file(
     //     &self,
     //     path: &str,

@@ -1,4 +1,4 @@
-use std::ffi::c_void;
+use std::{cell::RefCell, ffi::c_void, rc::Rc};
 
 use crate::gl;
 
@@ -36,12 +36,12 @@ impl arc::Renderer for GLRenderer {
     }
 
     fn create_texture(
-        &self,
+        self: Rc<Self>,
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: arc::TextureFilter,
-    ) -> Box<dyn arc::Texture + '_> {
-        Box::new(crate::Texture::new(std::sync::Arc::new(self), size, color_type, texture_filter))
+    ) -> Box<dyn arc::Texture> {
+        Box::new(crate::Texture::new(self.clone(), size, color_type, texture_filter))
     }
 
     // fn create_texture_with_file(
@@ -65,6 +65,7 @@ impl arc::Renderer for GLRenderer {
         gl::delete_texture(texture_id as _);
     }
 }
+
 
 impl Drop for GLRenderer {
     fn drop(&mut self) {

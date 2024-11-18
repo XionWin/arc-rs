@@ -1,4 +1,4 @@
-use std::borrow::Borrow;
+use std::{borrow::Borrow, rc::Rc};
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
@@ -128,7 +128,7 @@ impl Window {
 
         let renderer = opengl::GLRenderer::new();
         renderer.load_with(|name| get_proc_address(&video_subsystem, name));
-        let graphic = arc::Graphic::new(Box::new(renderer));
+        let graphic = arc::Graphic::new(Rc::new(renderer));
 
         Ok(Window {
             parameter,

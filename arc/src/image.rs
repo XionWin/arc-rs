@@ -3,19 +3,19 @@ use std::borrow::{Borrow, BorrowMut};
 
 use crate::Texture;
 
-pub struct Image<'a> {
-    texture: Box<dyn Texture + 'a>,
+pub struct Image {
+    texture: Box<dyn Texture>,
 }
 
-impl<'a> Image<'a> {
-    pub fn new(texture: Box<dyn Texture + 'a>) -> Self {
+impl Image {
+    pub fn new(texture: Box<dyn Texture>) -> Self {
         Self {
             texture
         }
     }
 }
 
-impl<'a> core::Image for Image<'a> {
+impl core::Image for Image {
     fn get_size(&self) -> Size<i32> {
         self.texture.get_size()
     }
@@ -28,7 +28,7 @@ impl<'a> core::Image for Image<'a> {
     }
 }
 
-impl<'a> crate::TextureComponent for Image<'a> {
+impl crate::TextureComponent for Image {
     fn get_texture(&self) -> &dyn Texture {
         self.texture.borrow()
     }
