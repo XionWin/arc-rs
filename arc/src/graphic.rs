@@ -8,12 +8,6 @@ pub struct Graphic {
 
 
 impl Graphic {
-    pub const fn const_new(renderer: Box<dyn crate::Renderer>) -> Self {
-        Self {
-            renderer
-        }
-    }
-    
     pub fn new(renderer: Box<dyn crate::Renderer>) -> Self {
         Self {
             renderer
