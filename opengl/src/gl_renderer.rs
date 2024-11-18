@@ -24,8 +24,8 @@ impl arc::Renderer for GLRenderer {
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         gl::viewport(x, y, width, height);
     }
-    fn clear_color(&self, color: arc::Color) {
-        let rgba: arc::Rgba = color.into();
+    fn clear_color(&self, color: core::Color) {
+        let rgba: core::Rgba = color.into();
         let (r, g, b, a) = rgba.into();
         gl::clear_color(r, g, b, a);
     }
@@ -39,8 +39,8 @@ impl arc::Renderer for GLRenderer {
         &self,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        color_filter: core::TextureFilter,
-    ) -> Box<dyn core::Texture + '_> {
+        color_filter: core::ImageFilter,
+    ) -> Box<dyn arc::Texture + '_> {
         Box::new(crate::Texture::new(std::sync::Arc::new(self), size, color_type, color_filter))
     }
 
@@ -57,7 +57,7 @@ impl arc::Renderer for GLRenderer {
     //     todo!()
     // }
 
-    fn drop_texture(&self, texture: &dyn core::Texture) {
+    fn drop_texture(&self, texture: &dyn arc::Texture) {
         gl::delete_texture(texture.get_id() as _);
     }
 

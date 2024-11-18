@@ -1,5 +1,7 @@
-use core::Texture;
+use core::Size;
 use std::borrow::{Borrow, BorrowMut};
+
+use crate::Texture;
 
 pub struct Image<'a> {
     texture: Box<dyn Texture + 'a>,
@@ -11,20 +13,27 @@ impl<'a> Image<'a> {
             texture
         }
     }
+}
 
-    pub fn get_texture(&self) -> &dyn Texture {
-        self.texture.borrow()
+impl<'a> core::Image for Image<'a> {
+    fn get_size(&self) -> Size<i32> {
+        self.texture.get_size()
     }
-
-    pub fn get_texture_mut(&mut self) -> &mut dyn Texture {
-        self.texture.borrow_mut()
-    }
-
-    pub fn get_color_type(&self) -> core::ColorType {
+    fn get_color_type(&self) -> core::ColorType {
         self.texture.get_color_type()
     }
 
-    pub fn get_texture_filter(&self) -> core::TextureFilter {
+    fn get_filter(&self) -> core::ImageFilter {
         self.texture.get_texture_filter()
+    }
+}
+
+impl<'a> crate::TextureComponent for Image<'a> {
+    fn get_texture(&self) -> &dyn Texture {
+        self.texture.borrow()
+    }
+
+    fn get_texture_mut(&mut self) -> &mut dyn Texture {
+        self.texture.borrow_mut()
     }
 }

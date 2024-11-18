@@ -5,11 +5,11 @@ pub struct Texture<'a> {
     id: i32,
     size: core::Size<i32>,
     color_type: core::ColorType,
-    texture_filter: core::TextureFilter
+    texture_filter: core::ImageFilter
 }
 
 impl<'a> Texture<'a> {
-    pub fn new(renderer: Arc<&'a dyn arc::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: core::TextureFilter) -> Self {
+    pub fn new(renderer: Arc<&'a dyn arc::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: core::ImageFilter) -> Self {
         Self {
             renderer,
             id: 1,
@@ -20,7 +20,7 @@ impl<'a> Texture<'a> {
     }
 }
 
-impl<'a> core::Texture for Texture<'a> {
+impl<'a> arc::Texture for Texture<'a> {
     fn get_id(&self) -> i32 {
         self.id
     }
@@ -33,7 +33,7 @@ impl<'a> core::Texture for Texture<'a> {
         self.color_type
     }
 
-    fn get_texture_filter(&self) -> core::TextureFilter {
+    fn get_texture_filter(&self) -> core::ImageFilter {
         self.texture_filter
     }
 

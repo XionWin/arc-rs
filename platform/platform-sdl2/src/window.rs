@@ -1,7 +1,6 @@
 use std::borrow::Borrow;
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
-use arc::Graphic;
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
 type TitleCallback = fn(&WindowParameter) -> String;
@@ -14,11 +13,11 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
-    graphic: Box<dyn arc::Graphic>,
+    graphic: Box<dyn core::Graphic>,
 }
 
-impl arc::Window for Window {
-    fn get_graphic(&self) -> &dyn Graphic {
+impl core::Window for Window {
+    fn get_graphic(&self) -> &dyn core::Graphic {
         self.graphic.borrow()
     }
 
@@ -75,7 +74,7 @@ impl arc::Window for Window {
             //     fps
             // )))
         });
-        self.get_graphic().clear_color(arc::Color::MidnightBlue);
+        self.get_graphic().clear_color(core::Color::MidnightBlue);
         self.get_graphic().clear();
     }
 
@@ -129,7 +128,7 @@ impl Window {
 
         let renderer = opengl::GLRenderer::new();
         renderer.load_with(|name| get_proc_address(&video_subsystem, name));
-        let graphic = arc::ArcGraphic::new(Box::new(renderer));
+        let graphic = arc::Graphic::new(Box::new(renderer));
 
         Ok(Window {
             parameter,

@@ -15,18 +15,20 @@
 
 mod skyline;
 mod vertex;
-mod window;
-mod color;
 mod graphic;
-mod arc_graphic;
 mod renderer;
+mod rendering_component;
+mod texture_filter;
+mod texture;
+mod texture_compontent;
 mod image;
 
 pub use skyline::*;
 pub use vertex::*;
-pub use window::*;
-pub use color::*;
 pub use graphic::*;
-pub use arc_graphic::*;
 pub use renderer::*;
+pub use rendering_component::*;
+pub use texture_filter::*;
+pub use texture::*;
+pub use texture_compontent::*;
 pub use image::*;

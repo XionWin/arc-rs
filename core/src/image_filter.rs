@@ -1,5 +1,5 @@
 #[derive(Debug, Clone, Copy)]
-pub enum TextureFilter {
+pub enum ImageFilter {
     Linear,
     Nearest,
 }
