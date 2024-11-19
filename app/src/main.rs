@@ -10,6 +10,7 @@ fn main() {
             let _g = window.get_graphic();
             
             let _i = _g.create_image(core::Size { width: 10, height: 10 }, core::ColorType::Rgba, core::ImageFilter::Linear);
+            let _i = _g.load_image_from_file("resource/image/icon96.png", core::ImageFilter::Linear);
         },
         |window| {
             let _g = window.get_graphic();

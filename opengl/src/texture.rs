@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 pub struct Texture {
     renderer: Rc<dyn arc::Renderer>,
-    id: i32,
+    id: u32,
     size: core::Size<i32>,
     color_type: core::ColorType,
     texture_filter: arc::TextureFilter
@@ -12,7 +12,7 @@ impl Texture {
     pub fn new(renderer: Rc<dyn arc::Renderer>, size: core::Size<i32>, color_type: core::ColorType, texture_filter: arc::TextureFilter) -> Self {
         Self {
             renderer,
-            id: 1,
+            id: crate::gl::gen_texture(),
             size,
             color_type,
             texture_filter
@@ -21,7 +21,7 @@ impl Texture {
 }
 
 impl arc::Texture for Texture {
-    fn get_id(&self) -> i32 {
+    fn get_id(&self) -> u32 {
         self.id
     }
 

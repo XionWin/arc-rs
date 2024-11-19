@@ -45,12 +45,12 @@ impl arc::Renderer for GLRenderer {
     }
 
     fn create_texture_from_file(
-        &self,
+        self: Rc<Self>,
         path: &str,
-        color_type: core::ColorType,
         texture_filter: arc::TextureFilter,
     ) -> Box<dyn arc::Texture> {
-        todo!()
+        let image_data = core::ImageData::new_from_file(path);
+        Box::new(crate::Texture::new(self.clone(), image_data.size, image_data.color_type, texture_filter))
     }
 
     // fn create_texture_with_image_data(&self, image_data: core::ImageData, texture_filter: arc::TextureFilter) -> arc::Texture {

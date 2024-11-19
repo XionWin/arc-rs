@@ -14,9 +14,8 @@ pub trait Renderer {
         texture_filter: TextureFilter,
     ) -> Box<dyn Texture>;
     fn create_texture_from_file(
-        &self,
+        self: Rc<Self>,
         path: &str,
-        color_type: core::ColorType,
         texture_filter: TextureFilter,
     ) -> Box<dyn Texture>;
     // fn create_texture_with_image_data(

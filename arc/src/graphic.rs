@@ -29,8 +29,8 @@ impl core::Graphic for Graphic {
         let texture = self.renderer.clone().create_texture(size, color_type, image_filter.into());
         Box::new(Image::new(texture))
     }
-    fn load_image_from_file(&self, path: &str, color_type: core::ColorType, image_filter: core::ImageFilter) -> Box<dyn core::Image> {
-        let texture = self.renderer.clone().create_texture_from_file(path, color_type, image_filter.into());
+    fn load_image_from_file(&self, path: &str, image_filter: core::ImageFilter) -> Box<dyn core::Image> {
+        let texture = self.renderer.clone().create_texture_from_file(path, image_filter.into());
         Box::new(Image::new(texture))
     }
     // fn load_image_data(&self, image_data: ImageData, image_filter: core::TextureFilter) -> Image {
