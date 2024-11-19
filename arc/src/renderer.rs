@@ -18,11 +18,6 @@ pub trait Renderer {
         path: &str,
         texture_filter: TextureFilter,
     ) -> Box<dyn Texture>;
-    // fn create_texture_with_image_data(
-    //     &self,
-    //     image_data: core::ImageData,
-    //     texture_filter: TextureFilter,
-    // ) -> Texture;
     fn drop_texture(&self, texture: &dyn Texture);
     fn drop_texture_by_id(&self, texture_id: i32);
 }

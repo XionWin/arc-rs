@@ -1,6 +1,6 @@
 use std::{ffi::c_void, rc::Rc};
 
-use crate::gl;
+use arc::Texture;
 
 pub struct GLRenderer {}
 
@@ -12,7 +12,7 @@ impl GLRenderer {
 
 impl GLRenderer {
     pub fn load(&self) {
-        gl::load();
+        crate::gl::load();
     }
     pub fn load_with<T>(&self, loadfn: T)
     where T: Fn(&str) -> *const c_void {
@@ -22,15 +22,15 @@ impl GLRenderer {
 
 impl arc::Renderer for GLRenderer {
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
-        gl::viewport(x, y, width, height);
+        crate::gl::viewport(x, y, width, height);
     }
     fn clear_color(&self, color: core::Color) {
         let rgba: core::Rgba = color.into();
         let (r, g, b, a) = rgba.into();
-        gl::clear_color(r, g, b, a);
+        crate::gl::clear_color(r, g, b, a);
     }
     fn clear(&self) {
-        gl::clear(
+        crate::gl::clear(
             crate::ClearBufferMask::COLOR_BUFFER_BIT | crate::ClearBufferMask::DEPTH_BUFFER_BIT,
         );
     }
@@ -50,19 +50,17 @@ impl arc::Renderer for GLRenderer {
         texture_filter: arc::TextureFilter,
     ) -> Box<dyn arc::Texture> {
         let image_data = core::ImageData::new_from_file(path);
-        Box::new(crate::Texture::new(self.clone(), image_data.size, image_data.color_type, texture_filter))
+        let texture = crate::Texture::new(self.clone(), image_data.size, image_data.color_type, texture_filter);
+        texture.load(&image_data);
+        Box::new(texture)
     }
 
-    // fn create_texture_with_image_data(&self, image_data: core::ImageData, texture_filter: arc::TextureFilter) -> arc::Texture {
-    //     todo!()
-    // }
-
     fn drop_texture(&self, texture: &dyn arc::Texture) {
-        gl::delete_texture(texture.get_id() as _);
+        crate::gl::delete_texture(texture.get_id() as _);
     }
 
     fn drop_texture_by_id(&self, texture_id: i32) {
-        gl::delete_texture(texture_id as _);
+        crate::gl::delete_texture(texture_id as _);
     }
 }
 

@@ -33,9 +33,6 @@ impl core::Graphic for Graphic {
         let texture = self.renderer.clone().create_texture_from_file(path, image_filter.into());
         Box::new(Image::new(texture))
     }
-    // fn load_image_data(&self, image_data: ImageData, image_filter: core::TextureFilter) -> Image {
-    //     Image::new(Box::new(self.renderer.create_texture_with_image_data(image_data, image_filter)))
-    // }
 }
 
 impl RenderingComponent for Graphic {
