@@ -2,11 +2,8 @@ pub enum PixelStoreParameter {
     UnpackSwapBytes = 3312,
     UnpackLsbFirst = 3313,
     UnpackRowLength = 3314,
-    // UnpackRowLengthExt = 3314,
     UnpackSkipRows = 3315,
-    // UnpackSkipRowsExt = 3315,
     UnpackSkipPixels = 3316,
-    // UnpackSkipPixelsExt = 3316,
     UnpackAlignment = 3317,
     PackSwapBytes = 3328,
     PackLsbFirst = 3329,
@@ -15,13 +12,9 @@ pub enum PixelStoreParameter {
     PackSkipPixels = 3332,
     PackAlignment = 3333,
     PackSkipImages = 32875,
-    // PackSkipImagesExt = 32875,
     PackImageHeight = 32876,
-    // PackImageHeightExt = 32876,
     UnpackSkipImages = 32877,
-    // UnpackSkipImagesExt = 32877,
     UnpackImageHeight = 32878,
-    // UnpackImageHeightExt = 32878,
     PackSkipVolumesSgis = 33072,
     PackImageDepthSgis = 33073,
     UnpackSkipVolumesSgis = 33074,
@@ -38,4 +31,15 @@ pub enum PixelStoreParameter {
     UnpackSubsampleRateSgix = 34209,
     PackResampleOml = 35204,
     UnpackResampleOml = 35205,
+}
+
+#[allow(non_upper_case_globals)]
+impl PixelStoreParameter {
+    pub const UnpackRowLengthExt: PixelStoreParameter = PixelStoreParameter::UnpackRowLength;
+    pub const UnpackSkipRowsExt: PixelStoreParameter = PixelStoreParameter::UnpackSkipRows;
+    pub const UnpackSkipPixelsExt: PixelStoreParameter = PixelStoreParameter::UnpackSkipPixels;
+    pub const PackSkipImagesExt: PixelStoreParameter = PixelStoreParameter::PackSkipImages;
+    pub const PackImageHeightExt: PixelStoreParameter = PixelStoreParameter::PackImageHeight;
+    pub const UnpackSkipImagesExt: PixelStoreParameter = PixelStoreParameter::UnpackSkipImages;
+    pub const UnpackImageHeightExt: PixelStoreParameter = PixelStoreParameter::UnpackImageHeight;
 }

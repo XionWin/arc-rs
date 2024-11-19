@@ -80,7 +80,7 @@ impl arc::Texture for Texture {
             crate::def::TextureWrapMode::Repeat as _,
         );
 
-        crate::gl::generate_mipmap(crate::def::GenerateMipmapTarget::Texture2D);
+        crate::gl::generate_mipmap(crate::def::TextureTarget::Texture2D);
     }
 
     fn export(&self, path: &str) {

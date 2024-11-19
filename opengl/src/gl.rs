@@ -439,12 +439,12 @@ pub fn tex_parameter_i(
     unsafe { gl::TexParameteri(texture_target as _, texture_param_name as _, value) }
 }
 
-pub fn generate_mipmap(generate_mipmap_target: crate::def::GenerateMipmapTarget) {
-    unsafe { gl::GenerateMipmap(generate_mipmap_target as _) }
+pub fn generate_mipmap(texture_target: crate::def::TextureTarget) {
+    unsafe { gl::GenerateMipmap(texture_target as _) }
 }
 
-pub fn blend_func(sfactor: crate::def::BlendingFactor, dfactor: crate::def::BlendingFactor) {
-    unsafe { gl::BlendFunc(sfactor as _, dfactor as _) }
+pub fn blend_func(src_factor: crate::def::BlendingFactorSrc, dest_factor: crate::def::BlendingFactorDest) {
+    unsafe { gl::BlendFunc(src_factor as _, dest_factor as _) }
 }
 
 pub fn stencil_mask(mask: c_uint) {

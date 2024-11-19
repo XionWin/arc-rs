@@ -118,6 +118,6 @@ pub enum EnableCap {
 
 #[allow(non_upper_case_globals)]
 impl EnableCap {
-    pub const SampleAlphaToCoverage: u32 = EnableCap::SampleAlphaToMaskSgis as _;
-    pub const SampleCoverage: u32 = EnableCap::SampleMaskSgis as _;
+    pub const SampleAlphaToCoverage: EnableCap = EnableCap::SampleAlphaToMaskSgis;
+    pub const SampleCoverage: EnableCap = EnableCap::SampleMaskSgis;
 }

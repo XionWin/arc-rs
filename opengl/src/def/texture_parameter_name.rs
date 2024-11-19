@@ -1,10 +1,8 @@
 pub enum TextureParameterName {
     TextureWidth = 4096,
     TextureHeight = 4097,
-    // TextureComponents = 4099,
-    TextureInternalFormat = 4099,
+    TextureComponents = 4099,
     TextureBorderColor = 4100,
-    // TextureBorderColorNv = 4100,
     TextureBorder = 4101,
     TextureMagFilter = 10240,
     TextureMinFilter = 10241,
@@ -17,12 +15,9 @@ pub enum TextureParameterName {
     TextureLuminanceSize = 32864,
     TextureIntensitySize = 32865,
     TexturePriority = 32870,
-    // TexturePriorityExt = 32870,
     TextureResident = 32871,
     TextureDepthExt = 32881,
     TextureWrapR = 32882,
-    // TextureWrapRExt = 32882,
-    // TextureWrapROes = 32882,
     DetailTextureLevelSgis = 32922,
     DetailTextureModeSgis = 32923,
     DetailTextureFuncPointsSgis = 32924,
@@ -33,13 +28,9 @@ pub enum TextureParameterName {
     Texture4DsizeSgis = 33078,
     TextureWrapQSgis = 33079,
     TextureMinLod = 33082,
-    // TextureMinLodSgis = 33082,
     TextureMaxLod = 33083,
-    // TextureMaxLodSgis = 33083,
     TextureBaseLevel = 33084,
-    // TextureBaseLevelSgis = 33084,
     TextureMaxLevel = 33085,
-    // TextureMaxLevelSgis = 33085,
     TextureFilter4SizeSgis = 33095,
     TextureClipmapCenterSgix = 33137,
     TextureClipmapFrameSgix = 33138,
@@ -53,7 +44,6 @@ pub enum TextureParameterName {
     TextureLodBiasTSgix = 33167,
     TextureLodBiasRSgix = 33168,
     GenerateMipmap = 33169,
-    // GenerateMipmapSgis = 33169,
     TextureCompareSgix = 33178,
     TextureCompareOperatorSgix = 33179,
     TextureLequalRSgix = 33180,
@@ -71,4 +61,18 @@ pub enum TextureParameterName {
     TextureSwizzleRgba = 36422,
     DepthStencilTextureMode = 37098,
     TextureTilingExt = 38272
+}
+
+#[allow(non_upper_case_globals)]
+impl TextureParameterName {
+    pub const TextureInternalFormat: TextureParameterName = TextureParameterName::TextureComponents;
+    pub const TextureBorderColorNv: TextureParameterName = TextureParameterName::TextureBorderColor;
+    pub const TexturePriorityExt: TextureParameterName = TextureParameterName::TexturePriority;
+    pub const TextureWrapRExt: TextureParameterName = TextureParameterName::TextureWrapR;
+    pub const TextureWrapROes: TextureParameterName = TextureParameterName::TextureWrapR;
+    pub const TextureMinLodSgis: TextureParameterName = TextureParameterName::TextureMinLod;
+    pub const TextureMaxLodSgis: TextureParameterName = TextureParameterName::TextureMaxLod;
+    pub const TextureBaseLevelSgis: TextureParameterName = TextureParameterName::TextureBaseLevel;
+    pub const TextureMaxLevelSgis: TextureParameterName = TextureParameterName::TextureMaxLevel;
+    pub const GenerateMipmapSgis: TextureParameterName = TextureParameterName::GenerateMipmap;
 }
