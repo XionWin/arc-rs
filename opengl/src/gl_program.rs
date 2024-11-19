@@ -29,8 +29,10 @@ impl Program {
     pub fn get_id(&self) -> c_uint {
         self.id
     }
+}
 
-    pub fn active(&self) {
+impl arc::Program for Program {
+    fn use_program(&self) {
         crate::gl::attach_shader(self.id, self.vertex_shader.id);
         crate::gl::attach_shader(self.id, self.fragment_shader.id);
         crate::gl::link_program(self.id);
@@ -41,6 +43,7 @@ impl Program {
 
 impl Drop for Program {
     fn drop(&mut self) {
-        crate::gl::delete_program(self.id)
+        crate::gl::delete_program(self.id);
+        util::print_debug!("program {} droped", self.id)
     }
 }

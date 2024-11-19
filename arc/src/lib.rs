@@ -15,7 +15,7 @@
 
 mod skyline;
 mod vertex;
-mod shader;
+mod program;
 mod graphic;
 mod renderer;
 mod rendering_component;
@@ -26,7 +26,7 @@ mod image;
 
 pub use skyline::*;
 pub use vertex::*;
-pub use shader::*;
+pub use program::*;
 pub use graphic::*;
 pub use renderer::*;
 pub use rendering_component::*;

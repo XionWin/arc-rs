@@ -9,5 +9,5 @@ mod gl_program;
 pub use def::*;
 pub use gl_renderer::*;
 pub use texture::*;
-pub use gl_shader::*;
+pub(crate) use gl_shader::*;
 pub use gl_program::*;
