@@ -13,12 +13,12 @@ pub trait Renderer {
         color_type: core::ColorType,
         texture_filter: TextureFilter,
     ) -> Box<dyn Texture>;
-    // fn create_texture_with_file(
-    //     &self,
-    //     path: &str,
-    //     color_type: core::ColorType,
-    //     texture_filter: TextureFilter,
-    // ) -> Texture;
+    fn create_texture_from_file(
+        &self,
+        path: &str,
+        color_type: core::ColorType,
+        texture_filter: TextureFilter,
+    ) -> Box<dyn Texture>;
     // fn create_texture_with_image_data(
     //     &self,
     //     image_data: core::ImageData,

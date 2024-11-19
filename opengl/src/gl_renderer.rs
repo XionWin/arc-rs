@@ -44,14 +44,14 @@ impl arc::Renderer for GLRenderer {
         Box::new(crate::Texture::new(self.clone(), size, color_type, texture_filter))
     }
 
-    // fn create_texture_with_file(
-    //     &self,
-    //     path: &str,
-    //     color_type: core::ColorType,
-    //     texture_filter: arc::TextureFilter,
-    // ) -> arc::Texture {
-    //     todo!()
-    // }
+    fn create_texture_from_file(
+        &self,
+        path: &str,
+        color_type: core::ColorType,
+        texture_filter: arc::TextureFilter,
+    ) -> Box<dyn arc::Texture> {
+        todo!()
+    }
 
     // fn create_texture_with_image_data(&self, image_data: core::ImageData, texture_filter: arc::TextureFilter) -> arc::Texture {
     //     todo!()

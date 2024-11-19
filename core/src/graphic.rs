@@ -6,6 +6,6 @@ pub trait Graphic {
     fn clear(&self, );
 
     fn create_image(&self, size: Size<i32>, color_type: ColorType, image_filter: ImageFilter) -> Box<dyn Image>;
-    // fn load_image_from_file(&self, path: &str, color_type: core::ColorType, image_filter: ImageFilter) -> Image;
+    fn load_image_from_file(&self, path: &str, color_type: ColorType, image_filter: ImageFilter) -> Box<dyn Image>;
     // fn load_image_data(&self, image_data: core::ImageData, image_filter: ImageFilter) -> Image;
 }

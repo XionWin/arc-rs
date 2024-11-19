@@ -26,12 +26,13 @@ impl core::Graphic for Graphic {
         self.renderer.clear();
     }
     fn create_image(&self, size: core::Size<i32>, color_type: core::ColorType, image_filter: core::ImageFilter) -> Box<dyn core::Image> {
-        let r = self.renderer.clone().create_texture(size, color_type, image_filter.into());
-        Box::new(Image::new(r))
+        let texture = self.renderer.clone().create_texture(size, color_type, image_filter.into());
+        Box::new(Image::new(texture))
     }
-    // fn load_image_from_file(&self, path: &str, color_type: core::ColorType, image_filter: core::TextureFilter) -> Image {
-    //     Image::new(Box::new(self.renderer.create_texture_with_file(path, color_type, image_filter)))
-    // }
+    fn load_image_from_file(&self, path: &str, color_type: core::ColorType, image_filter: core::ImageFilter) -> Box<dyn core::Image> {
+        let texture = self.renderer.clone().create_texture_from_file(path, color_type, image_filter.into());
+        Box::new(Image::new(texture))
+    }
     // fn load_image_data(&self, image_data: ImageData, image_filter: core::TextureFilter) -> Image {
     //     Image::new(Box::new(self.renderer.create_texture_with_image_data(image_data, image_filter)))
     // }
