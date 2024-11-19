@@ -23,7 +23,7 @@ impl FpsLimiter {
                     std::thread::sleep(duration)
                 }
             },
-            Err(msg) => println!("fps_limiter delay error, Msg: {:?}", msg.duration()),
+            Err(msg) => util::print_panic!("fps_limiter delay error, Msg: {:?}", msg.duration()),
         }
         self.reset();
     }

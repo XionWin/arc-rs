@@ -57,3 +57,15 @@ macro_rules! print_error {
         println!("{}", $crate::Colorize::red(&*msg))
     }};
 }
+
+#[macro_export]
+#[doc="print_panic"]
+macro_rules! print_panic {
+    () => {
+        panic!()
+    };
+    ($($arg:tt)*) => {{
+        let msg = format!($($arg)*);
+        panic!("{}", $crate::Colorize::red(&*msg))
+    }};
+}

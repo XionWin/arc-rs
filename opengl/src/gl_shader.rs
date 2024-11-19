@@ -52,7 +52,7 @@ fn check_compile(shader: crate::Shader) -> crate::Shader {
         gl::GetShaderiv(shader.id, gl::COMPILE_STATUS, &mut is_compiled);
     }
     if is_compiled == 0 {
-        panic!("GLES shader compile faild");
+        util::print_panic!("shader compile faild");
     }
     return shader;
 }

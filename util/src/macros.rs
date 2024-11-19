@@ -16,7 +16,7 @@ macro_rules! expect {
         match $t {
             Ok(v) => v,
             Err(msg) => {
-                util::print_error!(
+                util::print_panic!(
                     "Error in {} (in {} [{}:{}:{}]) Message: {}",
                     util::function!(),
                     module_path!(),
@@ -25,15 +25,6 @@ macro_rules! expect {
                     column!(),
                     msg
                 );
-                panic!(
-                    "Error in {} (in {} [{}:{}:{}]) Message: {}",
-                    util::function!(),
-                    module_path!(),
-                    file!(),
-                    line!(),
-                    column!(),
-                    msg
-                )
             }
         }
     }};
