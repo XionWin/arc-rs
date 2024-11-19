@@ -19,5 +19,4 @@ pub trait Renderer {
         texture_filter: TextureFilter,
     ) -> Box<dyn Texture>;
     fn drop_texture(&self, texture: &dyn Texture);
-    fn drop_texture_by_id(&self, texture_id: i32);
 }

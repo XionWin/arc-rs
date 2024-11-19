@@ -56,11 +56,7 @@ impl arc::Renderer for GLRenderer {
     }
 
     fn drop_texture(&self, texture: &dyn arc::Texture) {
-        crate::gl::delete_texture(texture.get_id() as _);
-    }
-
-    fn drop_texture_by_id(&self, texture_id: i32) {
-        crate::gl::delete_texture(texture_id as _);
+        crate::gl::delete_texture(texture.get_id());
     }
 }
 
