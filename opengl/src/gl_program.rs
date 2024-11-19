@@ -26,7 +26,7 @@ impl Program {
         }
     }
 
-    pub fn get_id(&self) -> u32 {
+    pub fn get_id(&self) -> c_uint {
         self.id
     }
 

@@ -1,8 +1,8 @@
-use std::rc::Rc;
+use std::{ffi::c_uint, rc::Rc};
 
 pub struct Texture {
     renderer: Rc<dyn arc::Renderer>,
-    id: u32,
+    id: c_uint,
     size: core::Size<i32>,
     color_type: core::ColorType,
     texture_filter: arc::TextureFilter,
@@ -26,7 +26,7 @@ impl Texture {
 }
 
 impl arc::Texture for Texture {
-    fn get_id(&self) -> u32 {
+    fn get_id(&self) -> c_uint {
         self.id
     }
 
