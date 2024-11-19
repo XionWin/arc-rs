@@ -115,3 +115,9 @@ pub enum EnableCap {
     ShadingRateImagePerPrimitiveNv = 38321,
     ShadingRateImagePaletteCountNv = 38322
 }
+
+#[allow(non_upper_case_globals)]
+impl EnableCap {
+    pub const SampleAlphaToCoverage: u32 = EnableCap::SampleAlphaToMaskSgis as _;
+    pub const SampleCoverage: u32 = EnableCap::SampleMaskSgis as _;
+}
