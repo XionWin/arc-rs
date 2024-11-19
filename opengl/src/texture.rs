@@ -58,7 +58,6 @@ impl arc::Texture for Texture {
         );
 
         // Now that our texture is loaded, we can set a few settings to affect how the image appears on rendering.
-
         // First, we set the min and mag filter. These are used for when the texture is scaled down and up, respectively.
         // Here, we use Linear for both. This means that OpenGL will try to blend pixels, meaning that textures scaled too far will look blurred.
         // You could also use (amongst other options) Nearest, which just grabs the nearest pixel, which makes the texture look pixelated if scaled too far.
