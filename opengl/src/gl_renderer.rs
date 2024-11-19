@@ -1,15 +1,15 @@
-use std::{ffi::c_void, rc::Rc};
+use std::rc::Rc;
 
 use arc::Texture;
 
 pub struct GLRenderer {
-    program: Rc<dyn arc::Program>,
+    _program: Box<dyn arc::Program>,
 }
 
 impl GLRenderer {
     pub fn new(vertex_shader_path: &str, fragment_shader_path: &str) -> Self {
         Self {
-            program: Rc::new(crate::Program::new(
+            _program: Box::new(crate::Program::new(
                 vertex_shader_path,
                 fragment_shader_path,
             )),
@@ -17,23 +17,7 @@ impl GLRenderer {
     }
 }
 
-pub fn load() {
-    crate::gl::load();
-}
-pub fn load_with<T>(loadfn: T)
-where
-    T: Fn(&str) -> *const c_void,
-{
-    gl::load_with(loadfn);
-}
-
 impl arc::Renderer for GLRenderer {
-    fn use_program(&self) {
-        self.program.use_program();
-    }
-    fn get_program(&self) -> Rc<dyn arc::Program> {
-        self.program.clone()
-    }
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         crate::gl::viewport(x, y, width, height);
     }
