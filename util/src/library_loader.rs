@@ -1,7 +1,7 @@
-use std::ffi::CString;
+use std::ffi::{c_void, c_int, CString};
 
 pub struct LibraryLoader {
-    _handle: *const libc::c_void,
+    _handle: *const c_void,
 }
 
 #[repr(i32)]
@@ -14,9 +14,9 @@ pub(crate) enum OpenFlag {
     RtldDeepbind = 0x00010,    /* Use deep binding.  */
 }
 
-impl Into<libc::c_int> for OpenFlag {
-    fn into(self) -> libc::c_int {
-        self as libc::c_int
+impl Into<c_int> for OpenFlag {
+    fn into(self) -> c_int {
+        self as c_int
     }
 }
 
@@ -30,7 +30,7 @@ impl LibraryLoader {
         }
     }
 
-    pub fn get_proc_address(&self, function_name: &str) -> *const libc::c_void {
+    pub fn get_proc_address(&self, function_name: &str) -> *const c_void {
         unsafe {
             let cstr = CString::new(function_name).unwrap();
             let ptr = cstr.as_ptr();

@@ -1,8 +1,10 @@
+use std::ffi::c_uint;
+
 use crate::Shader;
 
 #[derive(Debug)]
 pub struct Program {
-    pub(crate) id: u32,
+    pub(crate) id: c_uint,
     pub(crate) vertex_shader: Shader,
     pub(crate) fragment_shader: Shader,
 }

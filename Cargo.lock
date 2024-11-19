@@ -585,7 +585,6 @@ dependencies = [
  "bitflags 2.6.0",
  "core",
  "gl",
- "libc",
  "util",
 ]
 
@@ -607,7 +606,6 @@ version = "0.1.0"
 dependencies = [
  "arc",
  "core",
- "libc",
  "opengl",
  "sdl2",
  "util",

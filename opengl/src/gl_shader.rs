@@ -1,7 +1,9 @@
+use std::ffi::c_uint;
+
 #[derive(Debug)]
 pub struct Shader
 {
-    pub id: u32,
+    pub id: c_uint,
     pub source: String,
     pub shader_type: crate::def::ShaderType,
 }
@@ -17,7 +19,7 @@ impl Shader {
             shader_type,
         }
     }
-    
+
     pub(crate) fn load(self) -> Self {
         let source = String::from(&self.source);
         let source_cstring = std::ffi::CString::new(source).unwrap();

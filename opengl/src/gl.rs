@@ -1,8 +1,7 @@
 use crate::{def::StringName, ClearBufferMask};
-use libc::{c_char, c_float, c_int, c_uint};
 use util::LibraryLoader;
 use std::{
-    ffi::{c_void, CStr, CString},
+    ffi::{c_void, c_char, c_float, c_int, c_uint, CStr, CString},
     str::from_utf8,
 };
 
@@ -130,7 +129,7 @@ pub fn get_program_information(program_id: c_uint) -> Option<String> {
                 gl::GetProgramInfoLog(
                     program_id,
                     len,
-                    std::ptr::null_mut::<libc::c_int>(),
+                    std::ptr::null_mut::<c_int>(),
                     buf.as_mut_ptr() as _,
                 );
             }
@@ -152,7 +151,7 @@ pub fn get_shader_information(shader_id: c_uint) -> Option<String> {
                 gl::GetShaderInfoLog(
                     shader_id,
                     len,
-                    std::ptr::null_mut::<libc::c_int>(),
+                    std::ptr::null_mut::<c_int>(),
                     buf.as_mut_ptr() as _,
                 );
             }
