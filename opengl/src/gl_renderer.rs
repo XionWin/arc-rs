@@ -7,11 +7,11 @@ pub struct GLRenderer {
 }
 
 impl GLRenderer {
-    pub fn new(vertex_shader_path: &str, fragment_shader_path: &str) -> Self {
+    pub fn new() -> Self {
         Self {
             _program: Box::new(crate::Program::new(
-                vertex_shader_path,
-                fragment_shader_path,
+                "resource/shader/arc.vert",
+                "resource/shader/arc.frag",
             )),
         }
     }

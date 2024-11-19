@@ -127,7 +127,7 @@ impl Window {
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
         opengl::load_with(|name| get_proc_address(&video_subsystem, name));
-        let renderer = opengl::GLRenderer::new("resource/shader/arc.vert", "resource/shader/arc.frag");
+        let renderer = opengl::GLRenderer::new();
         let graphic = arc::Graphic::new(Rc::new(renderer));
 
         Ok(Window {
