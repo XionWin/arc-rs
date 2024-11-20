@@ -56,7 +56,7 @@ impl core::Window for Window {
             },
         );
         self.fps_limiter = if vsync_result.is_err() {
-            util::print_debug!("set vsync error, try use fps_limiter @60fps");
+            util::print_debug!("set vsync error, try use fps_limiter@60fps");
             Some(FpsLimiter::new(60))
         } else {
             util::print_debug!("set vsync successfully");
