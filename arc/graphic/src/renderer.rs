@@ -3,6 +3,7 @@ use std::rc::Rc;
 use crate::{Texture, TextureFilter};
 
 pub trait Renderer {
+    fn init(&self);
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32);
     fn clear_color(&self, color: core::Color);
     fn clear(&self);

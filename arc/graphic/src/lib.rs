@@ -14,7 +14,6 @@
 // }
 
 mod vertex;
-mod program;
 mod graphic;
 mod renderer;
 mod rendering_component;
@@ -24,7 +23,6 @@ mod texture_compontent;
 mod image;
 
 pub use vertex::*;
-pub use program::*;
 pub use graphic::*;
 pub use renderer::*;
 pub use rendering_component::*;

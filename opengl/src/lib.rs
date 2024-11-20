@@ -10,7 +10,7 @@ pub use def::*;
 pub use gl_renderer::*;
 pub use texture::*;
 pub(crate) use gl_shader::*;
-pub use gl_program::*;
+pub(crate) use gl_program::*;
 
 
 pub fn load() {
