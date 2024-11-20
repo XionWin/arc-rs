@@ -21,7 +21,8 @@ impl core::Window for Window {
         self.graphic.borrow()
     }
 
-    fn run(&mut self, on_load: fn(&Self), on_render: fn(&Self)) {
+    fn run<T1, T2>(&mut self, on_load: T1, on_render: T2)
+    where T1: Fn(&Self), T2: Fn(&Self) {
         self.init();
         on_load(self);
         let mut event_pump = util::expect!(self.sdl_context.event_pump());
