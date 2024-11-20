@@ -126,7 +126,7 @@ impl Window {
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
         let renderer = opengl::GLRenderer::new();
-        let graphic = arc::Graphic::new(Rc::new(renderer));
+        let graphic = graphic::Graphic::new(Rc::new(renderer));
 
         Ok(Window {
             parameter,

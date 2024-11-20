@@ -1,9 +1,9 @@
 use std::rc::Rc;
 
-use arc::Texture;
+use graphic::Texture;
 
 pub struct GLRenderer {
-    _program: Box<dyn arc::Program>,
+    _program: Box<dyn graphic::Program>,
 }
 
 impl GLRenderer {
@@ -17,7 +17,7 @@ impl GLRenderer {
     }
 }
 
-impl arc::Renderer for GLRenderer {
+impl graphic::Renderer for GLRenderer {
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         crate::gl::viewport(x, y, width, height);
     }
@@ -36,8 +36,8 @@ impl arc::Renderer for GLRenderer {
         self: Rc<Self>,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        texture_filter: arc::TextureFilter,
-    ) -> Box<dyn arc::Texture> {
+        texture_filter: graphic::TextureFilter,
+    ) -> Box<dyn graphic::Texture> {
         Box::new(crate::Texture::new(
             self.clone(),
             size,
@@ -49,8 +49,8 @@ impl arc::Renderer for GLRenderer {
     fn create_texture_from_file(
         self: Rc<Self>,
         path: &str,
-        texture_filter: arc::TextureFilter,
-    ) -> Box<dyn arc::Texture> {
+        texture_filter: graphic::TextureFilter,
+    ) -> Box<dyn graphic::Texture> {
         let image_data = core::ImageData::new_from_file(path);
         let texture = crate::Texture::new(
             self.clone(),
@@ -62,7 +62,7 @@ impl arc::Renderer for GLRenderer {
         Box::new(texture)
     }
 
-    fn drop_texture(&self, texture: &dyn arc::Texture) {
+    fn drop_texture(&self, texture: &dyn graphic::Texture) {
         crate::gl::delete_texture(texture.get_id());
     }
 }

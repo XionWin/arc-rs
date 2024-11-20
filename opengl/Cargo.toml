@@ -8,4 +8,4 @@ gl="*"
 bitflags="*"
 core = { path = "../core" }
 util = { path = "../util" }
-arc = { path = "../arc" }
+graphic = { path = "../arc/graphic" }

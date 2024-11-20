@@ -1,19 +1,19 @@
 use std::{ffi::c_uint, rc::Rc};
 
 pub struct Texture {
-    renderer: Rc<dyn arc::Renderer>,
+    renderer: Rc<dyn graphic::Renderer>,
     id: c_uint,
     size: core::Size<i32>,
     color_type: core::ColorType,
-    texture_filter: arc::TextureFilter,
+    texture_filter: graphic::TextureFilter,
 }
 
 impl Texture {
     pub fn new(
-        renderer: Rc<dyn arc::Renderer>,
+        renderer: Rc<dyn graphic::Renderer>,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        texture_filter: arc::TextureFilter,
+        texture_filter: graphic::TextureFilter,
     ) -> Self {
         Self {
             renderer,
@@ -25,7 +25,7 @@ impl Texture {
     }
 }
 
-impl arc::Texture for Texture {
+impl graphic::Texture for Texture {
     fn get_id(&self) -> c_uint {
         self.id
     }
@@ -38,7 +38,7 @@ impl arc::Texture for Texture {
         self.color_type
     }
 
-    fn get_texture_filter(&self) -> arc::TextureFilter {
+    fn get_texture_filter(&self) -> graphic::TextureFilter {
         self.texture_filter
     }
 
@@ -57,7 +57,7 @@ impl arc::Texture for Texture {
             Some(&image_data.value),
         );
 
-        let texture_filter = Into::<arc::TextureFilter>::into(self.texture_filter);
+        let texture_filter = Into::<graphic::TextureFilter>::into(self.texture_filter);
         crate::gl::tex_parameter_i(
             crate::def::TextureTarget::Texture2D,
             crate::def::TextureParameterName::TextureMagFilter,

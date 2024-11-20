@@ -18,11 +18,11 @@ pub enum TextureMinFilter
     LinearClipmapNearestSgix = 33871,
 }
 
-impl From<arc::TextureFilter> for TextureMinFilter {
-    fn from(value: arc::TextureFilter) -> Self {
+impl From<graphic::TextureFilter> for TextureMinFilter {
+    fn from(value: graphic::TextureFilter) -> Self {
         match value {
-            arc::TextureFilter::Nearest => TextureMinFilter::Nearest,
-            arc::TextureFilter::Linear => TextureMinFilter::Linear,
+            graphic::TextureFilter::Nearest => TextureMinFilter::Nearest,
+            graphic::TextureFilter::Linear => TextureMinFilter::Linear,
         }
     }
 }

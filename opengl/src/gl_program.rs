@@ -31,7 +31,7 @@ impl Program {
     }
 }
 
-impl arc::Program for Program {
+impl graphic::Program for Program {
     fn use_program(&self) {
         crate::gl::attach_shader(self.id, self.vertex_shader.id);
         crate::gl::attach_shader(self.id, self.fragment_shader.id);

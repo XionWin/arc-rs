@@ -16,11 +16,11 @@ pub enum TextureMagFilter
     PixelTexGenQFloorSgix = 33158
 }
 
-impl From<arc::TextureFilter> for TextureMagFilter {
-    fn from(value: arc::TextureFilter) -> Self {
+impl From<graphic::TextureFilter> for TextureMagFilter {
+    fn from(value: graphic::TextureFilter) -> Self {
         match value {
-            arc::TextureFilter::Nearest => TextureMagFilter::Nearest,
-            arc::TextureFilter::Linear => TextureMagFilter::Linear,
+            graphic::TextureFilter::Nearest => TextureMagFilter::Nearest,
+            graphic::TextureFilter::Linear => TextureMagFilter::Linear,
         }
     }
 }
