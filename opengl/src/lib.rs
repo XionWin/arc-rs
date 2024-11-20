@@ -12,7 +12,6 @@ pub use texture::*;
 pub(crate) use gl_shader::*;
 pub(crate) use gl_program::*;
 
-
 pub fn load() {
     crate::gl::load();
 }
