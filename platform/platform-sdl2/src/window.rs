@@ -114,7 +114,6 @@ impl Window {
             .window(&title_function(&parameter), width.into(), height.into())
             .opengl()
             .build());
-        opengl::load_with(|name| get_proc_address(&video_subsystem, name));
 
         let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file(
             "resource/image/icon96.png",
@@ -125,7 +124,7 @@ impl Window {
         // Unlike the other example above, nobody created a context for your window,
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
-        let renderer = opengl::GLRenderer::new();
+        let renderer = opengl::GLRenderer::new(|name| get_proc_address(&video_subsystem, name));
         let graphic = graphic::Graphic::new(Rc::new(renderer));
 
         Ok(Window {

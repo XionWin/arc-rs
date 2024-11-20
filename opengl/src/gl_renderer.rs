@@ -7,7 +7,10 @@ pub struct GLRenderer {
 }
 
 impl GLRenderer {
-    pub fn new() -> Self {
+    pub fn new<T>(loadfn: T)  -> Self
+    where
+        T: Fn(&str) -> *const std::ffi::c_void {
+            crate::load_with(loadfn);
         Self {
             _program: Box::new(crate::Program::new(
                 "resource/shader/arc.vert",
