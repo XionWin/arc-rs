@@ -6,5 +6,5 @@ members = [
     "arc/graphic",
     "opengl",
     "util",
-    "core",
+    "core", "arc/vector",
 ]

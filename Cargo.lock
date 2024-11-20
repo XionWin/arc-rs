@@ -25,7 +25,6 @@ name = "app"
 version = "0.1.0"
 dependencies = [
  "core",
- "graphic",
  "platform-sdl2",
  "util",
 ]
@@ -990,6 +989,10 @@ dependencies = [
  "num-traits",
  "wasm-bindgen",
 ]
+
+[[package]]
+name = "vector"
+version = "0.1.0"
 
 [[package]]
 name = "version-compare"

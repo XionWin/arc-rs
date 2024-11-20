@@ -13,7 +13,6 @@
 //     }
 // }
 
-mod skyline;
 mod vertex;
 mod program;
 mod graphic;
@@ -24,7 +23,6 @@ mod texture;
 mod texture_compontent;
 mod image;
 
-pub use skyline::*;
 pub use vertex::*;
 pub use program::*;
 pub use graphic::*;
