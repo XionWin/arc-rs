@@ -9,3 +9,4 @@ bitflags="*"
 core = { path = "../core" }
 util = { path = "../util" }
 graphic = { path = "../arc/graphic" }
+image = { path = "../arc/image" }

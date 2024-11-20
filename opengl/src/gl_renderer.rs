@@ -55,7 +55,7 @@ impl graphic::Renderer for GLRenderer {
         path: &str,
         texture_filter: graphic::TextureFilter,
     ) -> Box<dyn graphic::Texture> {
-        let image_data = core::ImageData::new_from_file(path);
+        let image_data = image::ImageData::new_from_file(path);
         let texture = crate::Texture::new(
             self.clone(),
             image_data.size,

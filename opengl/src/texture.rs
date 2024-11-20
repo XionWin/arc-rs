@@ -42,19 +42,19 @@ impl graphic::Texture for Texture {
         self.texture_filter
     }
 
-    fn load(&self, image_data: &core::ImageData) {
+    fn load(&self, image_data: &dyn core::ImageData) {
         crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, self.id);
 
         crate::gl::tex_image_2d(
             crate::def::TextureTarget::Texture2D,
             0,
             crate::def::PixelInternalFormat::Rgba,
-            image_data.size.width,
-            image_data.size.height,
+            image_data.get_size().width,
+            image_data.get_size().height,
             0,
             crate::def::PixelFormat::Rgba,
             crate::def::PixelType::UnsignedByte,
-            Some(&image_data.value),
+            Some(image_data.get_value()),
         );
 
         let texture_filter = Into::<graphic::TextureFilter>::into(self.texture_filter);

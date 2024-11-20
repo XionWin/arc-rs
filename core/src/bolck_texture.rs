@@ -7,6 +7,6 @@ pub struct Block<'a> {
 }
 
 pub trait BlockTexture<'a> {
-    fn append_image(&self, image_data: ImageData) -> Block<'a>;
+    fn append_image(&self, image_data: &dyn ImageData) -> Block<'a>;
     fn clear(&self);
 }
