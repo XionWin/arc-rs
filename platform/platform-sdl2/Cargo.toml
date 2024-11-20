@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 sdl2 = { version = "*", features = ["image"] }
-core = { path = "../../core" }
 util = { path = "../../util" }
+core = { path = "../../arc/core" }
 graphic = { path = "../../arc/graphic" }
 opengl = { path = "../../opengl" }

@@ -13,7 +13,6 @@
 //     }
 // }
 
-mod vertex;
 mod graphic;
 mod renderer;
 mod rendering_component;
@@ -22,7 +21,6 @@ mod texture;
 mod texture_compontent;
 mod image;
 
-pub use vertex::*;
 pub use graphic::*;
 pub use renderer::*;
 pub use rendering_component::*;

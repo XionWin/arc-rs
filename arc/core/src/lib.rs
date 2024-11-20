@@ -11,6 +11,8 @@ mod color;
 mod image;
 mod graphic;
 mod window;
+mod vector2;
+mod vertex2;
 
 pub use number::*;
 pub use version::*;
@@ -25,3 +27,5 @@ pub use color::*;
 pub use image::*;
 pub use graphic::*;
 pub use window::*;
+pub use vector2::*;
+pub use vertex2::*;

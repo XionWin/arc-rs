@@ -6,7 +6,7 @@ edition = "2021"
 [dependencies]
 gl="*"
 bitflags="*"
-core = { path = "../core" }
 util = { path = "../util" }
+core = { path = "../arc/core" }
 graphic = { path = "../arc/graphic" }
 image = { path = "../arc/image" }

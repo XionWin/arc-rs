@@ -6,4 +6,4 @@ edition = "2021"
 [dependencies]
 image = "*"
 util = { path = "../../util" }
-core = { path = "../../core" }
+core = { path = "../core" }

@@ -5,4 +5,4 @@ edition = "2021"
 
 [dependencies]
 util = { path = "../../util" }
-core = { path = "../../core" }
+core = { path = "../core" }
