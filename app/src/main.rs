@@ -12,17 +12,20 @@ fn main() {
     window.run(
         |window| {
             let _g = window.get_graphic();
-            image_ref.replace(Some(_g.load_image_from_file("resource/image/icon96.png", core::ImageFilter::Linear)));
+            image_ref.replace(Some(_g.load_image_from_file(
+                "resource/image/icon96.png",
+                core::ImageFilter::Linear,
+            )));
         },
         |window| {
             let _g = window.get_graphic();
 
             let image = image_ref.take();
             match &image {
-                Some(_v) => {},
-                None => util::print_panic!("image is null")
+                Some(_v) => {}
+                None => util::print_panic!("image is null"),
             }
             image_ref.replace(image);
-        }
+        },
     );
 }

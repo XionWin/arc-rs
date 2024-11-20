@@ -1,4 +1,4 @@
-use std::ffi::{c_void, c_int, CString};
+use std::ffi::{c_int, c_void, CString};
 
 pub struct LibraryLoader {
     _handle: *const c_void,
@@ -7,11 +7,11 @@ pub struct LibraryLoader {
 #[repr(i32)]
 #[allow(dead_code)]
 pub(crate) enum OpenFlag {
-    RtldLazy = 0x0001,         /* Lazy function call binding.  */
-    RtldNow = 0x0002,          /* Immediate function call binding.  */
+    RtldLazy = 0x0001,        /* Lazy function call binding.  */
+    RtldNow = 0x0002,         /* Immediate function call binding.  */
     RtldBindingMask = 0x0003, /* Mask of binding time value.  */
-    RtldNoload = 0x00008,      /* Do not load the object.  */
-    RtldDeepbind = 0x00010,    /* Use deep binding.  */
+    RtldNoload = 0x00008,     /* Do not load the object.  */
+    RtldDeepbind = 0x00010,   /* Use deep binding.  */
 }
 
 impl Into<c_int> for OpenFlag {
