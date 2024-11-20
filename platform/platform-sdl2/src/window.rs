@@ -110,11 +110,11 @@ impl Window {
             WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8))
         };
         set_gl_version(&video_subsystem, &parameter);
-
         let mut sdl_window = util::expect!(video_subsystem
             .window(&title_function(&parameter), width.into(), height.into())
             .opengl()
             .build());
+        opengl::load_with(|name| get_proc_address(&video_subsystem, name));
 
         let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file(
             "resource/image/icon96.png",
@@ -125,8 +125,6 @@ impl Window {
         // Unlike the other example above, nobody created a context for your window,
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
-
-        opengl::load_with(|name| get_proc_address(&video_subsystem, name));
         let renderer = opengl::GLRenderer::new();
         let graphic = arc::Graphic::new(Rc::new(renderer));
 
