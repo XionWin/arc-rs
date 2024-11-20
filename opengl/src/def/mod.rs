@@ -1,5 +1,5 @@
 mod string_name;
-mod clear_buffer_mask;
+mod clear_buffer_masks;
 mod enable_cap;
 mod shader_type;
 mod buffer_target;
@@ -25,7 +25,7 @@ mod stencil_function;
 mod get_p_name;
 
 pub use string_name::*;
-pub use clear_buffer_mask::*;
+pub use clear_buffer_masks::*;
 pub use enable_cap::*;
 pub use shader_type::*;
 pub use buffer_target::*;

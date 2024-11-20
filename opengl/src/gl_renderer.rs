@@ -32,7 +32,7 @@ impl graphic::Renderer for GLRenderer {
     }
     fn clear(&self) {
         crate::gl::clear(
-            crate::ClearBufferMask::COLOR_BUFFER_BIT | crate::ClearBufferMask::DEPTH_BUFFER_BIT,
+            crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
         );
     }
 

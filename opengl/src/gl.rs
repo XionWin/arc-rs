@@ -1,4 +1,4 @@
-use crate::{def::StringName, ClearBufferMask};
+use crate::{def::StringName, ClearBufferMasks};
 use util::LibraryLoader;
 use std::{
     ffi::{c_void, c_char, c_float, c_int, c_uint, CStr, CString},
@@ -21,7 +21,7 @@ pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {
     unsafe { gl::ClearColor(r, g, b, a) };
 }
 
-pub fn clear(mask: ClearBufferMask) {
+pub fn clear(mask: ClearBufferMasks) {
     unsafe { gl::Clear(mask.into()) };
 }
 

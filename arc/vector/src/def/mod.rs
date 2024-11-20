@@ -1,6 +1,3 @@
-mod blend_factor;
-mod composite_operation;
+mod point_flags;
 
-pub use blend_factor::*;
-pub use composite_operation::*;
-
+pub use point_flags::*;

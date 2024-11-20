@@ -13,6 +13,7 @@ mod graphic;
 mod window;
 mod vector2;
 mod vertex2;
+mod composite_operation;
 
 pub use number::*;
 pub use version::*;
@@ -29,3 +30,4 @@ pub use graphic::*;
 pub use window::*;
 pub use vector2::*;
 pub use vertex2::*;
+pub use composite_operation::*;
