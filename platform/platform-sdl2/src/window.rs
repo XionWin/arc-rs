@@ -74,7 +74,7 @@ impl core::Window for Window {
             //     fps
             // )))
         });
-        self.get_graphic().clear_color(core::Color::MidnightBlue);
+        self.get_graphic().clear_color(core::Color::Black);
         self.get_graphic().clear();
     }
 
