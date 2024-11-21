@@ -1,4 +1,6 @@
-pub trait Number: Copy + Clone {
+use std::fmt::Debug;
+
+pub trait Number: Copy + Clone + Debug {
     fn default() -> Self;
     fn one() -> Self;
 }
