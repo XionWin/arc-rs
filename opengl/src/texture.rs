@@ -1,5 +1,6 @@
 use std::{ffi::c_uint, rc::Rc};
 
+#[derive(Debug)]
 pub struct Texture {
     renderer: Rc<dyn graphic::Renderer>,
     id: c_uint,

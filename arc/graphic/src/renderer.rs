@@ -1,8 +1,9 @@
 use std::rc::Rc;
+use std::fmt::Debug;
 
 use crate::{Texture, TextureFilter};
 
-pub trait Renderer {
+pub trait Renderer: Debug {
     fn init(&self);
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32);
     fn clear_color(&self, color: core::Color);

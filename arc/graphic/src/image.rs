@@ -3,6 +3,7 @@ use std::borrow::{Borrow, BorrowMut};
 
 use crate::Texture;
 
+#[derive(Debug)]
 pub struct Image {
     texture: Box<dyn Texture>,
 }
@@ -16,6 +17,10 @@ impl Image {
 }
 
 impl core::Image for Image {
+    fn get_id(&self) -> std::ffi::c_uint {
+        self.texture.get_id()
+    }
+
     fn get_size(&self) -> Size<i32> {
         self.texture.get_size()
     }

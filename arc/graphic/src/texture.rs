@@ -1,9 +1,9 @@
 use core::{ColorType, Size};
-use std::ffi::c_uint;
+use std::{ffi::c_uint, fmt::Debug};
 
 use crate::TextureFilter;
 
-pub trait Texture {
+pub trait Texture: Debug {
     fn get_id(&self) -> c_uint;
     fn get_size(&self) -> Size<i32>;
     fn get_color_type(&self) -> ColorType;

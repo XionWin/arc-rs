@@ -2,6 +2,7 @@ use std::rc::Rc;
 
 use graphic::Texture;
 
+#[derive(Debug)]
 pub struct GLRenderer {
     _program: crate::Program,
 }

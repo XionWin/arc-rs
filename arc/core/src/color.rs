@@ -38,6 +38,7 @@ pub enum Color {
     BrightCyan,
     BrightWhite,
     MidnightBlue,
+    Transparent,
     TrueColor { r: u8, g: u8, b: u8, a: u8 },
 }
 
@@ -145,6 +146,12 @@ impl Into<Rgba> for Color {
                 g: 25u8,
                 b: 112u8,
                 a: 255u8
+            },
+            Color::Transparent => Rgba {
+                r: 0u8,
+                g: 0u8,
+                b: 0u8,
+                a: 0u8
             },
             Color::TrueColor { r, g, b, a } => Rgba { r, g, b, a},
         }
