@@ -1,11 +1,19 @@
+use crate::Number;
+
 #[derive(Debug)]
-pub struct Offset {
-    _x: i32,
-    _y: i32,
+pub struct Offset<T>
+where
+    T: Number,
+{
+    pub x: T,
+    pub y: T,
 }
 
-impl Offset {
-    pub fn new(x: i32, y: i32) -> Self {
-        Self { _x: x, _y: y }
+impl<T> Offset<T>
+where
+    T: Number,
+{
+    pub fn new(x: T, y: T) -> Self {
+        Self { x, y }
     }
 }
