@@ -13,6 +13,7 @@ pub struct Window {
     pub(crate) fps_counter: FpsCounter,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
+    pub background_color: core::Color,
     graphic: Box<dyn core::Graphic>,
 }
 
@@ -22,7 +23,10 @@ impl core::Window for Window {
     }
 
     fn run<T1, T2>(&mut self, on_load: T1, on_render: T2)
-    where T1: Fn(&Self), T2: Fn(&Self) {
+    where
+        T1: Fn(&Self),
+        T2: Fn(&Self),
+    {
         self.init();
         on_load(self);
         let mut event_pump = util::expect!(self.sdl_context.event_pump());
@@ -76,7 +80,7 @@ impl core::Window for Window {
             //     fps
             // )))
         });
-        self.get_graphic().clear_color(core::Color::Black);
+        self.get_graphic().clear_color(self.background_color);
         self.get_graphic().clear();
     }
 
@@ -138,6 +142,7 @@ impl Window {
             fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
             fps_limiter: None,
             title_function,
+            background_color: core::Color::MidnightBlue,
             graphic: Box::new(graphic),
         })
     }
