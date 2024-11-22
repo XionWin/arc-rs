@@ -24,7 +24,9 @@ mod vector2;
 mod version;
 mod vertex2;
 mod window;
+mod point;
 
+pub use point::*;
 pub use bolck_texture::*;
 pub use call_type::*;
 pub use color::*;
