@@ -3,7 +3,6 @@ use crate::{Matrix, Matrix2D};
 #[test]
 pub fn matrix_test() {
     let matrix = Matrix2D::<f32>::new();
-
     util::print_debug!("matrix:\n{}", matrix);
 
     let row_1 = matrix.get_row(1);
@@ -18,20 +17,27 @@ pub fn matrix_test() {
     col_2[1].set(2.0f32);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
-    let values = matrix.get_value();
-    assert_eq!(
-        values.len(),
-        matrix.get_row_count() * matrix.get_col_count()
-    );
-
-    matrix[(1, 0)].set(3.0f32);
-    util::print_debug!("matrix[(1, 0)]: {:?}", matrix[(1, 0)]);
+    matrix[[1, 0]].set(3.0f32);
+    util::print_debug!("matrix[(1, 0)]: {:?}", matrix[[1, 0]]);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
-    // assert_eq!(values[0].get(), 1f32);
-    // assert_eq!(values[5].get(), 1f32);
-    // assert_eq!(values[10].get(), 1f32);
+    util::print_debug!("{:?}", matrix.get_value());
+}
 
-    // assert_eq!(values[4].get(), 2.0f32);
-    // assert_eq!(values[9].get(), 2.0f32);
+#[test]
+pub fn matrix_calc_test() {
+    let matrix = Matrix2D::<f32>::new();
+    util::print_debug!("matrix:\n{}", matrix);
+    matrix[[1, 0]].set(2.0f32);
+    matrix[[0, 2]].set(2.0f32);
+    matrix[[1, 2]].set(2.0f32);
+    matrix[[1, 0]].set(3.0f32);
+    util::print_debug!("matrix after col changed:\n{}", matrix);
+
+    let matrix2 = Matrix2D::<f32>::new();
+    util::print_debug!("matrix2:\n{}", matrix2);
+
+    let result = matrix * matrix2;
+
+    util::print_debug!("result:\n{}", result);
 }

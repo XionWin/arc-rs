@@ -1,6 +1,8 @@
 use std::fmt::Debug;
 
-pub trait Number: Copy + Clone + Debug {
+pub trait Number:
+    Copy + Clone + Debug + std::ops::Mul + std::ops::AddAssign<<Self as std::ops::Mul>::Output>
+{
     fn default() -> Self;
     fn one() -> Self;
 }

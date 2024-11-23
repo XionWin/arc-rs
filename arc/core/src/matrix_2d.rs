@@ -1,10 +1,36 @@
+use crate::{Matrix, Number, RefVectors};
 use std::{
     cell::Cell,
     fmt::{Display, Write},
     usize,
 };
 
-use crate::{Matrix, Number};
+#[derive(Debug)]
+pub struct MatrixRow<T>
+where
+    T: Number,
+{
+    _len: usize,
+    _value: Vec<Cell<T>>,
+}
+
+impl<T> MatrixRow<T>
+where
+    T: Number,
+{
+    pub fn new(vectors: &[T]) -> Self {
+        Self {
+            _len: vectors.len(),
+            _value: vectors
+                .iter()
+                .map(|x| Cell::new(*x))
+                .collect::<Vec<Cell<T>>>(),
+        }
+    }
+    pub fn get_value(&self) -> Vec<&Cell<T>> {
+        self._value.iter().map(|x| x).collect()
+    }
+}
 
 #[derive(Debug)]
 pub struct Matrix2D<T>
@@ -13,7 +39,7 @@ where
 {
     _row_count: usize,
     _col_count: usize,
-    _value: [Cell<T>; 6],
+    _rows: Vec<MatrixRow<T>>,
 }
 
 impl<T> Matrix2D<T>
@@ -24,26 +50,22 @@ where
         Self {
             _row_count: 2,
             _col_count: 3,
-            _value: Self::get_identity_matrix(),
+            _rows: Self::get_identity_rows(),
         }
     }
 
-    fn get_identity_matrix() -> [Cell<T>; 6]
+    fn get_identity_rows() -> Vec<MatrixRow<T>>
     where
         T: Number,
     {
-        [
-            Cell::new(T::one()),
-            Cell::new(T::default()),
-            Cell::new(T::default()),
-            Cell::new(T::default()),
-            Cell::new(T::one()),
-            Cell::new(T::default()),
+        vec![
+            MatrixRow::new(&[T::one(), T::default(), T::default()]),
+            MatrixRow::new(&[T::default(), T::one(), T::default()]),
         ]
     }
 }
 
-impl<T> crate::Matrix<T> for Matrix2D<T>
+impl<T> Matrix<T> for Matrix2D<T>
 where
     T: Number,
 {
@@ -55,43 +77,66 @@ where
         self._col_count
     }
 
-    fn get_row(&self, row_index: usize) -> Vec<&Cell<T>> {
-        self._value
+    fn get_row(&self, row_index: usize) -> RefVectors<'_, T> {
+        self._rows[row_index].get_value().into()
+    }
+
+    fn get_col(&self, col_index: usize) -> RefVectors<'_, T> {
+        self._rows
             .iter()
-            .skip(row_index * self._col_count)
-            .take(self._col_count)
+            .map(|x| x.get_value()[col_index])
             .collect::<Vec<&Cell<T>>>()
+            .into()
     }
 
-    fn get_col(&self, col_index: usize) -> Vec<&Cell<T>> {
-        let selected_indexes: Vec<usize> = (0..self._row_count)
-            .into_iter()
-            .map(|r| r * self._col_count + col_index)
-            .collect();
-        let r = self
-            ._value
+    fn get_value(&self) -> RefVectors<'_, T> {
+        self._rows
             .iter()
-            .enumerate()
-            .filter(|(i, _)| selected_indexes.contains(i))
-            .map(|(_, v)| v)
-            .collect::<Vec<&Cell<T>>>();
-        r
+            .flat_map(|x| x.get_value())
+            .collect::<Vec<&Cell<T>>>()
+            .into()
     }
 
-    fn get_value(&self) -> Vec<&Cell<T>> {
-        self._value.iter().map(|x| x).collect()
+    fn rotate(&self, angle: f32) {
+        todo!()
     }
 }
 
-impl<T> std::ops::Index<(usize, usize)> for Matrix2D<T>
+impl<T> std::ops::Index<[usize; 2]> for Matrix2D<T>
 where
     T: Number,
 {
     type Output = Cell<T>;
 
-    fn index(&self, index: (usize, usize)) -> &Self::Output {
-        let (row_index, col_index) = index;
-        &self._value[row_index * self.get_col_count() + col_index]
+    fn index(&self, indexes: [usize; 2]) -> &Self::Output {
+        let [row_index, col_index] = indexes;
+        &self._rows[row_index].get_value()[col_index]
+    }
+}
+
+impl<T> std::ops::Mul for Matrix2D<T>
+where
+    T: Number,
+{
+    type Output = Self;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        Self {
+            _row_count: 2,
+            _col_count: 3,
+            _rows: vec![
+                MatrixRow::new(&[
+                    self.get_row(0) * rhs.get_col(0),
+                    self.get_row(0) * rhs.get_col(1),
+                    self.get_row(0) * rhs.get_col(2),
+                ]),
+                MatrixRow::new(&[
+                    self.get_row(1) * rhs.get_col(0),
+                    self.get_row(1) * rhs.get_col(1),
+                    self.get_row(1) * rhs.get_col(2),
+                ]),
+            ],
+        }
     }
 }
 
@@ -103,11 +148,8 @@ where
         let mut str = String::new();
         for row in 0..self._row_count {
             for col in 0..self._col_count {
-                str.write_str(&format!(
-                    "{:?}\t",
-                    self._value[row * self._col_count + col].get()
-                ))
-                .unwrap();
+                str.write_str(&format!("{:?}\t", self._rows[row].get_value()[col].get()))
+                    .unwrap();
             }
             str.write_char('\n').unwrap();
         }
