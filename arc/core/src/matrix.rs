@@ -39,18 +39,18 @@ impl<'a> std::ops::Mul for RefVectors {
     type Output = f32;
 
     fn mul(self, rhs: Self) -> Self::Output {
-        let len = self._len.max(rhs._len);
+        let max_len = self._len.max(rhs._len);
         let mut src = self._value.iter().map(|x| x.get()).collect::<Vec<f32>>();
-        for _ in src.len()..len {
+        for _ in src.len()..max_len {
             src.push(1f32);
         }
         let mut rhs = rhs._value.iter().map(|x| x.get()).collect::<Vec<f32>>();
-        for _ in rhs.len()..len {
+        for _ in rhs.len()..max_len {
             rhs.push(1f32);
         }
 
         let mut result = 0f32;
-        for index in 0..len {
+        for index in 0..max_len {
             result += src[index] * rhs[index]
         }
         result

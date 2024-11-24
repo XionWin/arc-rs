@@ -36,7 +36,7 @@ pub fn matrix_calc_test() {
     matrix[1][0].set(3.0f32);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
-    let matrix_roated = Matrix2D::new_from_angle(PI / 8f32);
+    let matrix_roated = Matrix2D::new_from_angle(PI / 6f32);
     util::print_debug!("matrix2:\n{}", matrix_roated);
 
     let result = matrix * matrix_roated;

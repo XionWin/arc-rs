@@ -30,6 +30,13 @@ impl MatrixRow {
     }
 }
 
+#[macro_export]
+macro_rules! matrix_row {
+    ($($ps:expr),+) => {
+        crate::MatrixRow::new(&vec![$($ps),+])
+    };
+}
+
 #[derive(Debug)]
 pub struct Matrix2D {
     _len: usize,
@@ -52,16 +59,13 @@ impl Matrix2D {
     }
 
     fn get_identity_rows() -> Vec<MatrixRow> {
-        vec![
-            MatrixRow::new(&[1f32, 0f32, 0f32]),
-            MatrixRow::new(&[0f32, 1f32, 0f32]),
-        ]
+        vec![matrix_row!(1f32, 0f32, 0f32), matrix_row!(0f32, 1f32, 0f32)]
     }
 
     fn get_angle_rows(angle: f32) -> Vec<MatrixRow> {
         vec![
-            MatrixRow::new(&[angle.cos(), -angle.sin(), 0f32]),
-            MatrixRow::new(&[angle.sin(), angle.cos(), 0f32]),
+            matrix_row!(angle.cos(), -angle.sin(), 0f32),
+            matrix_row!(angle.sin(), angle.cos(), 0f32),
         ]
     }
 }
@@ -115,16 +119,16 @@ impl std::ops::Mul for &Matrix2D {
         Self::Output {
             _len: 6,
             _rows: vec![
-                MatrixRow::new(&[
+                matrix_row!(
                     self.get_row(0) * rhs.get_col(0),
                     self.get_row(0) * rhs.get_col(1),
-                    self.get_row(0) * rhs.get_col(2),
-                ]),
-                MatrixRow::new(&[
+                    self.get_row(0) * rhs.get_col(2)
+                ),
+                matrix_row!(
                     self.get_row(1) * rhs.get_col(0),
                     self.get_row(1) * rhs.get_col(1),
-                    self.get_row(1) * rhs.get_col(2),
-                ]),
+                    self.get_row(1) * rhs.get_col(2)
+                ),
             ],
         }
     }
@@ -137,16 +141,16 @@ impl std::ops::Mul for Matrix2D {
         Self::Output {
             _len: 6,
             _rows: vec![
-                MatrixRow::new(&[
+                matrix_row!(
                     self.get_row(0) * rhs.get_col(0),
                     self.get_row(0) * rhs.get_col(1),
-                    self.get_row(0) * rhs.get_col(2),
-                ]),
-                MatrixRow::new(&[
+                    self.get_row(0) * rhs.get_col(2)
+                ),
+                matrix_row!(
                     self.get_row(1) * rhs.get_col(0),
                     self.get_row(1) * rhs.get_col(1),
-                    self.get_row(1) * rhs.get_col(2),
-                ]),
+                    self.get_row(1) * rhs.get_col(2)
+                ),
             ],
         }
     }
