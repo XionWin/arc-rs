@@ -20,12 +20,10 @@ fn main() {
         |window| {
             let _g = window.get_graphic();
 
-            let image = image_ref.take();
-            match &image {
+            match image_ref.borrow().as_ref() {
                 Some(_v) => {}
                 None => util::print_panic!("image is null"),
             }
-            image_ref.replace(image);
         },
     );
 }
