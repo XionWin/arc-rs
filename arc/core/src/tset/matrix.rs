@@ -20,7 +20,7 @@ pub fn matrix_test() {
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
     matrix[1][0].set(3.0f32);
-    util::print_debug!("matrix[(1, 0)]: {:?}", matrix[1][0]);
+    util::print_debug!("{}: {:?}", stringify!(matrix[1][0]), matrix[1][0]);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
     util::print_debug!("{:?}", matrix.get_value());
