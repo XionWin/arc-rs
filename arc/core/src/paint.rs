@@ -4,7 +4,7 @@ use crate::{Matrix, Matrix2D};
 
 pub struct Paint {
     _rect: crate::Rect<i32>,
-    _transform: Box<dyn Matrix<f32>>,
+    _transform: Box<dyn Matrix>,
     _extent: crate::Extent<f32>,
     _radius: f32,
     _feather: f32,
@@ -17,7 +17,7 @@ impl Paint {
     pub fn new(image: Rc<dyn crate::Image>, view: crate::Rect<i32>) -> Self {
         Self {
             _rect: view,
-            _transform: Box::new(Matrix2D::<f32>::new()),
+            _transform: Box::new(Matrix2D::new()),
             _extent: crate::Extent::new(view.size.width as _, view.size.height as _),
             _radius: 0f32,
             _feather: 1f32,
