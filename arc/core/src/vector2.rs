@@ -1,6 +1,7 @@
 use crate::Number;
 
 #[repr(C)]
+#[derive(Debug, Clone, Copy)]
 pub struct Vector2<T>
 where
     T: Number,

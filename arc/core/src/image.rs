@@ -1,6 +1,6 @@
 use std::ffi::c_uint;
 
-use crate::{ColorType, Size, ImageFilter};
+use crate::{ColorType, ImageFilter, Size};
 
 pub trait Image {
     fn get_id(&self) -> c_uint;
