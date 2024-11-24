@@ -9,11 +9,9 @@ impl TestCanvas {
         }
     }
 
-    pub fn init(&self) {
-        util::print_debug!("test_canvas inited")
+    pub fn load(&self) {
+        util::print_debug!("test_canvas load")
     }
 
-    pub fn draw(&self) {
-        util::print_debug!("test_canvas drawed")
-    }
+    pub fn render(&self) {}
 }
