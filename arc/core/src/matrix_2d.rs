@@ -30,6 +30,14 @@ impl MatrixRow {
     }
 }
 
+impl std::ops::Index<usize> for MatrixRow {
+    type Output = Cell<f32>;
+
+    fn index(&self, index: usize) -> &Self::Output {
+        &self._value[index]
+    }
+}
+
 #[macro_export]
 macro_rules! matrix_row {
     ($($ps:expr),+) => {
@@ -105,10 +113,10 @@ impl Matrix for Matrix2D {
 }
 
 impl std::ops::Index<usize> for Matrix2D {
-    type Output = [Cell<f32>];
+    type Output = MatrixRow;
 
     fn index(&self, index: usize) -> &Self::Output {
-        self._rows[index].get_ref_value()
+        &self._rows[index]
     }
 }
 
