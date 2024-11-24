@@ -19,8 +19,8 @@ pub fn matrix_test() {
     col_2[1].set(2.0f32);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
-    matrix[[1, 0]].set(3.0f32);
-    util::print_debug!("matrix[(1, 0)]: {:?}", matrix[[1, 0]]);
+    matrix[1][0].set(3.0f32);
+    util::print_debug!("matrix[(1, 0)]: {:?}", matrix[1][0]);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
     util::print_debug!("{:?}", matrix.get_value());
@@ -30,10 +30,10 @@ pub fn matrix_test() {
 pub fn matrix_calc_test() {
     let matrix = Matrix2D::new();
     util::print_debug!("matrix:\n{}", matrix);
-    matrix[[1, 0]].set(2.0f32);
-    matrix[[0, 2]].set(2.0f32);
-    matrix[[1, 2]].set(2.0f32);
-    matrix[[1, 0]].set(3.0f32);
+    matrix[1][0].set(2.0f32);
+    matrix[0][2].set(2.0f32);
+    matrix[1][2].set(2.0f32);
+    matrix[1][0].set(3.0f32);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
     let matrix_roated = Matrix2D::new_from_angle(PI / 8f32);

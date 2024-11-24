@@ -21,8 +21,12 @@ impl MatrixRow {
                 .collect::<Vec<Cell<f32>>>(),
         }
     }
-    pub fn get_value(&self) -> Vec<&Cell<f32>> {
-        self._value.iter().map(|x| x).collect()
+    pub fn get_value(&self) -> Vec<Cell<f32>> {
+        self._value.iter().map(|x| x.clone()).collect()
+    }
+
+    pub fn get_ref_value(&self) -> &Vec<Cell<f32>> {
+        &self._value
     }
 }
 
@@ -71,23 +75,23 @@ impl Matrix for Matrix2D {
         self._rows[0]._len
     }
 
-    fn get_row(&self, row_index: usize) -> RefVectors<'_> {
+    fn get_row(&self, row_index: usize) -> RefVectors {
         self._rows[row_index].get_value().into()
     }
 
-    fn get_col(&self, col_index: usize) -> RefVectors<'_> {
+    fn get_col(&self, col_index: usize) -> RefVectors {
         self._rows
             .iter()
-            .map(|x| x.get_value()[col_index])
-            .collect::<Vec<&Cell<f32>>>()
+            .map(|x| x.get_value()[col_index].clone())
+            .collect::<Vec<Cell<f32>>>()
             .into()
     }
 
-    fn get_value(&self) -> RefVectors<'_> {
+    fn get_value(&self) -> RefVectors {
         self._rows
             .iter()
             .flat_map(|x| x.get_value())
-            .collect::<Vec<&Cell<f32>>>()
+            .collect::<Vec<Cell<f32>>>()
             .into()
     }
 
@@ -96,12 +100,11 @@ impl Matrix for Matrix2D {
     }
 }
 
-impl std::ops::Index<[usize; 2]> for Matrix2D {
-    type Output = Cell<f32>;
+impl std::ops::Index<usize> for Matrix2D {
+    type Output = [Cell<f32>];
 
-    fn index(&self, indexes: [usize; 2]) -> &Self::Output {
-        let [row_index, col_index] = indexes;
-        &self._rows[row_index].get_value()[col_index]
+    fn index(&self, index: usize) -> &Self::Output {
+        self._rows[index].get_ref_value()
     }
 }
 
