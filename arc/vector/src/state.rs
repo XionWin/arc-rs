@@ -12,7 +12,7 @@ impl StrokeState {
         Self {
             _stroke_paint: Some(core::Paint::default()),
             _stroke_width: stroke_width,
-            _stroke_multiple: (stroke_width * 0.5f32 + FRINGE_WIDTH * 0.5f32) / FRINGE_WIDTH,
+            _stroke_multiple: (stroke_width / 2f32 + FRINGE_WIDTH / 2f32) / FRINGE_WIDTH,
             _line_join: core::LineJoin::default(),
             _line_cap: core::LineCap::default(),
         }
