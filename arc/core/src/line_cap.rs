@@ -1,6 +1,11 @@
-pub enum LineCap
-{
+pub enum LineCap {
     Butt,
     Round,
-    Square
+    Square,
+}
+
+impl Default for LineCap {
+    fn default() -> Self {
+        Self::Butt
+    }
 }

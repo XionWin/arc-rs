@@ -1,6 +1,11 @@
-pub enum LineJoin
-{
+pub enum LineJoin {
     Bevel,
     Miter,
-    Round
+    Round,
+}
+
+impl Default for LineJoin {
+    fn default() -> Self {
+        Self::Bevel
+    }
 }

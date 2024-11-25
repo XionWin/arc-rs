@@ -4,7 +4,7 @@ use crate::{Matrix, Matrix2D};
 
 #[test]
 pub fn matrix_test() {
-    let matrix = Matrix2D::new();
+    let matrix = Matrix2D::default();
     util::print_debug!("matrix:\n{}", matrix);
 
     let row_1 = matrix.get_row(1);
@@ -28,7 +28,7 @@ pub fn matrix_test() {
 
 #[test]
 pub fn matrix_calc_test() {
-    let matrix = Matrix2D::new();
+    let matrix = Matrix2D::default();
     util::print_debug!("matrix:\n{}", matrix);
     matrix[1][0].set(2.0f32);
     matrix[0][2].set(2.0f32);

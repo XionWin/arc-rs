@@ -52,13 +52,6 @@ pub struct Matrix2D {
 }
 
 impl Matrix2D {
-    pub fn new() -> Self {
-        Self {
-            _len: 6,
-            _rows: Self::get_identity_rows(),
-        }
-    }
-
     pub fn new_from_angle(angle: f32) -> Self {
         Self {
             _len: 6,
@@ -75,6 +68,15 @@ impl Matrix2D {
             matrix_row!(angle.cos(), -angle.sin(), 0f32),
             matrix_row!(angle.sin(), angle.cos(), 0f32),
         ]
+    }
+}
+
+impl Default for Matrix2D {
+    fn default() -> Self {
+        Self {
+            _len: 6,
+            _rows: Self::get_identity_rows(),
+        }
     }
 }
 

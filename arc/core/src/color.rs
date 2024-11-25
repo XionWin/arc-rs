@@ -14,7 +14,12 @@ impl Into<(u8, u8, u8, u8)> for Rgba {
 
 impl Into<(f32, f32, f32, f32)> for Rgba {
     fn into(self) -> (f32, f32, f32, f32) {
-        (self.r as f32 / 255f32, self.g as f32 / 255f32, self.b as f32 / 255f32, self.a as f32 / 255f32)
+        (
+            self.r as f32 / 255f32,
+            self.g as f32 / 255f32,
+            self.b as f32 / 255f32,
+            self.a as f32 / 255f32,
+        )
     }
 }
 
@@ -40,6 +45,12 @@ pub enum Color {
     MidnightBlue,
     Transparent,
     TrueColor { r: u8, g: u8, b: u8, a: u8 },
+}
+
+impl Default for Color {
+    fn default() -> Self {
+        Self::Transparent
+    }
 }
 
 impl Into<Rgba> for Color {
@@ -145,15 +156,15 @@ impl Into<Rgba> for Color {
                 r: 25u8,
                 g: 25u8,
                 b: 112u8,
-                a: 255u8
+                a: 255u8,
             },
             Color::Transparent => Rgba {
                 r: 0u8,
                 g: 0u8,
                 b: 0u8,
-                a: 0u8
+                a: 0u8,
             },
-            Color::TrueColor { r, g, b, a } => Rgba { r, g, b, a},
+            Color::TrueColor { r, g, b, a } => Rgba { r, g, b, a },
         }
     }
 }
