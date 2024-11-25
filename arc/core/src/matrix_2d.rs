@@ -1,49 +1,9 @@
-use crate::MatrixRefVectors;
+use crate::{matrix_row, MatrixRefVectors, MatrixRow};
 use std::{
     cell::Cell,
     fmt::{Display, Write},
     usize,
 };
-
-#[derive(Debug)]
-pub struct MatrixRow {
-    _len: usize,
-    _value: Vec<Cell<f32>>,
-}
-
-impl MatrixRow {
-    pub fn new(vectors: &[f32]) -> Self {
-        Self {
-            _len: vectors.len(),
-            _value: vectors
-                .iter()
-                .map(|x| Cell::new(*x))
-                .collect::<Vec<Cell<f32>>>(),
-        }
-    }
-    pub fn get_value(&self) -> Vec<Cell<f32>> {
-        self._value.iter().map(|x| x.clone()).collect()
-    }
-
-    pub fn get_ref_value(&self) -> &Vec<Cell<f32>> {
-        &self._value
-    }
-}
-
-impl std::ops::Index<usize> for MatrixRow {
-    type Output = Cell<f32>;
-
-    fn index(&self, index: usize) -> &Self::Output {
-        &self._value[index]
-    }
-}
-
-#[macro_export]
-macro_rules! matrix_row {
-    ($($ps:expr),+) => {
-        crate::MatrixRow::new(&vec![$($ps),+])
-    };
-}
 
 #[derive(Debug)]
 pub struct Matrix2D {
@@ -64,7 +24,7 @@ impl Matrix2D {
     }
 
     pub fn get_col_count(&self) -> usize {
-        self._rows[0]._len
+        self._rows[0].get_len()
     }
 
     pub fn get_row(&self, row_index: usize) -> MatrixRefVectors {
@@ -90,7 +50,9 @@ impl Matrix2D {
     pub fn rotate(&self, angle: f32) -> Self {
         self * &Matrix2D::new_from_angle(angle)
     }
+}
 
+impl Matrix2D {
     fn get_identity_rows() -> Vec<MatrixRow> {
         vec![matrix_row!(1f32, 0f32, 0f32), matrix_row!(0f32, 1f32, 0f32)]
     }
@@ -168,7 +130,7 @@ impl Display for Matrix2D {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let mut str = String::new();
         for row in &self._rows {
-            for cell in &row._value {
+            for cell in &row.get_value() {
                 str.write_str(&format!("{:?}\t", cell.get())).unwrap();
             }
             str.write_char('\n').unwrap();

@@ -1,15 +1,5 @@
 use std::{cell::Cell, fmt::Debug};
 
-// pub trait Matrix: Default + Debug {
-//     fn get_row_count(&self) -> usize;
-//     fn get_col_count(&self) -> usize;
-//     fn get_row(&self, row_index: usize) -> RefVectors;
-//     fn get_col(&self, col_index: usize) -> RefVectors;
-
-//     fn get_value(&self) -> RefVectors;
-//     fn rotate(&self, angle: f32) -> Matrix2D;
-// }
-
 #[derive(Debug)]
 pub struct MatrixRefVectors {
     _len: usize,
