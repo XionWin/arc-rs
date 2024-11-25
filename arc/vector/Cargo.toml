@@ -5,3 +5,5 @@ edition = "2021"
 
 [dependencies]
 bitflags="*"
+util = { path = "../../util" }
+core = { path = "../core" }
