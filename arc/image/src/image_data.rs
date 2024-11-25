@@ -3,9 +3,9 @@ use std::ffi::c_uchar;
 use core::{ColorType, Size};
 
 pub struct ImageData {
-    pub size: Size<i32>,
-    pub value: Vec<c_uchar>,
-    pub color_type: ColorType,
+    size: Size<i32>,
+    value: Vec<c_uchar>,
+    color_type: ColorType,
 }
 
 impl ImageData {

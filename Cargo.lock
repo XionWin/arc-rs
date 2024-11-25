@@ -307,6 +307,7 @@ name = "graphic"
 version = "0.1.0"
 dependencies = [
  "core",
+ "image 0.1.0",
  "util",
 ]
 

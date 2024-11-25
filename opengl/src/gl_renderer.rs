@@ -56,11 +56,12 @@ impl graphic::Renderer for GLRenderer {
         path: &str,
         texture_filter: graphic::TextureFilter,
     ) -> Box<dyn graphic::Texture> {
+        use core::ImageData;
         let image_data = image::ImageData::new_from_file(path);
         let texture = crate::Texture::new(
             self.clone(),
-            image_data.size,
-            image_data.color_type,
+            image_data.get_size(),
+            image_data.get_color_type(),
             texture_filter,
         );
         texture.load(&image_data);

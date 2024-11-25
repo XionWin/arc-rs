@@ -10,9 +10,17 @@ pub struct Image {
 
 impl Image {
     pub fn new(texture: Box<dyn Texture>) -> Self {
-        Self {
-            texture
-        }
+        Self { texture }
+    }
+
+    pub fn new_from_file<T>(path: &str, get_texture_func: T) -> Self
+    where
+        T: Fn(core::Size<i32>, core::ColorType) -> Box<dyn Texture>,
+    {
+        use core::ImageData;
+        let image = image::ImageData::new_from_file(path);
+        let texture = get_texture_func(image.get_size(), image.get_color_type());
+        Self { texture }
     }
 }
 
