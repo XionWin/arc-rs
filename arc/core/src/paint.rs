@@ -1,9 +1,9 @@
 use std::rc::Rc;
 
-use crate::{Matrix, Matrix2D, PaintImage};
+use crate::{Matrix2D, PaintImage};
 
 pub struct Paint {
-    _transform: Box<dyn Matrix>,
+    _transform: Matrix2D,
     _radius: f32,
     _feather: f32,
     _inner_color: crate::Color,
@@ -15,7 +15,7 @@ pub struct Paint {
 impl Paint {
     pub fn new_from_image(image: Rc<dyn crate::Image>, view_port: crate::Rect<i32>) -> Self {
         Self {
-            _transform: Box::new(Matrix2D::default()),
+            _transform: Matrix2D::default(),
             _radius: 0f32,
             _feather: 1f32,
             _inner_color: crate::Color::default(),
@@ -29,7 +29,7 @@ impl Paint {
 impl Default for Paint {
     fn default() -> Self {
         Self {
-            _transform: Box::new(Matrix2D::default()),
+            _transform: Matrix2D::default(),
             _radius: 0f32,
             _feather: 1f32,
             _inner_color: crate::Color::default(),

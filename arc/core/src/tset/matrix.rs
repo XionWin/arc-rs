@@ -1,6 +1,6 @@
 use std::f32::consts::PI;
 
-use crate::{Matrix, Matrix2D};
+use crate::Matrix2D;
 
 #[test]
 pub fn matrix_test() {

@@ -1,24 +1,22 @@
-use std::cell::Cell;
+use std::{cell::Cell, fmt::Debug};
 
-use crate::Matrix2D;
+// pub trait Matrix: Default + Debug {
+//     fn get_row_count(&self) -> usize;
+//     fn get_col_count(&self) -> usize;
+//     fn get_row(&self, row_index: usize) -> RefVectors;
+//     fn get_col(&self, col_index: usize) -> RefVectors;
 
-pub trait Matrix: std::fmt::Debug {
-    fn get_row_count(&self) -> usize;
-    fn get_col_count(&self) -> usize;
-    fn get_row(&self, row_index: usize) -> RefVectors;
-    fn get_col(&self, col_index: usize) -> RefVectors;
-
-    fn get_value(&self) -> RefVectors;
-    fn rotate(&self, angle: f32) -> Matrix2D;
-}
+//     fn get_value(&self) -> RefVectors;
+//     fn rotate(&self, angle: f32) -> Matrix2D;
+// }
 
 #[derive(Debug)]
-pub struct RefVectors {
+pub struct MatrixRefVectors {
     _len: usize,
     _value: Vec<Cell<f32>>,
 }
 
-impl From<Vec<Cell<f32>>> for RefVectors {
+impl From<Vec<Cell<f32>>> for MatrixRefVectors {
     fn from(value: Vec<Cell<f32>>) -> Self {
         Self {
             _len: value.len(),
@@ -27,7 +25,7 @@ impl From<Vec<Cell<f32>>> for RefVectors {
     }
 }
 
-impl<'a> std::ops::Index<usize> for RefVectors {
+impl<'a> std::ops::Index<usize> for MatrixRefVectors {
     type Output = Cell<f32>;
 
     fn index(&self, index: usize) -> &Self::Output {
@@ -35,7 +33,7 @@ impl<'a> std::ops::Index<usize> for RefVectors {
     }
 }
 
-impl<'a> std::ops::Mul for RefVectors {
+impl<'a> std::ops::Mul for MatrixRefVectors {
     type Output = f32;
 
     fn mul(self, rhs: Self) -> Self::Output {

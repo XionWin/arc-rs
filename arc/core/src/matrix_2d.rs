@@ -1,4 +1,4 @@
-use crate::{Matrix, RefVectors};
+use crate::MatrixRefVectors;
 use std::{
     cell::Cell,
     fmt::{Display, Write},
@@ -59,6 +59,38 @@ impl Matrix2D {
         }
     }
 
+    pub fn get_row_count(&self) -> usize {
+        self._rows.len()
+    }
+
+    pub fn get_col_count(&self) -> usize {
+        self._rows[0]._len
+    }
+
+    pub fn get_row(&self, row_index: usize) -> MatrixRefVectors {
+        self._rows[row_index].get_value().into()
+    }
+
+    pub fn get_col(&self, col_index: usize) -> MatrixRefVectors {
+        self._rows
+            .iter()
+            .map(|x| x.get_value()[col_index].clone())
+            .collect::<Vec<Cell<f32>>>()
+            .into()
+    }
+
+    pub fn get_value(&self) -> MatrixRefVectors {
+        self._rows
+            .iter()
+            .flat_map(|x| x.get_value())
+            .collect::<Vec<Cell<f32>>>()
+            .into()
+    }
+
+    pub fn rotate(&self, angle: f32) -> Self {
+        self * &Matrix2D::new_from_angle(angle)
+    }
+
     fn get_identity_rows() -> Vec<MatrixRow> {
         vec![matrix_row!(1f32, 0f32, 0f32), matrix_row!(0f32, 1f32, 0f32)]
     }
@@ -77,40 +109,6 @@ impl Default for Matrix2D {
             _len: 6,
             _rows: Self::get_identity_rows(),
         }
-    }
-}
-
-impl Matrix for Matrix2D {
-    fn get_row_count(&self) -> usize {
-        self._rows.len()
-    }
-
-    fn get_col_count(&self) -> usize {
-        self._rows[0]._len
-    }
-
-    fn get_row(&self, row_index: usize) -> RefVectors {
-        self._rows[row_index].get_value().into()
-    }
-
-    fn get_col(&self, col_index: usize) -> RefVectors {
-        self._rows
-            .iter()
-            .map(|x| x.get_value()[col_index].clone())
-            .collect::<Vec<Cell<f32>>>()
-            .into()
-    }
-
-    fn get_value(&self) -> RefVectors {
-        self._rows
-            .iter()
-            .flat_map(|x| x.get_value())
-            .collect::<Vec<Cell<f32>>>()
-            .into()
-    }
-
-    fn rotate(&self, angle: f32) -> Self {
-        self * &Matrix2D::new_from_angle(angle)
     }
 }
 
