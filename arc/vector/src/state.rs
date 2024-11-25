@@ -1,9 +1,13 @@
+pub trait State {}
+
 pub struct StrokeState {
     _stroke_paint: Option<core::Paint>,
     _stroke_width: f32,
     _stroke_multiple: f32,
     _line_join: core::LineJoin,
     _line_cap: core::LineCap,
+    _transform: core::Matrix2D,
+    _scissor: core::Scissor,
 }
 
 impl StrokeState {
@@ -15,18 +19,28 @@ impl StrokeState {
                 / crate::FRINGE_WIDTH,
             _line_join: core::LineJoin::default(),
             _line_cap: core::LineCap::default(),
+            _transform: core::Matrix2D::default(),
+            _scissor: core::Scissor::default(),
         }
     }
 }
 
+impl State for StrokeState {}
+
 pub struct FillState {
     _fill_paint: Option<core::Paint>,
-}
-
-pub struct State {
-    _fill: Option<FillState>,
-    _stroke: Option<StrokeState>,
     _transform: core::Matrix2D,
     _scissor: core::Scissor,
-    _alpha: f32,
 }
+
+impl FillState {
+    pub fn new() -> Self {
+        Self {
+            _fill_paint: Some(core::Paint::default()),
+            _transform: core::Matrix2D::default(),
+            _scissor: core::Scissor::default(),
+        }
+    }
+}
+
+impl State for FillState {}
