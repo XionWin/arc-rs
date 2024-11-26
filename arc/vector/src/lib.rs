@@ -1,9 +1,10 @@
 pub mod def;
 
-mod parameter;
+pub(crate) mod parameter;
+mod primitive;
 mod shape;
 mod state;
 
-pub use parameter::*;
+pub use primitive::*;
 pub use shape::*;
 pub use state::*;

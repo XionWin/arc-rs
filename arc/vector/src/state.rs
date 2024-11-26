@@ -15,8 +15,8 @@ impl StrokeState {
         Self {
             _stroke_paint: Some(core::Paint::default()),
             _stroke_width: stroke_width,
-            _stroke_multiple: (stroke_width / 2f32 + crate::FRINGE_WIDTH / 2f32)
-                / crate::FRINGE_WIDTH,
+            _stroke_multiple: (stroke_width / 2f32 + crate::parameter::FRINGE_WIDTH / 2f32)
+                / crate::parameter::FRINGE_WIDTH,
             _line_join: core::LineJoin::default(),
             _line_cap: core::LineCap::default(),
             _transform: core::Matrix2D::default(),

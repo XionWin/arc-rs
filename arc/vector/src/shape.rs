@@ -1,8 +1,4 @@
-use core::Vector2;
-
-use crate::State;
-
 pub trait Shape {
-    fn get_state(&self) -> &dyn State;
-    fn get_vertexes(&self) -> &[Vector2<f32>];
+    fn get_stroke_primitive(&self) -> &crate::Primitive;
+    fn get_fill_primitive(&self) -> &crate::Primitive;
 }
