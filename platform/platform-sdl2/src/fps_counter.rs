@@ -14,7 +14,9 @@ impl FpsCounter {
     }
 
     pub fn update<T>(&mut self, mut callback: T)
-        where T: FnMut(f32) {
+    where
+        T: FnMut(f32),
+    {
         let now_time = std::time::SystemTime::now();
         if (now_time.duration_since(self.start_time)).unwrap() >= self.update_duration {
             match now_time.duration_since(self.start_time) {

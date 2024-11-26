@@ -519,7 +519,6 @@ impl Not for &Style {
 //     }
 // }
 
-
 impl_assign_op_trait!(BitAndAssign, bitand_assign for Style, Style, using BitAnd::bitand);
 
 impl_assign_op_trait!(BitAndAssign, bitand_assign for Style, Styles, using BitAnd::bitand);
@@ -755,7 +754,6 @@ mod tests {
 
         /// TTABLE = TRUTH_TABLE
         const TTABLE: (u8, u8) = (0b0101, 0b0011);
-
 
         #[test]
         fn binops() {

@@ -9,7 +9,8 @@ impl FpsLimiter {
     pub fn new(fps: u32) -> Self {
         FpsLimiter {
             fps,
-            _duration: std::time::Duration::from_secs(1) / fps - std::time::Duration::from_micros(350),
+            _duration: std::time::Duration::from_secs(1) / fps
+                - std::time::Duration::from_micros(350),
             _last_update_time: std::time::SystemTime::now(),
         }
     }
@@ -22,7 +23,7 @@ impl FpsLimiter {
                     let duration = self._duration - used_duration;
                     std::thread::sleep(duration)
                 }
-            },
+            }
             Err(msg) => util::print_panic!("fps_limiter delay error, Msg: {:?}", msg.duration()),
         }
         self.reset();

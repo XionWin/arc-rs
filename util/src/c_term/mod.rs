@@ -33,12 +33,12 @@ mod color;
 mod control;
 #[allow(dead_code)]
 mod error;
-mod style;
 mod macros;
+mod style;
 
+pub use self::customcolors::CustomColor;
 #[allow(unused_imports)]
 pub use macros::*;
-pub use self::customcolors::CustomColor;
 
 /// Custom colors support.
 pub mod customcolors;

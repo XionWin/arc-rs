@@ -1,5 +1,5 @@
 #[macro_export]
-#[doc="print_hight_light"]
+#[doc = "print_hight_light"]
 macro_rules! print_hight_light {
     () => {
         println!()
@@ -11,7 +11,7 @@ macro_rules! print_hight_light {
 }
 
 #[macro_export]
-#[doc="print_info"]
+#[doc = "print_info"]
 macro_rules! print_info {
     () => {
         println!()
@@ -23,7 +23,7 @@ macro_rules! print_info {
 }
 
 #[macro_export]
-#[doc="print_debug"]
+#[doc = "print_debug"]
 macro_rules! print_debug {
     () => {
         println!()
@@ -35,7 +35,7 @@ macro_rules! print_debug {
 }
 
 #[macro_export]
-#[doc="print_warning"]
+#[doc = "print_warning"]
 macro_rules! print_warning {
     () => {
         println!()
@@ -47,7 +47,7 @@ macro_rules! print_warning {
 }
 
 #[macro_export]
-#[doc="print_error"]
+#[doc = "print_error"]
 macro_rules! print_error {
     () => {
         println!()
@@ -59,7 +59,7 @@ macro_rules! print_error {
 }
 
 #[macro_export]
-#[doc="print_panic"]
+#[doc = "print_panic"]
 macro_rules! print_panic {
     () => {
         panic!()

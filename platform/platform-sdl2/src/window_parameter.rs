@@ -21,14 +21,11 @@ impl std::fmt::Display for VideoProfile {
 
 pub struct WindowParameter {
     pub profile: VideoProfile,
-    pub version: core::Version
+    pub version: core::Version,
 }
 
 impl WindowParameter {
-    pub fn new(profile:VideoProfile, version: core::Version) -> Self {
-        Self {
-            profile,
-            version
-        }
+    pub fn new(profile: VideoProfile, version: core::Version) -> Self {
+        Self { profile, version }
     }
 }
