@@ -14,3 +14,15 @@ pub struct FragUniform {
     _inner_color: core::Color,
     _outer_color: core::Color,
 }
+
+impl Into<FragUniform> for &vector::StrokeState {
+    fn into(self) -> FragUniform {
+        todo!()
+    }
+}
+
+impl Into<FragUniform> for &vector::FillState {
+    fn into(self) -> FragUniform {
+        todo!()
+    }
+}

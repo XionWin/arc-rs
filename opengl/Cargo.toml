@@ -10,3 +10,4 @@ util = { path = "../util" }
 core = { path = "../arc/core" }
 graphic = { path = "../arc/graphic" }
 image = { path = "../arc/image" }
+vector = { path = "../arc/vector" }

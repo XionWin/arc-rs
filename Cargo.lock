@@ -595,6 +595,7 @@ dependencies = [
  "graphic",
  "image 0.1.0",
  "util",
+ "vector",
 ]
 
 [[package]]
