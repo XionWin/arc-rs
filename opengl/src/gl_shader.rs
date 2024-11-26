@@ -1,8 +1,7 @@
 use std::ffi::c_uint;
 
 #[derive(Debug)]
-pub struct Shader
-{
+pub struct Shader {
     pub id: c_uint,
     pub source: String,
     pub shader_type: crate::def::ShaderType,
@@ -11,11 +10,8 @@ pub struct Shader
 impl Shader {
     pub fn new(shader_type: crate::def::ShaderType, path: &str) -> Self {
         Self {
-            id: unsafe {
-                gl::CreateShader(shader_type as _)
-            },
-            source: std::fs::read_to_string(path)
-            .expect("unread the file"),
+            id: unsafe { gl::CreateShader(shader_type as _) },
+            source: std::fs::read_to_string(path).expect("unread the file"),
             shader_type,
         }
     }
@@ -45,7 +41,7 @@ impl Drop for Shader {
         }
     }
 }
-    
+
 fn check_compile(shader: crate::Shader) -> crate::Shader {
     let mut is_compiled = 0;
     unsafe {

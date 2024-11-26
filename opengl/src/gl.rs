@@ -1,9 +1,9 @@
 use crate::{def::StringName, ClearBufferMasks};
-use util::LibraryLoader;
 use std::{
-    ffi::{c_void, c_char, c_float, c_int, c_uint, CStr, CString},
+    ffi::{c_char, c_float, c_int, c_uint, c_void, CStr, CString},
     str::from_utf8,
 };
+use util::LibraryLoader;
 
 pub fn load() {
     let loader = LibraryLoader::new("libGLESv2.so.2");
@@ -69,7 +69,6 @@ pub fn delete_shader(shader_id: c_uint) {
 }
 
 pub fn shader_source(shader_id: c_uint, source_code: &str) {
-
     let c_str = util::expect!(CString::new(source_code));
     let sources = vec![c_str.as_ptr()];
     unsafe { gl::ShaderSource(shader_id, 1, sources.as_ptr() as _, sources.len() as _) }
@@ -443,7 +442,10 @@ pub fn generate_mipmap(texture_target: crate::def::TextureTarget) {
     unsafe { gl::GenerateMipmap(texture_target as _) }
 }
 
-pub fn blend_func(src_factor: crate::def::BlendingFactorSrc, dest_factor: crate::def::BlendingFactorDest) {
+pub fn blend_func(
+    src_factor: crate::def::BlendingFactorSrc,
+    dest_factor: crate::def::BlendingFactorDest,
+) {
     unsafe { gl::BlendFunc(src_factor as _, dest_factor as _) }
 }
 

@@ -13,11 +13,8 @@ impl Program {
     pub fn new(vertex_shader_path: &str, fragment_shader_path: &str) -> Self {
         Self {
             id: crate::gl::create_program(),
-            _vertex_shader: Shader::new(
-                crate::def::ShaderType::VertexShader,
-                vertex_shader_path,
-            )
-            .load(),
+            _vertex_shader: Shader::new(crate::def::ShaderType::VertexShader, vertex_shader_path)
+                .load(),
             _fragment_shader: Shader::new(
                 crate::def::ShaderType::FragmentShader,
                 fragment_shader_path,
