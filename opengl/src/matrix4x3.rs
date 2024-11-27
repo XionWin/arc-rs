@@ -47,6 +47,16 @@ impl Matrix4x3 {
     }
 }
 
+impl Default for Matrix4x3 {
+    fn default() -> Self {
+        Self {
+            _row_0: Vector4::new(1f32, 0f32, 0f32, 0f32),
+            _row_1: Vector4::new(0f32, 1f32, 0f32, 0f32),
+            _row_2: Vector4::new(0f32, 0f32, 1f32, 0f32),
+        }
+    }
+}
+
 impl From<&core::Matrix2D> for Matrix4x3 {
     fn from(value: &core::Matrix2D) -> Self {
         Self::new(

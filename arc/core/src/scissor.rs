@@ -1,6 +1,6 @@
 pub struct Scissor {
     _transform: crate::Matrix2D,
-    _extent: crate::Extent<f32>,
+    _extent: crate::Extent<i32>,
 }
 
 impl Default for Scissor {
@@ -17,7 +17,7 @@ impl Scissor {
         &self._transform
     }
 
-    pub fn get_extent(&self) -> crate::Extent<f32> {
+    pub fn get_extent(&self) -> crate::Extent<i32> {
         self._extent
     }
 }

@@ -4,7 +4,11 @@ pub trait AsAny: Any {
     fn as_any(&self) -> &dyn Any;
 }
 
-pub trait State: AsAny {}
+pub trait State: AsAny {
+    fn get_paint(&self) -> &core::Paint;
+    fn get_transform(&self) -> &core::Matrix2D;
+    fn get_scissor(&self) -> Option<&core::Scissor>;
+}
 
 impl dyn State {
     pub fn downcast_ref<T>(&self) -> Option<&T>
@@ -51,7 +55,22 @@ impl AsAny for StrokeState {
     }
 }
 
-impl State for StrokeState {}
+impl State for StrokeState {
+    fn get_paint(&self) -> &core::Paint {
+        &self._paint
+    }
+
+    fn get_transform(&self) -> &core::Matrix2D {
+        &self._transform
+    }
+
+    fn get_scissor(&self) -> Option<&core::Scissor> {
+        match &self._scissor {
+            Some(x) => Some(x),
+            None => None,
+        }
+    }
+}
 
 pub struct FillState {
     _paint: core::Paint,
@@ -75,4 +94,19 @@ impl AsAny for FillState {
     }
 }
 
-impl State for FillState {}
+impl State for FillState {
+    fn get_paint(&self) -> &core::Paint {
+        &self._paint
+    }
+
+    fn get_transform(&self) -> &core::Matrix2D {
+        &self._transform
+    }
+
+    fn get_scissor(&self) -> Option<&core::Scissor> {
+        match &self._scissor {
+            Some(x) => Some(x),
+            None => None,
+        }
+    }
+}
