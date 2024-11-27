@@ -18,6 +18,12 @@ impl Matrix2D {
             _rows: Self::get_angle_rows(angle),
         }
     }
+    pub fn new_from_translation(x: f32, y: f32) -> Self {
+        Self {
+            _len: 6,
+            _rows: Self::get_translation_rows(x, y),
+        }
+    }
 
     pub fn get_row_count(&self) -> usize {
         self._rows.len()
@@ -62,6 +68,10 @@ impl Matrix2D {
             matrix_row!(angle.cos(), -angle.sin(), 0f32),
             matrix_row!(angle.sin(), angle.cos(), 0f32),
         ]
+    }
+
+    fn get_translation_rows(x: f32, y: f32) -> Vec<MatrixRow> {
+        vec![matrix_row!(1f32, 0f32, x), matrix_row!(0f32, 1f32, y)]
     }
 }
 

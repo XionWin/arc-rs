@@ -1,3 +1,6 @@
+#[cfg(test)]
+pub mod test;
+
 mod def;
 mod frag_uniform;
 #[allow(dead_code)]

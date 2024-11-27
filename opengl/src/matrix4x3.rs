@@ -1,4 +1,7 @@
+use std::fmt::Display;
+
 #[repr(C)]
+#[derive(Debug)]
 pub struct Vector4 {
     _x: f32,
     _y: f32,
@@ -17,7 +20,18 @@ impl Vector4 {
     }
 }
 
+impl Display for Vector4 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{:?}\t{:?}\t{:?}\t{:?}",
+            self._x, self._y, self._z, self._w
+        )
+    }
+}
+
 #[repr(C)]
+#[derive(Debug)]
 pub struct Matrix4x3 {
     _row_0: Vector4,
     _row_1: Vector4,
@@ -66,12 +80,37 @@ impl From<&core::Matrix2D> for Matrix4x3 {
             0f32,
             value[1][0].get(),
             value[1][1].get(),
-            value[1][1].get(),
+            value[1][2].get(),
             0f32,
             0f32,
             0f32,
             1f32,
             0f32,
         )
+    }
+}
+
+impl From<core::Matrix2D> for Matrix4x3 {
+    fn from(value: core::Matrix2D) -> Self {
+        Self::new(
+            value[0][0].get(),
+            value[0][1].get(),
+            value[0][2].get(),
+            0f32,
+            value[1][0].get(),
+            value[1][1].get(),
+            value[1][2].get(),
+            0f32,
+            0f32,
+            0f32,
+            1f32,
+            0f32,
+        )
+    }
+}
+
+impl Display for Matrix4x3 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}\n{}\n{}\n", self._row_0, self._row_1, self._row_2)
     }
 }
