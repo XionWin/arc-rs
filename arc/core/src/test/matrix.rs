@@ -13,12 +13,6 @@ pub fn matrix_test() {
     row_1[0].set(2.0f32);
     util::print_debug!("matrix after row changed:\n{}", matrix);
 
-    let col_2 = matrix.get_col(2);
-    util::print_debug!("{:?}", col_2);
-    col_2[0].set(2.0f32);
-    col_2[1].set(2.0f32);
-    util::print_debug!("matrix after col changed:\n{}", matrix);
-
     matrix[1][0].set(3.0f32);
     util::print_debug!("{}: {:?}", stringify!(matrix[1][0]), matrix[1][0]);
     util::print_debug!("matrix after col changed:\n{}", matrix);
@@ -31,14 +25,19 @@ pub fn matrix_calc_test() {
     let matrix = Matrix2D::default();
     util::print_debug!("matrix:\n{}", matrix);
     matrix[1][0].set(2.0f32);
-    matrix[0][2].set(2.0f32);
-    matrix[1][2].set(2.0f32);
+    matrix[0][1].set(2.0f32);
+    matrix[1][1].set(2.0f32);
     matrix[1][0].set(3.0f32);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
-    let matrix_roated = Matrix2D::new_from_angle(PI / 6f32);
-    util::print_debug!("matrix2:\n{}", matrix_roated);
+    let m1 = Matrix2D::new_from_translation(20f32, 50f32);
+    util::print_debug!("m1:\n{}", m1);
+    let m2 = Matrix2D::new_from_angle(PI / 6f32);
+    util::print_debug!("m1:\n{}", m2);
 
-    let result = matrix * matrix_roated;
+    let result = m1 * m2;
     util::print_debug!("result:\n{}", result);
+
+    // let result = matrix * matrix_roated;
+    // util::print_debug!("result:\n{}", result);
 }

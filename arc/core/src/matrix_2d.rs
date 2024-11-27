@@ -60,18 +60,27 @@ impl Matrix2D {
 
 impl Matrix2D {
     fn get_identity_rows() -> Vec<MatrixRow> {
-        vec![matrix_row!(1f32, 0f32, 0f32), matrix_row!(0f32, 1f32, 0f32)]
+        vec![
+            matrix_row!(1f32, 0f32),
+            matrix_row!(0f32, 1f32),
+            matrix_row!(0f32, 0f32),
+        ]
     }
 
     fn get_angle_rows(angle: f32) -> Vec<MatrixRow> {
         vec![
-            matrix_row!(angle.cos(), -angle.sin(), 0f32),
-            matrix_row!(angle.sin(), angle.cos(), 0f32),
+            matrix_row!(angle.cos(), -angle.sin()),
+            matrix_row!(angle.sin(), angle.cos()),
+            matrix_row!(0f32, 0f32),
         ]
     }
 
     fn get_translation_rows(x: f32, y: f32) -> Vec<MatrixRow> {
-        vec![matrix_row!(1f32, 0f32, x), matrix_row!(0f32, 1f32, y)]
+        vec![
+            matrix_row!(1f32, 0f32),
+            matrix_row!(0f32, 1f32),
+            matrix_row!(x, y),
+        ]
     }
 }
 
@@ -100,14 +109,20 @@ impl std::ops::Mul for &Matrix2D {
             _len: 6,
             _rows: vec![
                 matrix_row!(
-                    self.get_row(0) * rhs.get_col(0),
-                    self.get_row(0) * rhs.get_col(1),
-                    self.get_row(0) * rhs.get_col(2)
+                    self[0][0].get() * rhs[0][0].get() + self[0][1].get() * rhs[1][0].get(),
+                    self[0][0].get() * rhs[0][1].get() + self[0][1].get() * rhs[1][1].get()
                 ),
                 matrix_row!(
-                    self.get_row(1) * rhs.get_col(0),
-                    self.get_row(1) * rhs.get_col(1),
-                    self.get_row(1) * rhs.get_col(2)
+                    self[1][0].get() * rhs[0][0].get() + self[1][1].get() * rhs[1][0].get(),
+                    self[1][0].get() * rhs[0][1].get() + self[1][1].get() * rhs[1][1].get()
+                ),
+                matrix_row!(
+                    self[2][0].get() * rhs[0][0].get()
+                        + self[2][1].get() * rhs[1][0].get()
+                        + rhs[2][0].get(),
+                    self[2][0].get() * rhs[0][1].get()
+                        + self[2][1].get() * rhs[1][1].get()
+                        + rhs[2][1].get()
                 ),
             ],
         }
@@ -122,14 +137,20 @@ impl std::ops::Mul for Matrix2D {
             _len: 6,
             _rows: vec![
                 matrix_row!(
-                    self.get_row(0) * rhs.get_col(0),
-                    self.get_row(0) * rhs.get_col(1),
-                    self.get_row(0) * rhs.get_col(2)
+                    self[0][0].get() * rhs[0][0].get() + self[0][1].get() * rhs[1][0].get(),
+                    self[0][0].get() * rhs[0][1].get() + self[0][1].get() * rhs[1][1].get()
                 ),
                 matrix_row!(
-                    self.get_row(1) * rhs.get_col(0),
-                    self.get_row(1) * rhs.get_col(1),
-                    self.get_row(1) * rhs.get_col(2)
+                    self[1][0].get() * rhs[0][0].get() + self[1][1].get() * rhs[1][0].get(),
+                    self[1][0].get() * rhs[0][1].get() + self[1][1].get() * rhs[1][1].get()
+                ),
+                matrix_row!(
+                    self[2][0].get() * rhs[0][0].get()
+                        + self[2][1].get() * rhs[1][0].get()
+                        + rhs[2][0].get(),
+                    self[2][0].get() * rhs[0][1].get()
+                        + self[2][1].get() * rhs[1][1].get()
+                        + rhs[2][1].get()
                 ),
             ],
         }
