@@ -15,14 +15,14 @@ pub struct FragUniform {
     _outer_color: core::Color,
 }
 
-impl Into<FragUniform> for &vector::StrokeState {
-    fn into(self) -> FragUniform {
-        todo!()
-    }
-}
-
-impl Into<FragUniform> for &vector::FillState {
-    fn into(self) -> FragUniform {
-        todo!()
-    }
-}
+// impl From<&dyn vector::State> for FragUniform {
+//     fn from(state: &dyn vector::State) -> Self {
+//         match state.get_stroke_state() {
+//             Some(stroke_state) => todo!(),
+//             None => match state.get_fill_state() {
+//                 Some(fill_state) => todo!(),
+//                 None => util::print_panic!("from state to frag_uniform"),
+//             },
+//         }
+//     }
+// }

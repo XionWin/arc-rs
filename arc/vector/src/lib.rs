@@ -1,3 +1,6 @@
+#[cfg(test)]
+pub mod test;
+
 pub mod def;
 
 pub(crate) mod parameter;

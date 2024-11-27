@@ -1,5 +1,5 @@
 #[cfg(test)]
-pub mod tset;
+pub mod test;
 
 mod bolck_texture;
 mod call_type;
@@ -20,6 +20,7 @@ mod matrix_row;
 mod number;
 mod offset;
 mod paint;
+mod paint_color;
 mod paint_image;
 mod point;
 mod rect;
@@ -50,6 +51,7 @@ pub use matrix_row::*;
 pub use number::*;
 pub use offset::*;
 pub use paint::*;
+pub use paint_color::*;
 pub use paint_image::*;
 pub use point::*;
 pub use rect::*;

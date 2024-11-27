@@ -1,45 +1,77 @@
-pub trait State {}
+use std::any::Any;
+
+pub trait AsAny: Any {
+    fn as_any(&self) -> &dyn Any;
+}
+
+pub trait State: AsAny {}
+
+impl dyn State {
+    pub fn downcast_ref<T>(&self) -> Option<&T>
+    where
+        T: State,
+    {
+        self.as_any().downcast_ref::<T>()
+    }
+}
 
 pub struct StrokeState {
-    _stroke_paint: Option<core::Paint>,
+    _paint: core::Paint,
+    _transform: core::Matrix2D,
+    _scissor: Option<core::Scissor>,
+
     _stroke_width: f32,
     _stroke_multiple: f32,
     _line_join: core::LineJoin,
     _line_cap: core::LineCap,
-    _transform: core::Matrix2D,
-    _scissor: core::Scissor,
 }
 
 impl StrokeState {
     pub fn new(stroke_width: f32) -> Self {
         Self {
-            _stroke_paint: Some(core::Paint::default()),
+            _paint: core::Paint::default(),
             _stroke_width: stroke_width,
             _stroke_multiple: (stroke_width / 2f32 + crate::parameter::FRINGE_WIDTH / 2f32)
                 / crate::parameter::FRINGE_WIDTH,
             _line_join: core::LineJoin::default(),
             _line_cap: core::LineCap::default(),
             _transform: core::Matrix2D::default(),
-            _scissor: core::Scissor::default(),
+            _scissor: None,
         }
+    }
+
+    pub fn get_stroke_width(&self) -> f32 {
+        self._stroke_width
+    }
+}
+
+impl AsAny for StrokeState {
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
 
 impl State for StrokeState {}
 
 pub struct FillState {
-    _fill_paint: Option<core::Paint>,
+    _paint: core::Paint,
     _transform: core::Matrix2D,
-    _scissor: core::Scissor,
+    _scissor: Option<core::Scissor>,
 }
 
 impl FillState {
     pub fn new() -> Self {
         Self {
-            _fill_paint: Some(core::Paint::default()),
+            _paint: core::Paint::default(),
             _transform: core::Matrix2D::default(),
-            _scissor: core::Scissor::default(),
+            _scissor: None,
         }
+    }
+}
+
+impl AsAny for FillState {
+    fn as_any(&self) -> &dyn Any {
+        self
     }
 }
 

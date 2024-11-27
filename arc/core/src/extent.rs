@@ -24,8 +24,8 @@ where
 {
     fn default() -> Self {
         Self {
-            x: T::default(),
-            y: T::default(),
+            x: T::one(),
+            y: T::one(),
         }
     }
 }

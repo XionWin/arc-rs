@@ -17,3 +17,15 @@ where
         Self { x, y }
     }
 }
+
+impl<T> Default for Scale<T>
+where
+    T: Number,
+{
+    fn default() -> Self {
+        Self {
+            x: T::one(),
+            y: T::one(),
+        }
+    }
+}
