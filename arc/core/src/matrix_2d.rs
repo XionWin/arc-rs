@@ -40,16 +40,40 @@ impl Matrix2D {
             .into()
     }
 
-    pub fn rotate(&self, angle: f32) -> Self {
-        self * &Matrix2D::new_identity_from_angle(angle)
+    pub fn rotate(&self, angle: f32) {
+        Matrix2D::mul_assign(self, &Matrix2D::new_identity_from_angle(angle));
     }
 
-    pub fn translate(&self, x: f32, y: f32) -> Self {
-        self * &Matrix2D::new_from_translate(x, y)
+    pub fn translate(&self, x: f32, y: f32) {
+        Matrix2D::mul_assign(self, &Matrix2D::new_from_translate(x, y));
     }
 }
 
 impl Matrix2D {
+    fn mul_assign(&self, rhs: &Self) {
+        let (m11, m12, m21, m22, m31, m32) = self.get_mul_values(rhs);
+        self[0][0].set(m11);
+        self[0][1].set(m12);
+        self[1][0].set(m21);
+        self[1][1].set(m22);
+        self[2][0].set(m31);
+        self[2][1].set(m32);
+    }
+
+    fn get_mul_values(&self, rhs: &Self) -> (f32, f32, f32, f32, f32, f32) {
+        let m11 = self[0][0].get() * rhs[0][0].get() + self[0][1].get() * rhs[1][0].get();
+        let m12 = self[0][0].get() * rhs[0][1].get() + self[0][1].get() * rhs[1][1].get();
+        let m21 = self[1][0].get() * rhs[0][0].get() + self[1][1].get() * rhs[1][0].get();
+        let m22 = self[1][0].get() * rhs[0][1].get() + self[1][1].get() * rhs[1][1].get();
+        let m31 = self[2][0].get() * rhs[0][0].get()
+            + self[2][1].get() * rhs[1][0].get()
+            + rhs[2][0].get();
+        let m32 = self[2][0].get() * rhs[0][1].get()
+            + self[2][1].get() * rhs[1][1].get()
+            + rhs[2][1].get();
+
+        (m11, m12, m21, m22, m31, m32)
+    }
     fn new_identity_from_angle(angle: f32) -> Self {
         Self {
             _len: 6,
@@ -97,25 +121,13 @@ impl std::ops::Mul for &Matrix2D {
     type Output = Matrix2D;
 
     fn mul(self, rhs: Self) -> Self::Output {
+        let (m11, m12, m21, m22, m31, m32) = self.get_mul_values(rhs);
         Self::Output {
             _len: 6,
             _rows: vec![
-                matrix_row!(
-                    self[0][0].get() * rhs[0][0].get() + self[0][1].get() * rhs[1][0].get(),
-                    self[0][0].get() * rhs[0][1].get() + self[0][1].get() * rhs[1][1].get()
-                ),
-                matrix_row!(
-                    self[1][0].get() * rhs[0][0].get() + self[1][1].get() * rhs[1][0].get(),
-                    self[1][0].get() * rhs[0][1].get() + self[1][1].get() * rhs[1][1].get()
-                ),
-                matrix_row!(
-                    self[2][0].get() * rhs[0][0].get()
-                        + self[2][1].get() * rhs[1][0].get()
-                        + rhs[2][0].get(),
-                    self[2][0].get() * rhs[0][1].get()
-                        + self[2][1].get() * rhs[1][1].get()
-                        + rhs[2][1].get()
-                ),
+                matrix_row!(m11, m12),
+                matrix_row!(m21, m22),
+                matrix_row!(m31, m32),
             ],
         }
     }

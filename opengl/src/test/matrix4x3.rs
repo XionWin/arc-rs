@@ -5,9 +5,11 @@ use crate::Matrix4x3;
 
 #[test]
 pub fn test() {
-    let matrix2d_roate = Matrix2D::default().rotate(PI / 6f32);
+    let matrix2d_roate = Matrix2D::default();
+    matrix2d_roate.rotate(PI / 6f32);
     println!("matrix2d_roate:\n{}", matrix2d_roate);
-    let matrix2d_trans = Matrix2D::default().translate(100f32, 100f32);
+    let matrix2d_trans = Matrix2D::default();
+    matrix2d_trans.translate(100f32, 100f32);
     // let matrix2d = matrix2d_roate * matrix2d_trans;
     // println!("matrix2d:\n{}", matrix2d);
 

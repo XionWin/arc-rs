@@ -30,17 +30,21 @@ pub fn matrix_calc_test() {
     matrix[1][0].set(3.0f32);
     util::print_debug!("matrix after col changed:\n{}", matrix);
 
-    let m1 = Matrix2D::default().translate(20f32, 50f32);
+    let m1 = Matrix2D::default();
+    m1.translate(20f32, 50f32);
     util::print_debug!("m1:\n{}", m1);
-    let m2 = Matrix2D::default().rotate(PI / 6f32);
+    let m2 = Matrix2D::default();
+    m2.rotate(PI / 6f32);
     util::print_debug!("m2:\n{}", m2);
 
     let result = &m1 * &m2;
     util::print_debug!("result:\n{}", result);
 
-    let m3 = Matrix2D::default().rotate(-PI / 6f32);
+    let m3 = Matrix2D::default();
+    m3.rotate(-PI / 6f32);
     util::print_debug!("m3:\n{}", m3);
-    let m4 = Matrix2D::default().translate(-20f32, -50f32);
+    let m4 = Matrix2D::default();
+    m4.translate(-20f32, -50f32);
     util::print_debug!("m4:\n{}", m4);
     let result = &(&(&m1 * &m2) * &m3) * &m4;
     util::print_debug!("result:\n{}", result);
