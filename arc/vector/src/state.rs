@@ -76,8 +76,8 @@ pub struct FillState {
     _scissor: Option<core::Scissor>,
 }
 
-impl FillState {
-    pub fn new() -> Self {
+impl Default for FillState {
+    fn default() -> Self {
         Self {
             _paint: core::Paint::default(),
             _transform: core::Matrix2D::default(),

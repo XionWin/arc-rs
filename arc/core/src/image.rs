@@ -7,4 +7,5 @@ pub trait Image: Debug {
     fn get_size(&self) -> Size<i32>;
     fn get_color_type(&self) -> ColorType;
     fn get_filter(&self) -> ImageFilter;
+    fn get_shape(&self) -> &dyn crate::Shape;
 }

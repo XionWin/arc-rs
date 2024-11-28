@@ -16,13 +16,17 @@ fn main() {
 
     window.run(
         |window| {
-            let _g = window.get_graphic();
-            image.replace(Some(_g.load_image_from_file(
+            let g = window.get_graphic();
+            image.replace(Some(g.load_image_from_file(
                 "resource/image/icon96.png",
                 core::ImageFilter::Linear,
             )));
 
             canvas.borrow().load();
+
+            let img =
+                g.load_image_from_file("resource/image/icon96.png", core::ImageFilter::Linear);
+            g.draw_shape(img.get_shape());
         },
         |window| {
             let _g = window.get_graphic();
