@@ -1,4 +1,4 @@
-use std::cell::Cell;
+use std::{cell::Cell, fmt::Display};
 
 #[derive(Debug, PartialEq)]
 pub struct MatrixRow {
@@ -39,4 +39,30 @@ macro_rules! matrix_row {
     ($($ps:expr),+) => {
         crate::MatrixRow::new(&vec![$($ps),+])
     };
+}
+
+impl Display for MatrixRow {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            self._value
+                .iter()
+                .map(|x| {
+                    let mut number = format!("{:#}", x.get());
+                    {
+                        let str: String = match number.len() {
+                            v if v < 8 => {
+                                vec![' '; (8 - number.len()).max(0)].into_iter().collect()
+                            }
+                            _ => String::new(),
+                        };
+                        number.push_str(&str);
+                        number
+                    }
+                })
+                .collect::<Vec<String>>()
+                .join("\t")
+        )
+    }
 }

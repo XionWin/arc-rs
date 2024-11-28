@@ -24,8 +24,24 @@ impl Display for Vector4 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(
             f,
-            "{:?}\t{:?}\t{:?}\t{:?}",
-            self._x, self._y, self._z, self._w
+            "{}",
+            [self._x, self._y, self._z, self._w]
+                .iter()
+                .map(|x| {
+                    let mut number = format!("{:#}", x);
+                    {
+                        let str: String = match number.len() {
+                            v if v < 8 => {
+                                vec![' '; (8 - number.len()).max(0)].into_iter().collect()
+                            }
+                            _ => String::new(),
+                        };
+                        number.push_str(&str);
+                        number
+                    }
+                })
+                .collect::<Vec<String>>()
+                .join("\t")
         )
     }
 }

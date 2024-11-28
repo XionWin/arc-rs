@@ -5,19 +5,23 @@ use crate::Matrix2D;
 #[test]
 pub fn matrix_test() {
     let matrix = Matrix2D::default();
-    util::print_debug!("matrix:\n{}", matrix);
+    util::print_info!("matrix:");
+    util::print_debug!("{}", matrix);
 
     let row_1 = matrix.get_row(1);
-    util::print_debug!("{:?}", row_1);
+    util::print_info!("row_1:");
+    util::print_debug!("{}", row_1);
 
     row_1[0].set(2.0f32);
-    util::print_debug!("matrix after row changed:\n{}", matrix);
+    util::print_info!("matrix after row changed:");
+    util::print_debug!("{}", matrix);
 
     matrix[1][0].set(3.0f32);
-    util::print_debug!("{}: {:?}", stringify!(matrix[1][0]), matrix[1][0]);
-    util::print_debug!("matrix after col changed:\n{}", matrix);
+    util::print_info!("matrix after col changed:");
+    util::print_debug!("{}", matrix);
 
-    util::print_debug!("{:?}", matrix.get_value());
+    util::print_info!("matrix.get_value():");
+    util::print_debug!("{}", matrix.get_value());
 }
 
 #[test]

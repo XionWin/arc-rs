@@ -7,15 +7,19 @@ use crate::Matrix4x3;
 pub fn test() {
     let matrix2d_roate = Matrix2D::default();
     matrix2d_roate.rotate(PI / 6f32);
-    println!("matrix2d_roate:\n{}", matrix2d_roate);
+    util::print_info!("matrix2d_roate:");
+    util::print_debug!("{}", matrix2d_roate);
+
     let matrix2d_trans = Matrix2D::default();
     matrix2d_trans.translate(100f32, 100f32);
-    // let matrix2d = matrix2d_roate * matrix2d_trans;
-    // println!("matrix2d:\n{}", matrix2d);
+    util::print_info!("matrix2d_trans:");
+    util::print_debug!("{}", matrix2d_trans);
 
     let matrix2d = matrix2d_trans * matrix2d_roate;
-    println!("matrix2d:\n{}", matrix2d);
+    util::print_info!("matrix2d:");
+    util::print_debug!("{}", matrix2d);
 
     let matrix4x3: Matrix4x3 = matrix2d.into();
-    println!("matrix4x3:\n{}", matrix4x3);
+    util::print_info!("matrix4x3:");
+    util::print_debug!("{}", matrix4x3);
 }

@@ -1,9 +1,5 @@
 use crate::{matrix_row, MatrixRefVectors, MatrixRow};
-use std::{
-    cell::Cell,
-    fmt::{Display, Write},
-    usize,
-};
+use std::{cell::Cell, fmt::Display};
 
 #[derive(Debug, PartialEq)]
 pub struct Matrix2D {
@@ -12,6 +8,27 @@ pub struct Matrix2D {
 }
 
 impl Matrix2D {
+    pub fn new_from_angle(angle: f32) -> Self {
+        Self {
+            _len: 6,
+            _rows: vec![
+                matrix_row!(angle.cos(), -angle.sin()),
+                matrix_row!(angle.sin(), angle.cos()),
+                matrix_row!(0f32, 0f32),
+            ],
+        }
+    }
+    pub fn new_from_translate(x: f32, y: f32) -> Self {
+        Self {
+            _len: 6,
+            _rows: vec![
+                matrix_row!(1f32, 0f32),
+                matrix_row!(0f32, 1f32),
+                matrix_row!(x, y),
+            ],
+        }
+    }
+
     pub fn get_row_count(&self) -> usize {
         self._rows.len()
     }
@@ -41,7 +58,7 @@ impl Matrix2D {
     }
 
     pub fn rotate(&self, angle: f32) {
-        Matrix2D::mul_assign(self, &Matrix2D::new_identity_from_angle(angle));
+        Matrix2D::mul_assign(self, &Matrix2D::new_from_angle(angle));
     }
 
     pub fn translate(&self, x: f32, y: f32) {
@@ -73,26 +90,6 @@ impl Matrix2D {
             + rhs[2][1].get();
 
         (m11, m12, m21, m22, m31, m32)
-    }
-    fn new_identity_from_angle(angle: f32) -> Self {
-        Self {
-            _len: 6,
-            _rows: vec![
-                matrix_row!(angle.cos(), -angle.sin()),
-                matrix_row!(angle.sin(), angle.cos()),
-                matrix_row!(0f32, 0f32),
-            ],
-        }
-    }
-    fn new_from_translate(x: f32, y: f32) -> Self {
-        Self {
-            _len: 6,
-            _rows: vec![
-                matrix_row!(1f32, 0f32),
-                matrix_row!(0f32, 1f32),
-                matrix_row!(x, y),
-            ],
-        }
     }
 }
 
@@ -153,14 +150,14 @@ impl std::ops::Mul for Matrix2D {
 
 impl Display for Matrix2D {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut str = String::new();
-        for row in &self._rows {
-            for cell in &row.get_value() {
-                str.write_str(&format!("{:?}\t", cell.get())).unwrap();
-            }
-            str.write_char('\n').unwrap();
-        }
-
-        write!(f, "{}", &str)
+        write!(
+            f,
+            "{}",
+            self._rows
+                .iter()
+                .map(|x| format!("{}", x))
+                .collect::<Vec<String>>()
+                .join("\n")
+        )
     }
 }
