@@ -12,19 +12,6 @@ pub struct Matrix2D {
 }
 
 impl Matrix2D {
-    pub fn new_from_angle(angle: f32) -> Self {
-        Self {
-            _len: 6,
-            _rows: Self::get_angle_rows(angle),
-        }
-    }
-    pub fn new_from_translation(x: f32, y: f32) -> Self {
-        Self {
-            _len: 6,
-            _rows: Self::get_translation_rows(x, y),
-        }
-    }
-
     pub fn get_row_count(&self) -> usize {
         self._rows.len()
     }
@@ -54,33 +41,34 @@ impl Matrix2D {
     }
 
     pub fn rotate(&self, angle: f32) -> Self {
-        self * &Matrix2D::new_from_angle(angle)
+        self * &Matrix2D::new_identity_from_angle(angle)
+    }
+
+    pub fn translate(&self, x: f32, y: f32) -> Self {
+        self * &Matrix2D::new_from_translate(x, y)
     }
 }
 
 impl Matrix2D {
-    fn get_identity_rows() -> Vec<MatrixRow> {
-        vec![
-            matrix_row!(1f32, 0f32),
-            matrix_row!(0f32, 1f32),
-            matrix_row!(0f32, 0f32),
-        ]
+    fn new_identity_from_angle(angle: f32) -> Self {
+        Self {
+            _len: 6,
+            _rows: vec![
+                matrix_row!(angle.cos(), -angle.sin()),
+                matrix_row!(angle.sin(), angle.cos()),
+                matrix_row!(0f32, 0f32),
+            ],
+        }
     }
-
-    fn get_angle_rows(angle: f32) -> Vec<MatrixRow> {
-        vec![
-            matrix_row!(angle.cos(), -angle.sin()),
-            matrix_row!(angle.sin(), angle.cos()),
-            matrix_row!(0f32, 0f32),
-        ]
-    }
-
-    fn get_translation_rows(x: f32, y: f32) -> Vec<MatrixRow> {
-        vec![
-            matrix_row!(1f32, 0f32),
-            matrix_row!(0f32, 1f32),
-            matrix_row!(x, y),
-        ]
+    fn new_from_translate(x: f32, y: f32) -> Self {
+        Self {
+            _len: 6,
+            _rows: vec![
+                matrix_row!(1f32, 0f32),
+                matrix_row!(0f32, 1f32),
+                matrix_row!(x, y),
+            ],
+        }
     }
 }
 
@@ -88,7 +76,11 @@ impl Default for Matrix2D {
     fn default() -> Self {
         Self {
             _len: 6,
-            _rows: Self::get_identity_rows(),
+            _rows: vec![
+                matrix_row!(1f32, 0f32),
+                matrix_row!(0f32, 1f32),
+                matrix_row!(0f32, 0f32),
+            ],
         }
     }
 }
@@ -129,31 +121,21 @@ impl std::ops::Mul for &Matrix2D {
     }
 }
 
+impl std::ops::Mul for &mut Matrix2D {
+    type Output = Matrix2D;
+
+    fn mul(self, rhs: Self) -> Self::Output {
+        let left: &Matrix2D = self;
+        let right: &Matrix2D = rhs;
+        left * right
+    }
+}
+
 impl std::ops::Mul for Matrix2D {
     type Output = Self;
 
     fn mul(self, rhs: Self) -> Self::Output {
-        Self::Output {
-            _len: 6,
-            _rows: vec![
-                matrix_row!(
-                    self[0][0].get() * rhs[0][0].get() + self[0][1].get() * rhs[1][0].get(),
-                    self[0][0].get() * rhs[0][1].get() + self[0][1].get() * rhs[1][1].get()
-                ),
-                matrix_row!(
-                    self[1][0].get() * rhs[0][0].get() + self[1][1].get() * rhs[1][0].get(),
-                    self[1][0].get() * rhs[0][1].get() + self[1][1].get() * rhs[1][1].get()
-                ),
-                matrix_row!(
-                    self[2][0].get() * rhs[0][0].get()
-                        + self[2][1].get() * rhs[1][0].get()
-                        + rhs[2][0].get(),
-                    self[2][0].get() * rhs[0][1].get()
-                        + self[2][1].get() * rhs[1][1].get()
-                        + rhs[2][1].get()
-                ),
-            ],
-        }
+        &self * &rhs
     }
 }
 
