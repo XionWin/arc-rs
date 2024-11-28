@@ -45,6 +45,11 @@ impl core::Graphic for Graphic {
             .create_texture_from_file(path, image_filter.into());
         Box::new(Image::new(texture))
     }
+    fn draw_shape(&self, shape: &dyn core::Shape) {
+        use vector::Shape;
+        let stroke_primitive = shape.get_stroke_primitive();
+        util::print_debug!("stroke_primitive: {:?}", stroke_primitive);
+    }
 }
 
 impl RenderingComponent for Graphic {

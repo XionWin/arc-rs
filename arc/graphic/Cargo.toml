@@ -7,3 +7,4 @@ edition = "2021"
 util = { path = "../../util" }
 core = { path = "../core" }
 image = { path = "../image" }
+vector = { path = "../vector" }

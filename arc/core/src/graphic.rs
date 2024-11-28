@@ -1,4 +1,4 @@
-use crate::{Color, ColorType, Image, ImageFilter, Size};
+use crate::{Color, ColorType, Image, ImageFilter, Shape, Size};
 
 pub trait Graphic {
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32);
@@ -12,4 +12,5 @@ pub trait Graphic {
         image_filter: ImageFilter,
     ) -> Box<dyn Image>;
     fn load_image_from_file(&self, path: &str, image_filter: ImageFilter) -> Box<dyn Image>;
+    fn draw_shape(&self, shape: &dyn Shape);
 }
