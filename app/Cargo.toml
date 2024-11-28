@@ -7,4 +7,5 @@ build="build.rs"
 [dependencies]
 util = { path = "../util" }
 core = { path = "../arc/core" }
+graphic = { path = "../arc/graphic" }
 platform-sdl2 = { path = "../platform/platform-sdl2" }

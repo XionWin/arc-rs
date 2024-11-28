@@ -130,16 +130,6 @@ impl std::ops::Mul for &Matrix2D {
     }
 }
 
-impl std::ops::Mul for &mut Matrix2D {
-    type Output = Matrix2D;
-
-    fn mul(self, rhs: Self) -> Self::Output {
-        let left: &Matrix2D = self;
-        let right: &Matrix2D = rhs;
-        left * right
-    }
-}
-
 impl std::ops::Mul for Matrix2D {
     type Output = Self;
 

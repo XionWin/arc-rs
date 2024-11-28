@@ -1,6 +1,7 @@
 #[cfg(test)]
 pub mod test;
 
+mod as_any;
 mod bolck_texture;
 mod call_type;
 mod color;
@@ -32,6 +33,7 @@ mod version;
 mod vertex2;
 mod window;
 
+pub use as_any::*;
 pub use bolck_texture::*;
 pub use call_type::*;
 pub use color::*;

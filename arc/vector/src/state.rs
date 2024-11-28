@@ -1,10 +1,4 @@
-use std::any::Any;
-
-pub trait AsAny: Any {
-    fn as_any(&self) -> &dyn Any;
-}
-
-pub trait State: AsAny {
+pub trait State: core::AsAny {
     fn get_paint(&self) -> &core::Paint;
     fn get_transform(&self) -> &core::Matrix2D;
     fn get_scissor(&self) -> Option<&core::Scissor>;
@@ -49,8 +43,8 @@ impl StrokeState {
     }
 }
 
-impl AsAny for StrokeState {
-    fn as_any(&self) -> &dyn Any {
+impl core::AsAny for StrokeState {
+    fn as_any(&self) -> &dyn std::any::Any {
         self
     }
 }
@@ -88,8 +82,8 @@ impl FillState {
     }
 }
 
-impl AsAny for FillState {
-    fn as_any(&self) -> &dyn Any {
+impl core::AsAny for FillState {
+    fn as_any(&self) -> &dyn std::any::Any {
         self
     }
 }
