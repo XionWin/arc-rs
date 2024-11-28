@@ -1,6 +1,6 @@
 use std::cell::Cell;
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct MatrixRow {
     _len: usize,
     _value: Vec<Cell<f32>>,

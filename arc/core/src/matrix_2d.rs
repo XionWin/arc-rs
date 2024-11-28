@@ -5,7 +5,7 @@ use std::{
     usize,
 };
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Matrix2D {
     _len: usize,
     _rows: Vec<MatrixRow>,

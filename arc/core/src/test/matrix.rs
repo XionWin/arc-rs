@@ -33,11 +33,17 @@ pub fn matrix_calc_test() {
     let m1 = Matrix2D::new_from_translation(20f32, 50f32);
     util::print_debug!("m1:\n{}", m1);
     let m2 = Matrix2D::new_from_angle(PI / 6f32);
-    util::print_debug!("m1:\n{}", m2);
+    util::print_debug!("m2:\n{}", m2);
 
-    let result = m1 * m2;
+    let result = &m1 * &m2;
     util::print_debug!("result:\n{}", result);
 
-    // let result = matrix * matrix_roated;
-    // util::print_debug!("result:\n{}", result);
+    let m3 = Matrix2D::new_from_angle(-PI / 6f32);
+    util::print_debug!("m3:\n{}", m3);
+    let m4 = Matrix2D::new_from_translation(-20f32, -50f32);
+    util::print_debug!("m4:\n{}", m4);
+    let result = &(&(&m1 * &m2) * &m3) * &m4;
+    util::print_debug!("result:\n{}", result);
+
+    assert_eq!(result, Matrix2D::default());
 }

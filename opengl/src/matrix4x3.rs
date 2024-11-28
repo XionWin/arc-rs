@@ -76,14 +76,14 @@ impl From<&core::Matrix2D> for Matrix4x3 {
         Self::new(
             value[0][0].get(),
             value[0][1].get(),
-            value[0][2].get(),
+            0f32,
             0f32,
             value[1][0].get(),
             value[1][1].get(),
-            value[1][2].get(),
             0f32,
             0f32,
-            0f32,
+            value[2][0].get(),
+            value[2][1].get(),
             1f32,
             0f32,
         )
@@ -92,20 +92,7 @@ impl From<&core::Matrix2D> for Matrix4x3 {
 
 impl From<core::Matrix2D> for Matrix4x3 {
     fn from(value: core::Matrix2D) -> Self {
-        Self::new(
-            value[0][0].get(),
-            value[0][1].get(),
-            value[0][2].get(),
-            0f32,
-            value[1][0].get(),
-            value[1][1].get(),
-            value[1][2].get(),
-            0f32,
-            0f32,
-            0f32,
-            1f32,
-            0f32,
-        )
+        (&value).into()
     }
 }
 
