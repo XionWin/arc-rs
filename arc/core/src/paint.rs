@@ -2,6 +2,7 @@ use std::rc::Rc;
 
 use crate::{PaintColor, PaintImage};
 
+#[derive(Debug)]
 pub struct Paint {
     _image: Option<PaintImage>,
     _color: PaintColor,

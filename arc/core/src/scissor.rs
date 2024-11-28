@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct Scissor {
     _transform: crate::Matrix2D,
     _extent: crate::Extent<i32>,

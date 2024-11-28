@@ -1,4 +1,6 @@
-pub trait State: core::AsAny {
+use std::fmt::Debug;
+
+pub trait State: core::AsAny + Debug {
     fn get_paint(&self) -> &core::Paint;
     fn get_transform(&self) -> &core::Matrix2D;
     fn get_scissor(&self) -> Option<&core::Scissor>;
@@ -13,6 +15,7 @@ impl dyn State {
     }
 }
 
+#[derive(Debug)]
 pub struct StrokeState {
     _paint: core::Paint,
     _transform: core::Matrix2D,
@@ -66,6 +69,7 @@ impl State for StrokeState {
     }
 }
 
+#[derive(Debug)]
 pub struct FillState {
     _paint: core::Paint,
     _transform: core::Matrix2D,

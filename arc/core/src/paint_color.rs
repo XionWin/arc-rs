@@ -1,3 +1,4 @@
+#[derive(Debug)]
 pub struct PaintColor {
     _inner_color: crate::Color,
     _outer_color: crate::Color,

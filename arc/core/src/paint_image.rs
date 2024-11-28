@@ -2,6 +2,7 @@ use std::{borrow::Borrow, rc::Rc};
 
 use crate::Matrix2D;
 
+#[derive(Debug)]
 pub struct PaintImage {
     _image: Rc<dyn crate::Image>,
     _transform: Matrix2D,

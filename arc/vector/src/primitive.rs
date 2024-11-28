@@ -1,5 +1,6 @@
 use std::borrow::Borrow;
 
+#[derive(Debug)]
 pub struct Primitive {
     _vertexes: Box<[core::Vertex2]>,
     _state: Box<dyn crate::State>,
