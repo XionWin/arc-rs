@@ -1,16 +1,24 @@
-use crate::{Primitive, StrokeState};
+use std::fmt::Debug;
 
-pub trait Shape {
-    fn get_stroke_primitive(&self) -> Primitive;
-    fn get_fill_primitive(&self) -> Primitive;
+use crate::{FillState, Primitive, StrokeState};
+
+pub trait VectorObject: Debug {
+    fn get_vector_shape(&self) -> VectorShape;
 }
 
-impl<T: core::Shape + ?Sized> Shape for T {
-    fn get_stroke_primitive(&self) -> Primitive {
-        Primitive::new(Box::new([]), Box::new(StrokeState::new(1f32)))
-    }
+#[derive(Debug)]
+pub struct VectorShape {
+    stroke: Primitive,
+    fill: Primitive,
+}
 
-    fn get_fill_primitive(&self) -> Primitive {
-        todo!()
+impl VectorShape {}
+
+impl<T: core::Shape + ?Sized> VectorObject for T {
+    fn get_vector_shape(&self) -> VectorShape {
+        VectorShape {
+            stroke: Primitive::new(Box::new([]), Box::new(StrokeState::new(1f32))),
+            fill: Primitive::new(Box::new([]), Box::new(FillState::default())),
+        }
     }
 }
