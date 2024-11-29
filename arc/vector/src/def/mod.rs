@@ -1,3 +1,5 @@
-mod point_flags;
+mod point;
+mod point_flag;
 
-pub use point_flags::*;
+pub use point::*;
+pub use point_flag::*;

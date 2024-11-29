@@ -1,7 +1,10 @@
 use core::Vertex2;
 use std::fmt::Debug;
 
-use crate::{FillState, Primitive, StrokeState};
+use crate::{
+    def::{Point, PointFlag},
+    FillState, Primitive, StrokeState,
+};
 
 pub trait VectorShape: Debug {
     fn get_stroke_primitive(&self) -> Primitive;
@@ -22,7 +25,12 @@ fn get_stroke_primitive(_commands: &[core::Command], _style: &core::Style) -> Pr
     Primitive::new(Box::new([]), Box::new(StrokeState::new(1f32)))
 }
 
-fn get_fill_primitive(_commands: &[core::Command], _style: &core::Style) -> Primitive {
+fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primitive {
+    let is_closed = commands.iter().any(|x| x == &core::Command::Close);
+    util::print_debug!("is_closed: {}", is_closed);
+    let points = get_points(commands);
+    util::print_debug!("points: {:#?}", points);
+
     let x = 100;
     let y = 100;
     let width = 100;
@@ -37,4 +45,40 @@ fn get_fill_primitive(_commands: &[core::Command], _style: &core::Style) -> Prim
         Box::<[core::Vertex2]>::from(vec),
         Box::new(FillState::default()),
     )
+}
+
+fn get_points(commands: &[core::Command]) -> Box<[Point]> {
+    let mut last_point: Option<&core::Point<f32>> = Option::<&core::Point<f32>>::None;
+    let vec: Vec<Point> = commands
+        .iter()
+        .flat_map(|x| match x {
+            core::Command::MoveTo(point) => {
+                last_point = Some(point);
+                vec![Point::new(point.x, point.y, PointFlag::CORNER)]
+            }
+            core::Command::LineTo(point) => {
+                last_point = Some(point);
+                vec![Point::new(point.x, point.y, PointFlag::CORNER)]
+            }
+            core::Command::BezierTo(point1, point2, point3) => {
+                let result = match last_point {
+                    Some(point0) => get_bezier_points(point0, point1, point2, point3),
+                    None => util::print_panic!("vector_shape bezier start point is None"),
+                };
+                last_point = Some(point3);
+                result
+            }
+            core::Command::Close => Vec::new(),
+        })
+        .collect();
+    Box::<[Point]>::from(vec)
+}
+
+fn get_bezier_points(
+    point0: &core::Point<f32>,
+    point1: &core::Point<f32>,
+    point2: &core::Point<f32>,
+    point3: &core::Point<f32>,
+) -> Vec<Point> {
+    todo!()
 }

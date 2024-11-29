@@ -1,6 +1,6 @@
 use crate::Number;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Point<T>
 where
     T: Number,

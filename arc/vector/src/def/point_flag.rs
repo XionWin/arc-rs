@@ -4,7 +4,7 @@ use bitflags::bitflags;
 
 bitflags! {
     #[derive(Default)]
-    pub struct PointFlags: c_uint {
+    pub struct PointFlag: c_uint {
         const NONE = 1 << 0;
         const CORNER = 1 << 1;
         const LEFT = 1 << 2;
