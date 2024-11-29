@@ -39,9 +39,6 @@ impl core::Image for Image {
     fn get_filter(&self) -> core::ImageFilter {
         self.texture.get_texture_filter().into()
     }
-    fn get_shape(&self) -> &dyn core::Shape {
-        self
-    }
 }
 
 impl crate::TextureComponent for Image {
@@ -54,4 +51,8 @@ impl crate::TextureComponent for Image {
     }
 }
 
-impl core::Shape for Image {}
+impl core::Shape for Image {
+    fn get_shape(&self) -> &dyn core::Shape {
+        self
+    }
+}
