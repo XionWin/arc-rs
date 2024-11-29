@@ -49,41 +49,40 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primi
 
 fn get_points(commands: &[core::Command]) -> Box<[Point]> {
     let mut last_point: Option<&core::Point<f32>> = Option::<&core::Point<f32>>::None;
-    let vec: Vec<Point> = commands
-        .iter()
-        .flat_map(|x| match x {
-            core::Command::MoveTo(point) => {
-                last_point = Some(point);
-                vec![Point::new(point.x, point.y, PointFlag::CORNER)]
-            }
-            core::Command::LineTo(point) => {
-                last_point = Some(point);
-                vec![Point::new(point.x, point.y, PointFlag::CORNER)]
-            }
-            core::Command::BezierTo(point1, point2, point3) => {
-                let result = match last_point {
-                    Some(point0) => get_bezier_points(
-                        point0.x,
-                        point0.y,
-                        point1.x,
-                        point1.y,
-                        point2.x,
-                        point2.y,
-                        point3.x,
-                        point3.y,
-                        1.0f32,
-                        PointFlag::CORNER,
-                        0,
-                    ),
-                    None => util::print_panic!("vector_shape bezier start point is None"),
-                };
-                last_point = Some(point3);
-                result
-            }
-            core::Command::Close => Vec::new(),
-        })
-        .collect();
-    Box::<[Point]>::from(vec)
+
+    Box::<[Point]>::from(
+        commands
+            .iter()
+            .flat_map(|x| match x {
+                core::Command::MoveTo(point) | core::Command::LineTo(point) => {
+                    let result = vec![Point::new(point.x, point.y, PointFlag::CORNER)];
+                    last_point = Some(point);
+                    result
+                }
+                core::Command::BezierTo(point1, point2, point3) => {
+                    let result = match last_point {
+                        Some(point0) => get_bezier_points(
+                            point0.x,
+                            point0.y,
+                            point1.x,
+                            point1.y,
+                            point2.x,
+                            point2.y,
+                            point3.x,
+                            point3.y,
+                            crate::parameter::TESS_TOL,
+                            PointFlag::CORNER,
+                            0,
+                        ),
+                        None => util::print_panic!("vector_shape bezier start point is None"),
+                    };
+                    last_point = Some(point3);
+                    result
+                }
+                core::Command::Close => Vec::new(),
+            })
+            .collect::<Vec<Point>>(),
+    )
 }
 
 fn get_bezier_points(
@@ -124,7 +123,7 @@ fn get_bezier_points(
             let y1234 = (y123 + y234) * 0.5f32;
 
             result.splice(
-                ..,
+                result.len()..,
                 get_bezier_points(
                     x1,
                     y1,
@@ -140,7 +139,7 @@ fn get_bezier_points(
                 ),
             );
             result.splice(
-                ..,
+                result.len()..,
                 get_bezier_points(
                     x1234,
                     y1234,

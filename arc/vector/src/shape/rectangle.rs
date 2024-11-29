@@ -10,10 +10,17 @@ pub struct Rectangle {
 impl Rectangle {
     pub fn new(x: i32, y: i32, width: i32, height: i32) -> Self {
         let commands = vec![
+            // Command::MoveTo(Point::new(x as _, y as _)),
+            // Command::LineTo(Point::new(x as _, (y + height) as _)),
+            // Command::LineTo(Point::new((x + width) as _, (y + height) as _)),
+            // Command::LineTo(Point::new((x + width) as _, y as _)),
+            // Command::Close,
             Command::MoveTo(Point::new(x as _, y as _)),
-            Command::LineTo(Point::new(x as _, (y + height) as _)),
-            Command::LineTo(Point::new((x + width) as _, (y + height) as _)),
-            Command::LineTo(Point::new((x + width) as _, y as _)),
+            Command::BezierTo(
+                Point::new(x as _, (y + height) as _),
+                Point::new((x + width) as _, y as _),
+                Point::new((x + width) as _, (y + height) as _),
+            ),
             Command::Close,
         ];
 
