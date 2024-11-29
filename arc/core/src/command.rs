@@ -1,5 +1,6 @@
 use crate::Point;
 
+#[derive(Debug)]
 pub enum Command {
     MoveTo(Point<f32>),
     LineTo(Point<f32>),
