@@ -24,9 +24,8 @@ fn main() {
 
             canvas.borrow().load();
 
-            let img =
-                g.load_image_from_file("resource/image/icon96.png", core::ImageFilter::Linear);
-            g.draw_shape(img.get_shape_ref());
+            let rectangle = vector::Rectangle::new(100, 100, 100, 100);
+            g.draw_shape(&rectangle);
         },
         |window| {
             let _g = window.get_graphic();

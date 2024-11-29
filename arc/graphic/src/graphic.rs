@@ -1,7 +1,5 @@
 use std::{borrow::Borrow, rc::Rc};
 
-use vector::VectorObject;
-
 use crate::{Image, RenderingComponent};
 
 pub struct Graphic {
@@ -48,8 +46,9 @@ impl core::Graphic for Graphic {
         Box::new(Image::new(texture))
     }
     fn draw_shape(&self, shape: &dyn core::Shape) {
-        let vector_shape = shape.get_vector_shape();
-        util::print_debug!("vector_shape: {:#?}", vector_shape);
+        use vector::VectorShape;
+        let stroke_primitive = shape.get_stroke_primitive();
+        util::print_debug!("stroke_primitive: {:#?}", stroke_primitive);
     }
 }
 

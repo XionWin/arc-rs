@@ -8,4 +8,5 @@ build="build.rs"
 util = { path = "../util" }
 core = { path = "../arc/core" }
 graphic = { path = "../arc/graphic" }
+vector = { path = "../arc/vector" }
 platform-sdl2 = { path = "../platform/platform-sdl2" }

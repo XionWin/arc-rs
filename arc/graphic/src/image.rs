@@ -50,17 +50,3 @@ impl crate::TextureComponent for Image {
         self.texture.borrow_mut()
     }
 }
-
-impl core::Shape for Image {
-    fn get_shape_ref(&self) -> &dyn core::Shape {
-        self
-    }
-
-    fn get_vertexes(&self) -> &[core::Vertex2] {
-        todo!()
-    }
-
-    fn get_style(&self) -> &core::Style {
-        todo!()
-    }
-}
