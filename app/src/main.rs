@@ -6,7 +6,7 @@ use core::Window;
 use std::cell::RefCell;
 
 fn main() {
-    util::print_hight_light!("====================[ARC DEMO]====================");
+    util::print_hight_light!("====================[Arc Demo]====================");
     let mut window = util::expect!(platform_sdl2::Window::new(800, 480));
     window.set_vsync(true);
 
