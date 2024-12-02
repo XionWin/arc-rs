@@ -92,3 +92,14 @@ impl Display for Point {
         }
     }
 }
+
+impl Iterator for Point {
+    type Item = Rc<RefCell<Point>>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match &self._next {
+            Some(next) => Some(next.clone()),
+            None => None,
+        }
+    }
+}

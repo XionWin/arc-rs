@@ -75,7 +75,7 @@ fn get_points(commands: &[core::Command]) -> Option<Point> {
                             )));
                             point.borrow_mut().set_previous(Rc::downgrade(&last_point));
                             last_point.borrow_mut().set_next(point);
-                            let temp = last_point.borrow().get_next().unwrap();
+                            let temp = last_point.borrow_mut().next().unwrap();
                             last_point = temp;
                         }
                     }
