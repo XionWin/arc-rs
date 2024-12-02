@@ -67,7 +67,7 @@ fn get_points(commands: &[core::Command]) -> Option<Point> {
                         for (index, core_point) in core_points.iter().enumerate() {
                             let point = Rc::new(RefCell::new(Point::new_from_point(
                                 core_point,
-                                if index == 0 || index == core_points.len() {
+                                if index + 1 == core_points.len() {
                                     PointFlag::CORNER
                                 } else {
                                     PointFlag::NONE
@@ -86,7 +86,10 @@ fn get_points(commands: &[core::Command]) -> Option<Point> {
         }
         None => None,
     };
-    util::print_debug!("first_point: {:#?}", first_point);
+    match &first_point {
+        Some(point) => util::print_debug!("first_point: {}", point),
+        None => {}
+    }
     first_point
 }
 

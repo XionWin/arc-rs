@@ -1,5 +1,6 @@
 use std::{
     cell::RefCell,
+    fmt::Display,
     rc::{Rc, Weak},
 };
 
@@ -73,5 +74,21 @@ impl Point {
 
     pub fn get_point_ref(&self) -> &core::Point<f32> {
         &self.point
+    }
+}
+
+impl Display for Point {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self._next {
+            Some(next) => {
+                let r: std::cell::Ref<'_, Point> = next.borrow();
+                write!(
+                    f,
+                    "\n[{}, {}], {:?}, {}",
+                    self.point.x, self.point.y, self.flag, r
+                )
+            }
+            None => write!(f, "\n[{}, {}], {:?}", self.point.x, self.point.y, self.flag),
+        }
     }
 }
