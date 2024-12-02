@@ -47,7 +47,7 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primi
     )
 }
 
-fn get_points(commands: &[core::Command]) -> Option<Point> {
+fn get_points(commands: &[core::Command]) -> Option<Rc<RefCell<Point>>> {
     let mut first_core_point = match commands.get(0) {
         Some(x) => to_start_point(x),
         None => None,
@@ -82,12 +82,12 @@ fn get_points(commands: &[core::Command]) -> Option<Point> {
                 }
                 None => {}
             }
-            Some((*first_point).replace(Point::new(0f32, 0f32, PointFlag::NONE)))
+            Some(first_point)
         }
         None => None,
     };
     match &first_point {
-        Some(point) => util::print_debug!("first_point: {}", point),
+        Some(point) => util::print_debug!("first_point: {}", point.borrow()),
         None => {}
     }
     first_point
