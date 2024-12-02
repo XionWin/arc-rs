@@ -6,18 +6,19 @@ pub trait Number:
     + Clone
     + Debug
     + std::ops::Mul
-    + std::ops::AddAssign<<Self as std::ops::Mul>::Output>
+    + std::ops::Add<Output = Self>
+    + std::ops::Div<Output = Self>
 {
-    fn one() -> Self;
+    fn from_value(v: i32) -> Self;
 }
 
 impl Number for i32 {
-    fn one() -> Self {
-        1i32
+    fn from_value(value: i32) -> Self {
+        value
     }
 }
 impl Number for f32 {
-    fn one() -> Self {
-        1f32
+    fn from_value(value: i32) -> Self {
+        value as f32
     }
 }

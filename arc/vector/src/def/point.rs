@@ -1,12 +1,16 @@
+use std::{
+    cell::RefCell,
+    rc::{Rc, Weak},
+};
+
 use crate::def::PointFlag;
 
 #[derive(Debug)]
 pub struct Point {
-    pub x: f32,
-    pub y: f32,
-    pub flags: PointFlag,
-    _previous: Option<Box<Point>>,
-    _next: Option<Box<Point>>,
+    point: core::Point<f32>,
+    pub flag: PointFlag,
+    _previous: Option<Weak<RefCell<Point>>>,
+    _next: Option<Rc<RefCell<Point>>>,
     _len: Option<f32>,
     _dx: Option<f32>,
     _dy: Option<f32>,
@@ -16,11 +20,10 @@ pub struct Point {
 }
 
 impl Point {
-    pub fn new(x: f32, y: f32, flags: PointFlag) -> Self {
+    pub fn new(x: f32, y: f32, flag: PointFlag) -> Self {
         Self {
-            x,
-            y,
-            flags,
+            point: core::Point::new(x, y),
+            flag,
             _previous: None,
             _next: None,
             _len: None,
@@ -30,5 +33,45 @@ impl Point {
             _dmy: None,
             _dmr2: None,
         }
+    }
+    pub fn new_from_point(point: &core::Point<f32>, flags: PointFlag) -> Self {
+        Self {
+            point: point.clone(),
+            flag: flags,
+            _previous: None,
+            _next: None,
+            _len: None,
+            _dx: None,
+            _dy: None,
+            _dmx: None,
+            _dmy: None,
+            _dmr2: None,
+        }
+    }
+
+    pub fn set_next(&mut self, next: Rc<RefCell<Point>>) {
+        self._next = Some(next);
+    }
+
+    pub fn set_previous(&mut self, previous: Weak<RefCell<Point>>) {
+        self._previous = Some(previous);
+    }
+
+    pub fn get_next(&self) -> Option<Rc<RefCell<Point>>> {
+        match &self._next {
+            Some(next) => Some(next.clone()),
+            None => None,
+        }
+    }
+
+    pub fn get_previous(&self) -> Option<Weak<RefCell<Point>>> {
+        match &self._previous {
+            Some(previous) => Some(previous.clone()),
+            None => None,
+        }
+    }
+
+    pub fn get_point_ref(&self) -> &core::Point<f32> {
+        &self.point
     }
 }

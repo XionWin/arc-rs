@@ -1,5 +1,5 @@
 use core::Vertex2;
-use std::fmt::Debug;
+use std::{cell::RefCell, fmt::Debug, rc::Rc};
 
 use crate::{
     def::{Point, PointFlag},
@@ -26,10 +26,10 @@ fn get_stroke_primitive(_commands: &[core::Command], _style: &core::Style) -> Pr
 }
 
 fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primitive {
-    let is_closed = commands.iter().any(|x| x == &core::Command::Close);
-    util::print_debug!("is_closed: {}", is_closed);
-    let points = get_points(commands);
-    util::print_debug!("points: {:#?}", points);
+    let _is_closed = commands.iter().any(|x| x == &core::Command::Close);
+    // util::print_debug!("is_closed: {}", is_closed);
+    let _points = get_points(commands);
+    // util::print_debug!("points: {:#?}", points);
 
     let x = 100;
     let y = 100;
@@ -47,112 +47,104 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primi
     )
 }
 
-fn get_points(commands: &[core::Command]) -> Box<[Point]> {
-    let mut last_point: Option<&core::Point<f32>> = Option::<&core::Point<f32>>::None;
+fn get_points(commands: &[core::Command]) -> Option<Point> {
+    let mut first_core_point = match commands.get(0) {
+        Some(x) => to_start_point(x),
+        None => None,
+    };
 
-    Box::<[Point]>::from(
-        commands
-            .iter()
-            .flat_map(|x| match x {
-                core::Command::MoveTo(point) | core::Command::LineTo(point) => {
-                    let result = vec![Point::new(point.x, point.y, PointFlag::CORNER)];
-                    last_point = Some(point);
-                    result
+    let first_point = match &mut first_core_point {
+        Some(first_core_point) => {
+            let first_point = Rc::new(RefCell::new(Point::new_from_point(
+                first_core_point,
+                PointFlag::CORNER,
+            )));
+            match commands.get(1..) {
+                Some(commands) => {
+                    let mut last_point = first_point.clone();
+                    for command in commands {
+                        let core_points = to_points(command, last_point.borrow().get_point_ref());
+                        for (index, core_point) in core_points.iter().enumerate() {
+                            let point = Rc::new(RefCell::new(Point::new_from_point(
+                                core_point,
+                                if index == 0 || index == core_points.len() {
+                                    PointFlag::CORNER
+                                } else {
+                                    PointFlag::NONE
+                                },
+                            )));
+                            point.borrow_mut().set_previous(Rc::downgrade(&last_point));
+                            last_point.borrow_mut().set_next(point);
+                            let temp = last_point.borrow().get_next().unwrap();
+                            last_point = temp;
+                        }
+                    }
                 }
-                core::Command::BezierTo(point1, point2, point3) => {
-                    let result = match last_point {
-                        Some(point0) => get_bezier_points(
-                            point0.x,
-                            point0.y,
-                            point1.x,
-                            point1.y,
-                            point2.x,
-                            point2.y,
-                            point3.x,
-                            point3.y,
-                            crate::parameter::TESS_TOL,
-                            PointFlag::CORNER,
-                            0,
-                        ),
-                        None => util::print_panic!("vector_shape bezier start point is None"),
-                    };
-                    last_point = Some(point3);
-                    result
-                }
-                core::Command::Close => Vec::new(),
-            })
-            .collect::<Vec<Point>>(),
-    )
+                None => {}
+            }
+            Some((*first_point).replace(Point::new(0f32, 0f32, PointFlag::NONE)))
+        }
+        None => None,
+    };
+    util::print_debug!("first_point: {:#?}", first_point);
+    first_point
+}
+
+fn to_start_point(command: &core::Command) -> Option<core::Point<f32>> {
+    match command {
+        core::Command::MoveTo(point0) | core::Command::LineTo(point0) => Some(point0.clone()),
+        _ => None,
+    }
+}
+
+fn to_points(command: &core::Command, point0: &core::Point<f32>) -> Vec<core::Point<f32>> {
+    match command {
+        core::Command::MoveTo(point1) | core::Command::LineTo(point1) => vec![point1.clone()],
+        core::Command::BezierTo(point1, point2, point3) => get_bezier_points(
+            point0,
+            point1,
+            point2,
+            point3,
+            crate::parameter::TESS_TOL,
+            0,
+        ),
+        core::Command::Close => Vec::new(),
+    }
 }
 
 fn get_bezier_points(
-    x1: f32,
-    y1: f32,
-    x2: f32,
-    y2: f32,
-    x3: f32,
-    y3: f32,
-    x4: f32,
-    y4: f32,
+    point0: &core::Point<f32>,
+    point1: &core::Point<f32>,
+    point2: &core::Point<f32>,
+    point3: &core::Point<f32>,
     tess_tol: f32,
-    point_flag: PointFlag,
     level: u8,
-) -> Vec<Point> {
+) -> Vec<core::Point<f32>> {
     let mut result = Vec::new();
     if level <= 10 {
-        let x12 = (x1 + x2) * 0.5f32;
-        let y12 = (y1 + y2) * 0.5f32;
-        let x23 = (x2 + x3) * 0.5f32;
-        let y23 = (y2 + y3) * 0.5f32;
-        let x34 = (x3 + x4) * 0.5f32;
-        let y34 = (y3 + y4) * 0.5f32;
-        let x123 = (x12 + x23) * 0.5f32;
-        let y123 = (y12 + y23) * 0.5f32;
+        let point01 = point0.get_center_point(point1);
+        let point12 = point1.get_center_point(point2);
+        let point23 = point2.get_center_point(point3);
+        let point012 = point01.get_center_point(&point12);
 
-        let dx = x4 - x1;
-        let dy = y4 - y1;
-        let d2 = ((x2 - x4) * dy - (y2 - y4) * dx).abs();
-        let d3 = ((x3 - x4) * dy - (y3 - y4) * dx).abs();
+        let dx = point3.x - point0.x;
+        let dy = point3.y - point0.y;
+        let d2 = ((point1.x - point3.x) * dy - (point1.y - point3.y) * dx).abs();
+        let d3 = ((point2.x - point3.x) * dy - (point2.y - point3.y) * dx).abs();
 
         if (d2 + d3) * (d2 + d3) < tess_tol * (dx * dx + dy * dy) {
-            result.push(Point::new(x4, y4, point_flag));
+            result.push(point3.clone());
         } else {
-            let x234 = (x23 + x34) * 0.5f32;
-            let y234 = (y23 + y34) * 0.5f32;
-            let x1234 = (x123 + x234) * 0.5f32;
-            let y1234 = (y123 + y234) * 0.5f32;
+            let point123 = point12.get_center_point(&point23);
+            let point0123 = point012.get_center_point(&point123);
 
             result.splice(
                 result.len()..,
-                get_bezier_points(
-                    x1,
-                    y1,
-                    x12,
-                    y12,
-                    x123,
-                    y123,
-                    x1234,
-                    y1234,
-                    tess_tol,
-                    PointFlag::NONE,
-                    level + 1,
-                ),
+                get_bezier_points(point0, &point01, &point012, &point0123, tess_tol, level + 1),
             );
             result.splice(
                 result.len()..,
-                get_bezier_points(
-                    x1234,
-                    y1234,
-                    x234,
-                    y234,
-                    x34,
-                    y34,
-                    x4,
-                    y4,
-                    tess_tol,
-                    point_flag,
-                    level + 1,
-                ),
+                get_bezier_points(&point0123, &point123, &point23, point3, tess_tol, level + 1),
             );
         }
     }
