@@ -84,11 +84,22 @@ impl Display for Point {
                 let r: std::cell::Ref<'_, Point> = next.borrow();
                 write!(
                     f,
-                    "\n[{}, {}], {:?}, {}",
-                    self.point.x, self.point.y, self.flag, r
+                    "[{}, {}], {:?}, has_previous?: {}, \n{}",
+                    self.point.x,
+                    self.point.y,
+                    self.flag,
+                    self._previous.is_some(),
+                    r
                 )
             }
-            None => write!(f, "\n[{}, {}], {:?}", self.point.x, self.point.y, self.flag),
+            None => write!(
+                f,
+                "[{}, {}], {:?}, has_previous?: {}",
+                self.point.x,
+                self.point.y,
+                self.flag,
+                self._previous.is_some()
+            ),
         }
     }
 }

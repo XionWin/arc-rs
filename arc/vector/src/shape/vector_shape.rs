@@ -1,5 +1,9 @@
 use core::Vertex2;
-use std::{cell::RefCell, fmt::Debug, rc::Rc};
+use std::{
+    cell::RefCell,
+    fmt::Debug,
+    rc::{Rc, Weak},
+};
 
 use crate::{
     def::{Point, PointFlag},
@@ -28,7 +32,7 @@ fn get_stroke_primitive(_commands: &[core::Command], _style: &core::Style) -> Pr
 fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primitive {
     let _is_closed = commands.iter().any(|x| x == &core::Command::Close);
     // util::print_debug!("is_closed: {}", is_closed);
-    let _points = get_points(commands);
+    let _points = get_point_chain(commands);
     // util::print_debug!("points: {:#?}", points);
 
     let x = 100;
@@ -47,7 +51,7 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primi
     )
 }
 
-fn get_points(commands: &[core::Command]) -> Option<Rc<RefCell<Point>>> {
+fn get_point_chain(commands: &[core::Command]) -> Option<Rc<RefCell<Point>>> {
     let mut first_core_point = match commands.get(0) {
         Some(x) => x.to_start_point(),
         None => None,
@@ -67,20 +71,13 @@ fn get_points(commands: &[core::Command]) -> Option<Rc<RefCell<Point>>> {
                             last_point.borrow().get_point_ref(),
                             crate::parameter::TESS_TOL,
                         );
-                        for (index, core_point) in core_points.iter().enumerate() {
-                            let point = Rc::new(RefCell::new(Point::new_from_point(
-                                core_point,
-                                if index + 1 == core_points.len() {
-                                    PointFlag::CORNER
-                                } else {
-                                    PointFlag::NONE
-                                },
-                            )));
-                            point.borrow_mut().set_previous(Rc::downgrade(&last_point));
-                            last_point.borrow_mut().set_next(point);
-                            let temp = last_point.borrow_mut().next().unwrap();
-                            last_point = temp;
-                        }
+                        last_point = attach_point(last_point, &core_points);
+                    }
+                    match commands.last() {
+                        Some(last_command) if last_command == &core::Command::Close => first_point
+                            .borrow_mut()
+                            .set_previous(Rc::downgrade(&last_point)),
+                        _ => {}
                     }
                 }
                 None => {}
@@ -95,3 +92,28 @@ fn get_points(commands: &[core::Command]) -> Option<Rc<RefCell<Point>>> {
     }
     first_point
 }
+
+fn attach_point(
+    last_point: Rc<RefCell<Point>>,
+    core_points: &[core::Point<f32>],
+) -> Rc<RefCell<Point>> {
+    let mut last_point = last_point;
+    for (index, core_point) in core_points.iter().enumerate() {
+        let point = Rc::new(RefCell::new(Point::new_from_point(
+            core_point,
+            if index + 1 == core_points.len() {
+                PointFlag::CORNER
+            } else {
+                PointFlag::NONE
+            },
+        )));
+        point.borrow_mut().set_previous(Rc::downgrade(&last_point));
+        last_point.borrow_mut().set_next(point);
+        // modify_point(&mut last_point.borrow_mut());
+        let temp = last_point.borrow_mut().next().unwrap();
+        last_point = temp;
+    }
+    last_point
+}
+
+fn update_chain_calculate_data(curr: &mut Point, prev: &Point) {}
