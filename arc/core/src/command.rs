@@ -9,19 +9,28 @@ pub enum Command {
 }
 
 impl Command {
-    pub fn to_start_point(&self) -> Option<Point<f32>> {
+    pub fn get_end_point(&self) -> &Point<f32> {
         match self {
-            Command::MoveTo(point0) | Command::LineTo(point0) => Some(point0.clone()),
-            _ => None,
+            Command::MoveTo(point) => point,
+            Command::LineTo(point) => point,
+            Command::BezierTo(_, _, point) => point,
+            Command::Close => util::print_panic!("can't get point form command::colse"),
         }
     }
 
-    pub fn to_points(&self, point0: &Point<f32>, tess_tol: f32) -> Vec<Point<f32>> {
+    pub fn to_points(&self, previous: Option<&Command>, tess_tol: f32) -> Vec<Point<f32>> {
         match self {
             Command::MoveTo(point1) | Command::LineTo(point1) => vec![point1.clone()],
-            Command::BezierTo(point1, point2, point3) => {
-                Self::get_bezier_points(point0, point1, point2, point3, tess_tol, 0)
-            }
+            Command::BezierTo(point1, point2, point3) => Self::get_bezier_points(
+                previous
+                    .expect("command::bezierto must have the preview command")
+                    .get_end_point(),
+                point1,
+                point2,
+                point3,
+                tess_tol,
+                0,
+            ),
             Command::Close => Vec::new(),
         }
     }
