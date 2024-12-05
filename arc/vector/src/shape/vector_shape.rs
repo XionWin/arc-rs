@@ -90,7 +90,7 @@ fn attach_point(
                 PointFlag::NONE
             },
         )));
-        update_chain_calculate_data(&mut point.borrow_mut(), &mut last_point.borrow());
+        update_chain_calculate_data(&mut point.borrow_mut(), &mut last_point.borrow_mut());
         point.borrow_mut().set_previous(Rc::downgrade(&last_point));
         last_point.borrow_mut().set_next(point);
         let temp = last_point.borrow_mut().next().unwrap();
@@ -99,4 +99,51 @@ fn attach_point(
     last_point
 }
 
-fn update_chain_calculate_data(curr: &mut Point, prev: &Point) {}
+fn update_chain_calculate_data(curr: &mut Point, prev: &mut Point) {
+    // update dx dy len
+    update_point_data_by_next(prev, &curr);
+    // update dmx dmy dmr2
+    update_point_data_by_previous(curr, &prev);
+}
+
+fn update_point_data_by_next(curr: &mut Point, next: &Point) {
+    let mut dx = next.point.x - curr.point.x;
+    let mut dy = next.point.y - curr.point.y;
+    let len = (dx.powi(2) + dy.powi(2)).sqrt();
+    if len > 0f32 {
+        let i_len = 1.0f32 / len;
+        dx = dx * i_len;
+        dy = dy * i_len;
+    }
+    dx = if dx == 0f32 { 0f32 } else { dx };
+    dy = if dy == 0f32 { 0f32 } else { dy };
+
+    curr.dx = Some(dx);
+    curr.dy = Some(dy);
+    curr.len = Some(len);
+}
+
+fn update_point_data_by_previous(curr: &mut Point, prev: &Point) {
+    let dlx0 = prev.point.x;
+    let dly0 = -prev.point.y;
+    let dlx1 = curr.point.x;
+    let dly1 = -curr.point.y;
+    let mut dmx = (dlx0 + dlx1) * 0.5f32;
+    let mut dmy = (dly0 + dly1) * 0.5f32;
+
+    let dmr2 = dmx.powi(2) + dmy.powi(2);
+    if dmr2 > 0.1e-6f32 {
+        let mut i_scale = 1.0f32 / dmr2;
+        if i_scale > 600.0f32 {
+            i_scale = 600.0f32;
+        }
+        dmx = dmx * i_scale;
+        dmy = dmy * i_scale;
+    }
+    dmx = if dmx == 0f32 { 0f32 } else { dmx };
+    dmy = if dmy == 0f32 { 0f32 } else { dmy };
+
+    curr.dmx = Some(dmx);
+    curr.dmy = Some(dmy);
+    curr.dmr2 = Some(dmr2);
+}

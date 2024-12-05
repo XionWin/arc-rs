@@ -8,16 +8,16 @@ use crate::def::PointFlag;
 
 #[derive(Debug)]
 pub struct Point {
-    point: core::Point<f32>,
+    pub point: core::Point<f32>,
     pub flag: PointFlag,
     _previous: Option<Weak<RefCell<Point>>>,
     _next: Option<Rc<RefCell<Point>>>,
-    _len: Option<f32>,
-    _dx: Option<f32>,
-    _dy: Option<f32>,
-    _dmx: Option<f32>,
-    _dmy: Option<f32>,
-    _dmr2: Option<f32>,
+    pub len: Option<f32>,
+    pub dx: Option<f32>,
+    pub dy: Option<f32>,
+    pub dmx: Option<f32>,
+    pub dmy: Option<f32>,
+    pub dmr2: Option<f32>,
 }
 
 impl Point {
@@ -27,12 +27,12 @@ impl Point {
             flag,
             _previous: None,
             _next: None,
-            _len: None,
-            _dx: None,
-            _dy: None,
-            _dmx: None,
-            _dmy: None,
-            _dmr2: None,
+            len: None,
+            dx: None,
+            dy: None,
+            dmx: None,
+            dmy: None,
+            dmr2: None,
         }
     }
     pub fn new_from_point(point: &core::Point<f32>, flags: PointFlag) -> Self {
@@ -41,12 +41,12 @@ impl Point {
             flag: flags,
             _previous: None,
             _next: None,
-            _len: None,
-            _dx: None,
-            _dy: None,
-            _dmx: None,
-            _dmy: None,
-            _dmr2: None,
+            len: None,
+            dx: None,
+            dy: None,
+            dmx: None,
+            dmy: None,
+            dmr2: None,
         }
     }
 
@@ -84,20 +84,32 @@ impl Display for Point {
                 let r: std::cell::Ref<'_, Point> = next.borrow();
                 write!(
                     f,
-                    "[{}, {}], {:?}, has_previous?: {}, \n{}",
+                    "[{}, {}], {:?}, dx:{:?}, dy:{:?}, len:{:?}, dmx:{:?}, dmy:{:?}, dmr2:{:?}, has_previous?: {}, \n{}",
                     self.point.x,
                     self.point.y,
                     self.flag,
+                    self.dx,
+                    self.dy,
+                    self.len,
+                    self.dmx,
+                    self.dmy,
+                    self.dmr2,
                     self._previous.is_some(),
                     r
                 )
             }
             None => write!(
                 f,
-                "[{}, {}], {:?}, has_previous?: {}",
+                "[{}, {}], {:?}, dx:{:?}, dy:{:?}, len:{:?}, dmx:{:?}, dmy:{:?}, dmr2:{:?}, has_previous?: {}",
                 self.point.x,
                 self.point.y,
                 self.flag,
+                self.dx,
+                self.dy,
+                self.len,
+                self.dmx,
+                self.dmy,
+                self.dmr2,
                 self._previous.is_some()
             ),
         }
