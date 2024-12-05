@@ -1,4 +1,4 @@
-use crate::Point;
+use crate::{Point, Pt};
 
 #[derive(Debug, PartialEq)]
 pub enum Command {

@@ -6,6 +6,8 @@ use crate::{
     FillState, Primitive, StrokeState,
 };
 
+use super::CommandPoint;
+
 pub trait VectorShape: Debug {
     fn get_stroke_primitive(&self) -> Primitive;
     fn get_fill_primitive(&self) -> Primitive;
@@ -48,25 +50,17 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primi
 }
 
 fn get_point_chain(commands: &[core::Command]) -> Option<(Rc<RefCell<Point>>, bool)> {
-    let (point_lists, is_closed) = crate::CommandCalculator::to_points(commands);
+    let (points, is_closed) = crate::CommandCalculator::to_points(commands);
 
-    let first_point = Rc::new(RefCell::new(Point::new_from_point(
-        &point_lists.first().expect("first core_point can't be null")[0],
+    let first_point = Rc::new(RefCell::new(Point::new_from_command_point(
+        &points.first().expect("first core_point can't be null"),
         PointFlag::CORNER,
     )));
 
-    match point_lists.get(1..) {
-        Some(core_points) => {
-            let mut last_point = first_point.clone();
-            for core_points in core_points {
-                last_point = attach_point(last_point, core_points);
-            }
-
-            if is_closed {
-                first_point
-                    .borrow_mut()
-                    .set_previous(Rc::downgrade(&last_point));
-            }
+    match points.get(1..) {
+        Some(command_points) => {
+            let last_point = first_point.clone();
+            attach_point(last_point.clone(), command_points, is_closed);
         }
         None => {}
     }
@@ -77,14 +71,15 @@ fn get_point_chain(commands: &[core::Command]) -> Option<(Rc<RefCell<Point>>, bo
 }
 
 fn attach_point(
-    last_point: Rc<RefCell<Point>>,
-    core_points: &[core::Point<f32>],
-) -> Rc<RefCell<Point>> {
-    let mut last_point = last_point;
-    for (index, core_point) in core_points.iter().enumerate() {
-        let point = Rc::new(RefCell::new(Point::new_from_point(
-            core_point,
-            if index + 1 == core_points.len() {
+    first_point: Rc<RefCell<Point>>,
+    command_points: &[CommandPoint<f32>],
+    is_closed: bool,
+) {
+    let mut last_point = first_point.clone();
+    for command_point in command_points.iter() {
+        let point = Rc::new(RefCell::new(Point::new_from_command_point(
+            command_point,
+            if command_point.is_corner {
                 PointFlag::CORNER
             } else {
                 PointFlag::NONE
@@ -96,7 +91,13 @@ fn attach_point(
         let temp = last_point.borrow_mut().next().unwrap();
         last_point = temp;
     }
-    last_point
+
+    if is_closed {
+        first_point
+            .borrow_mut()
+            .set_previous(Rc::downgrade(&last_point));
+        update_chain_calculate_data(&mut first_point.borrow_mut(), &mut last_point.borrow_mut());
+    }
 }
 
 fn update_chain_calculate_data(curr: &mut Point, prev: &mut Point) {

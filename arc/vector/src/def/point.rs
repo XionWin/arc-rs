@@ -35,9 +35,9 @@ impl Point {
             dmr2: None,
         }
     }
-    pub fn new_from_point(point: &core::Point<f32>, flags: PointFlag) -> Self {
+    pub fn new_from_command_point(point: &crate::CommandPoint<f32>, flags: PointFlag) -> Self {
         Self {
-            point: point.clone(),
+            point: point.get_point(),
             flag: flags,
             _previous: None,
             _next: None,

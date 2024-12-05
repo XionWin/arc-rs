@@ -15,7 +15,17 @@ impl Rectangle {
             // Command::LineTo(Point::new((x + width) as _, (y + height) as _)),
             // Command::LineTo(Point::new((x + width) as _, y as _)),
             // Command::Close,
-            Command::MoveTo(Point::new(x as _, y as _)),
+
+            // Command::MoveTo(Point::new(x as _, y as _)),
+            // Command::BezierTo(
+            //     Point::new(x as _, (y + height) as _),
+            //     Point::new((x + width) as _, y as _),
+            //     Point::new((x + width) as _, (y + height) as _),
+            // ),
+            // Command::Close,
+            Command::MoveTo(Point::new(0f32, 0f32)),
+            Command::LineTo(Point::new(20f32, 20f32)),
+            Command::LineTo(Point::new(x as _, y as _)),
             Command::BezierTo(
                 Point::new(x as _, (y + height) as _),
                 Point::new((x + width) as _, y as _),
