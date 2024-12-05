@@ -17,10 +17,16 @@ where
         Self { x, y }
     }
 
-    pub fn get_center_point(&self, rhs: &Self) -> Self {
-        Self {
-            x: (self.x + rhs.x) / T::from_value(2),
-            y: (self.y + rhs.y) / T::from_value(2),
+    pub fn get_center_point(&self, rhs: &Self) -> Point<f32> {
+        Point {
+            x: (self.x + rhs.x).into_f32() / 2f32,
+            y: (self.y + rhs.y).into_f32() / 2f32,
         }
+    }
+
+    pub fn get_distance(&self, rhs: &Self) -> f32 {
+        ((self.x - rhs.x).pow_i8(2) + (self.y - rhs.y).pow_i8(2))
+            .into_f32()
+            .sqrt()
     }
 }
