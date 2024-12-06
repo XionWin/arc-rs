@@ -65,7 +65,7 @@ fn get_point_chain(commands: &[core::Command]) -> Option<(Rc<RefCell<Point>>, bo
         None => {}
     }
 
-    util::print_debug!("first_point: {}", first_point.borrow());
+    util::print_debug_with_title!("first_point:", "{}", first_point.borrow());
 
     Some((first_point, is_closed))
 }

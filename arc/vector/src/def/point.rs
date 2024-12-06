@@ -84,32 +84,32 @@ impl Display for Point {
                 let r: std::cell::Ref<'_, Point> = next.borrow();
                 write!(
                     f,
-                    "[{}, {}], {:?}, dx:{:?}, dy:{:?}, len:{:?}, dmx:{:?}, dmy:{:?}, dmr2:{:?}, has_previous?: {}, \n{}",
+                    "{{x:{:#.2}, y:{:#.2}, dx:{:#.2}, dy:{:#.2}, len:{:#.2}, dmx:{:#.2}, dmy:{:#.2}, dmr2:{:#.2}, {:?}, has_previous?: {}}}\n{}",
                     self.point.x,
                     self.point.y,
+                    self.dx.unwrap_or_default(),
+                    self.dy.unwrap_or_default(),
+                    self.len.unwrap_or_default(),
+                    self.dmx.unwrap_or_default(),
+                    self.dmy.unwrap_or_default(),
+                    self.dmr2.unwrap_or_default(),
                     self.flag,
-                    self.dx,
-                    self.dy,
-                    self.len,
-                    self.dmx,
-                    self.dmy,
-                    self.dmr2,
                     self._previous.is_some(),
                     r
                 )
             }
             None => write!(
                 f,
-                "[{}, {}], {:?}, dx:{:?}, dy:{:?}, len:{:?}, dmx:{:?}, dmy:{:?}, dmr2:{:?}, has_previous?: {}",
+                "{{x:{:#.2}, y:{:#.2}, dx:{:#.2}, dy:{:#.2}, len:{:#.2}, dmx:{:#.2}, dmy:{:#.2}, dmr2:{:#.2}, {:?}, has_previous?: {}}}",
                 self.point.x,
                 self.point.y,
+                self.dx.unwrap_or_default(),
+                self.dy.unwrap_or_default(),
+                self.len.unwrap_or_default(),
+                self.dmx.unwrap_or_default(),
+                self.dmy.unwrap_or_default(),
+                self.dmr2.unwrap_or_default(),
                 self.flag,
-                self.dx,
-                self.dy,
-                self.len,
-                self.dmx,
-                self.dmy,
-                self.dmr2,
                 self._previous.is_some()
             ),
         }

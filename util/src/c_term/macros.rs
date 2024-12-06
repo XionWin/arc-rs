@@ -35,6 +35,19 @@ macro_rules! print_debug {
 }
 
 #[macro_export]
+#[doc = "print_debug_with_title"]
+macro_rules! print_debug_with_title {
+    () => {
+        println!()
+    };
+    ($title:literal, $($arg:tt)*) => {{
+        println!("{}", $crate::Colorize::white($title));
+        let msg = format!($($arg)*);
+        println!("{}", $crate::Colorize::bright_black(&*msg))
+    }};
+}
+
+#[macro_export]
 #[doc = "print_warning"]
 macro_rules! print_warning {
     () => {
