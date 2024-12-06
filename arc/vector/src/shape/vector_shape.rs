@@ -60,7 +60,7 @@ fn get_point_chain(commands: &[core::Command]) -> Option<(Rc<RefCell<Point>>, bo
     match points.get(1..) {
         Some(command_points) => {
             let last_point = first_point.clone();
-            attach_point(last_point.clone(), command_points, is_closed);
+            attach_whirling_point(last_point.clone(), command_points, is_closed);
         }
         None => {}
     }
@@ -70,7 +70,7 @@ fn get_point_chain(commands: &[core::Command]) -> Option<(Rc<RefCell<Point>>, bo
     Some((first_point, is_closed))
 }
 
-fn attach_point(
+fn attach_whirling_point(
     first_point: Rc<RefCell<Point>>,
     command_points: &[CommandPoint<f32>],
     is_closed: bool,
@@ -85,7 +85,7 @@ fn attach_point(
                 PointFlag::NONE
             },
         )));
-        update_chain_calculate_data(&mut point.borrow_mut(), &mut last_point.borrow_mut());
+        update_whirling_data(&mut point.borrow_mut(), &mut last_point.borrow_mut());
         point.borrow_mut().set_previous(Rc::downgrade(&last_point));
         last_point.borrow_mut().set_next(point);
         let temp = last_point.borrow_mut().next().unwrap();
@@ -96,18 +96,18 @@ fn attach_point(
         first_point
             .borrow_mut()
             .set_previous(Rc::downgrade(&last_point));
-        update_chain_calculate_data(&mut first_point.borrow_mut(), &mut last_point.borrow_mut());
+        update_whirling_data(&mut first_point.borrow_mut(), &mut last_point.borrow_mut());
     }
 }
 
-fn update_chain_calculate_data(curr: &mut Point, prev: &mut Point) {
+fn update_whirling_data(curr: &mut Point, prev: &mut Point) {
     // update dx dy len
-    update_point_data_by_next(prev, &curr);
+    update_whirling_data_by_next(prev, &curr);
     // update dmx dmy dmr2
-    update_point_data_by_previous(curr, &prev);
+    update_whirling_data_by_previous(curr, &prev);
 }
 
-fn update_point_data_by_next(curr: &mut Point, next: &Point) {
+fn update_whirling_data_by_next(curr: &mut Point, next: &Point) {
     let mut dx = next.point.x - curr.point.x;
     let mut dy = next.point.y - curr.point.y;
     let len = (dx.powi(2) + dy.powi(2)).sqrt();
@@ -124,7 +124,7 @@ fn update_point_data_by_next(curr: &mut Point, next: &Point) {
     curr.len = Some(len);
 }
 
-fn update_point_data_by_previous(curr: &mut Point, prev: &Point) {
+fn update_whirling_data_by_previous(curr: &mut Point, prev: &Point) {
     let dlx0 = prev.point.x;
     let dly0 = -prev.point.y;
     let dlx1 = curr.point.x;

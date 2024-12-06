@@ -26,7 +26,10 @@ impl CommandCalculator {
             })
             .collect::<Vec<CommandPoint<f32>>>();
 
-        (optimize_points(points, is_closed), is_closed)
+        (
+            optimize_points(enforce_winding(points), is_closed),
+            is_closed,
+        )
     }
 }
 
@@ -50,6 +53,39 @@ fn check_commands_last_may_close(commands: &[core::Command]) -> bool {
             .iter()
             .any(|command| matches!(command, core::Command::Close)),
         None => false,
+    }
+}
+
+fn enforce_winding(points: Vec<CommandPoint<f32>>) -> Vec<CommandPoint<f32>> {
+    let mut points = points;
+    match get_area(&points) {
+        Some(area) => {
+            if area < 0f32 {
+                points.reverse();
+            }
+        }
+        None => {}
+    }
+    points
+}
+
+fn get_area(points: &Vec<CommandPoint<f32>>) -> Option<f32> {
+    let mut area = 0f32;
+    if points.len() > 2 {
+        for index in 2..points.len() {
+            let a = &points[0];
+            let b = &points[index - 1];
+            let c = &points[index];
+
+            let abx = b.x - a.x;
+            let aby = b.y - a.y;
+            let acx = c.x - a.x;
+            let acy = c.y - a.y;
+            area += (acx * aby - abx * acy) / 2f32;
+        }
+        Some(area)
+    } else {
+        None
     }
 }
 
