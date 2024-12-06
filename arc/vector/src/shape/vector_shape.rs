@@ -1,12 +1,10 @@
 use core::Vertex2;
-use std::{cell::RefCell, fmt::Debug, rc::Rc};
+use std::{cell::RefCell, fmt::Debug};
 
 use crate::{
     def::{Point, PointFlag},
     FillState, Primitive, StrokeState,
 };
-
-use super::CommandPoint;
 
 pub trait VectorShape: Debug {
     fn get_stroke_primitive(&self) -> Primitive;
@@ -30,7 +28,7 @@ fn get_stroke_primitive(_commands: &[core::Command], _style: &core::Style) -> Pr
 fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primitive {
     let _is_closed = commands.iter().any(|x| x == &core::Command::Close);
     // util::print_debug!("is_closed: {}", is_closed);
-    let _points = get_point_chain(commands);
+    let _points = get_points(commands);
     // util::print_debug!("points: {:#?}", points);
 
     let x = 100;
@@ -49,67 +47,74 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primi
     )
 }
 
-fn get_point_chain(commands: &[core::Command]) -> Option<(Rc<RefCell<Point>>, bool)> {
-    let (points, is_closed) = crate::CommandCalculator::to_points(commands);
+fn get_points(commands: &[core::Command]) -> Option<(Vec<Point>, bool)> {
+    let (command_points, is_closed) = crate::CommandCalculator::to_points(commands);
 
-    let first_point = Rc::new(RefCell::new(Point::new_from_command_point(
-        &points.first().expect("first core_point can't be null"),
-        PointFlag::CORNER,
-    )));
+    let cell_points = command_points
+        .iter()
+        .map(|command_point| {
+            RefCell::new(Point::new_from_command_point(
+                command_point,
+                if command_point.is_corner {
+                    PointFlag::CORNER
+                } else {
+                    PointFlag::NONE
+                },
+            ))
+        })
+        .collect::<Vec<_>>();
 
-    match points.get(1..) {
-        Some(command_points) => {
-            let last_point = first_point.clone();
-            attach_whirling_point(last_point.clone(), command_points, is_closed);
+    whirling_update(&cell_points, is_closed);
+
+    let points = cell_points
+        .iter()
+        .map(|cell| Point::new_from_point(&cell.borrow()))
+        .collect::<Vec<Point>>();
+
+    for point in &points {
+        util::print_debug!("{}", point);
+    }
+
+    Some((points, is_closed))
+}
+
+fn whirling_update(points: &[RefCell<Point>], is_closed: bool) {
+    {
+        let mut point_0 = points.get(0).unwrap().borrow_mut();
+        for index in 1..points.len() {
+            let mut point_1 = points.get(index).unwrap().borrow_mut();
+            whirling_update_point(&mut point_0, &mut point_1);
+            point_0 = point_1
         }
-        None => {}
     }
-
-    util::print_debug_with_title!("first_point:", "{}", first_point.borrow());
-
-    Some((first_point, is_closed))
-}
-
-fn attach_whirling_point(
-    first_point: Rc<RefCell<Point>>,
-    command_points: &[CommandPoint<f32>],
-    is_closed: bool,
-) {
-    let mut last_point = first_point.clone();
-    for command_point in command_points.iter() {
-        let point = Rc::new(RefCell::new(Point::new_from_command_point(
-            command_point,
-            if command_point.is_corner {
-                PointFlag::CORNER
-            } else {
-                PointFlag::NONE
-            },
-        )));
-        update_whirling_data(&mut point.borrow_mut(), &mut last_point.borrow_mut());
-        point.borrow_mut().set_previous(Rc::downgrade(&last_point));
-        last_point.borrow_mut().set_next(point);
-        let temp = last_point.borrow_mut().next().unwrap();
-        last_point = temp;
+    {
+        if is_closed {
+            whirling_update_point(
+                &mut points.get(points.len() - 1).unwrap().borrow_mut(),
+                &mut points.get(0).unwrap().borrow_mut(),
+            );
+        }
     }
-
+    {
+        let mut point_1 = points.get(points.len() - 1).unwrap().borrow_mut();
+        let max_index = points.len() - 2;
+        for index in 0..=max_index {
+            let mut point_0 = points.get(max_index - index).unwrap().borrow_mut();
+            whirling_update_point_reversed(&mut point_1, &mut point_0);
+            point_1 = point_0;
+        }
+    }
     if is_closed {
-        first_point
-            .borrow_mut()
-            .set_previous(Rc::downgrade(&last_point));
-        update_whirling_data(&mut first_point.borrow_mut(), &mut last_point.borrow_mut());
+        whirling_update_point_reversed(
+            &mut points.get(0).unwrap().borrow_mut(),
+            &mut points.get(points.len() - 1).unwrap().borrow_mut(),
+        );
     }
 }
 
-fn update_whirling_data(curr: &mut Point, prev: &mut Point) {
-    // update dx dy len
-    update_whirling_data_by_next(prev, &curr);
-    // update dmx dmy dmr2
-    update_whirling_data_by_previous(curr, &prev);
-}
-
-fn update_whirling_data_by_next(curr: &mut Point, next: &Point) {
-    let mut dx = next.point.x - curr.point.x;
-    let mut dy = next.point.y - curr.point.y;
+fn whirling_update_point(curr: &mut Point, next: &Point) {
+    let mut dx = next.x - curr.x;
+    let mut dy = next.y - curr.y;
     let len = (dx.powi(2) + dy.powi(2)).sqrt();
     if len > 0f32 {
         let i_len = 1.0f32 / len;
@@ -124,11 +129,11 @@ fn update_whirling_data_by_next(curr: &mut Point, next: &Point) {
     curr.len = Some(len);
 }
 
-fn update_whirling_data_by_previous(curr: &mut Point, prev: &Point) {
-    let dlx0 = prev.point.x;
-    let dly0 = -prev.point.y;
-    let dlx1 = curr.point.x;
-    let dly1 = -curr.point.y;
+fn whirling_update_point_reversed(curr: &mut Point, prev: &Point) {
+    let dlx0 = prev.dy.unwrap();
+    let dly0 = -prev.dx.unwrap();
+    let dlx1 = curr.dy.unwrap();
+    let dly1 = -curr.dx.unwrap();
     let mut dmx = (dlx0 + dlx1) * 0.5f32;
     let mut dmy = (dly0 + dly1) * 0.5f32;
 

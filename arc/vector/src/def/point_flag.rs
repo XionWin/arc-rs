@@ -5,10 +5,10 @@ use bitflags::bitflags;
 bitflags! {
     #[derive(Default)]
     pub struct PointFlag: c_uint {
-        const NONE = 1 << 0;
-        const CORNER = 1 << 1;
-        const LEFT = 1 << 2;
-        const BEVEL = 1 << 3;
-        const INNER_BEVEL = 1 << 4;
+        const NONE = 0 << 0;
+        const CORNER = 1 << 0;
+        const LEFT = 1 << 1;
+        const BEVEL = 1 << 2;
+        const INNER_BEVEL = 1 << 3;
     }
 }
