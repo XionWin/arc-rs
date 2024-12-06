@@ -1,5 +1,5 @@
 use core::Vertex2;
-use std::{cell::RefCell, fmt::Debug};
+use std::{cell::RefCell, fmt::Debug, rc::Rc};
 
 use crate::{
     def::{Point, PointFlag},
@@ -50,23 +50,40 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primi
 fn get_points(commands: &[core::Command]) -> Option<(Vec<Point>, bool)> {
     let (command_points, is_closed) = crate::CommandCalculator::to_points(commands);
 
-    let cell_points = command_points
-        .iter()
-        .map(|command_point| {
-            RefCell::new(Point::new_from_command_point(
-                command_point,
-                if command_point.is_corner {
-                    PointFlag::CORNER
-                } else {
-                    PointFlag::NONE
-                },
-            ))
-        })
-        .collect::<Vec<_>>();
+    let points = {
+        let mut point_0 = Option::<Rc<RefCell<Point>>>::None;
+        let points = command_points
+            .iter()
+            .map(|command_point| {
+                let point_1 = Rc::new(RefCell::new(Point::new_from_command_point(
+                    command_point,
+                    if command_point.is_corner {
+                        PointFlag::CORNER
+                    } else {
+                        PointFlag::NONE
+                    },
+                )));
+                if let Some(point_0) = point_0.clone() {
+                    whirling_update_point(&mut point_0.borrow_mut(), &mut point_1.borrow_mut());
+                }
+                point_0 = Some(point_1.clone());
+                point_1
+            })
+            .collect::<Vec<_>>();
 
-    whirling_update(&cell_points, is_closed);
+        if is_closed {
+            whirling_update_point(
+                &mut points.last().unwrap().borrow_mut(),
+                &mut points.first().unwrap().borrow_mut(),
+            );
+        }
 
-    let points = cell_points
+        points
+    };
+
+    whirling_update_reversed(&points, is_closed);
+
+    let points = points
         .iter()
         .map(|cell| Point::new_from_point(&cell.borrow()))
         .collect::<Vec<Point>>();
@@ -78,23 +95,7 @@ fn get_points(commands: &[core::Command]) -> Option<(Vec<Point>, bool)> {
     Some((points, is_closed))
 }
 
-fn whirling_update(points: &[RefCell<Point>], is_closed: bool) {
-    {
-        let mut point_0 = points.get(0).unwrap().borrow_mut();
-        for index in 1..points.len() {
-            let mut point_1 = points.get(index).unwrap().borrow_mut();
-            whirling_update_point(&mut point_0, &mut point_1);
-            point_0 = point_1
-        }
-    }
-    {
-        if is_closed {
-            whirling_update_point(
-                &mut points.get(points.len() - 1).unwrap().borrow_mut(),
-                &mut points.get(0).unwrap().borrow_mut(),
-            );
-        }
-    }
+fn whirling_update_reversed(points: &[Rc<RefCell<Point>>], is_closed: bool) {
     {
         let mut point_1 = points.get(points.len() - 1).unwrap().borrow_mut();
         let max_index = points.len() - 2;
