@@ -1,5 +1,3 @@
-use core::Vertex2;
-
 use crate::{Call, CallType, FragUniform};
 
 #[derive(Debug)]
