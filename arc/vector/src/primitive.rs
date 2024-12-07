@@ -1,4 +1,4 @@
-use std::borrow::Borrow;
+use std::{borrow::Borrow, fmt::Display};
 
 #[derive(Debug)]
 pub struct Primitive {
@@ -20,5 +20,19 @@ impl Primitive {
 
     pub fn get_state(&self) -> &dyn crate::State {
         self._state.borrow()
+    }
+}
+
+impl Display for Primitive {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "vertexes: {:#?},\nstate: {:#?}",
+            self._vertexes
+                .iter()
+                .map(|vertex| format!("{}", vertex))
+                .collect::<Vec<_>>(),
+            self._state
+        )
     }
 }

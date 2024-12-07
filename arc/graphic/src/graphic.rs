@@ -47,8 +47,8 @@ impl core::Graphic for Graphic {
     }
     fn draw_shape(&self, shape: &dyn core::Shape) {
         use vector::VectorShape;
-        let _fill_primitive = shape.get_fill_primitive();
-        // util::print_debug!("fill_primitive: {:?}", fill_primitive);
+        let fill_primitive = shape.get_fill_primitive();
+        util::print_debug!("fill_primitive: {}", fill_primitive.unwrap());
     }
 }
 

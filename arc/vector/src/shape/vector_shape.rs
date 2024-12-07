@@ -1,4 +1,4 @@
-use core::{Vector2, Vertex2};
+use core::Vertex2;
 use std::{cell::RefCell, fmt::Debug, rc::Rc};
 
 use crate::{
@@ -97,9 +97,9 @@ fn get_points(commands: &[core::Command]) -> Option<Vec<Point>> {
                 .map(|cell| Point::new_from_point(&cell.borrow()))
                 .collect::<Vec<Point>>();
 
-            for point in &points {
-                util::print_debug!("{}", point);
-            }
+            // for point in &points {
+            //     util::print_debug!("{}", point);
+            // }
             Some(points)
         }
         None => None,

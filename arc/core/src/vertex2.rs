@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use crate::Vector2;
 
 #[repr(C)]
@@ -13,5 +15,15 @@ impl Vertex2 {
             position: Vector2::new(x.into(), y.into()),
             coorinate: Vector2::new(u.into(), v.into()),
         }
+    }
+}
+
+impl Display for Vertex2 {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}, {}, {}, {}",
+            self.position.x, self.position.y, self.coorinate.x, self.coorinate.y
+        )
     }
 }
