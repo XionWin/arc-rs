@@ -1,5 +1,6 @@
 use crate::CallType;
 
+#[derive(Debug)]
 pub struct Call {
     pub call_type: CallType,
     pub vertex_offset: usize,

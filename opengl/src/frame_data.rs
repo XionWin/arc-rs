@@ -2,6 +2,7 @@ use core::Vertex2;
 
 use crate::{Call, CallType, FragUniform};
 
+#[derive(Debug)]
 pub struct FrameData {
     _calls: Vec<Call>,
     _vertices: Vec<core::Vertex2>,
@@ -20,7 +21,7 @@ impl FrameData {
     pub fn add_call(
         &mut self,
         call_type: CallType,
-        vertices: Vec<Vertex2>,
+        vertices: &[core::Vertex2],
         frag_uniforms: FragUniform,
         texture: Option<Box<dyn graphic::Texture>>,
     ) {
@@ -28,7 +29,7 @@ impl FrameData {
         let vertex_len = vertices.len();
 
         for vertex in vertices {
-            self._vertices.push(vertex);
+            self._vertices.push(*vertex);
         }
 
         let uniform_offset = self._frag_uniforms.len();

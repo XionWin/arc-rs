@@ -23,4 +23,5 @@ pub trait Renderer: Debug {
         texture_filter: TextureFilter,
     ) -> Box<dyn Texture>;
     fn drop_texture(&self, texture: &dyn Texture);
+    fn add_primitive(&self, primitive: vector::Primitive);
 }

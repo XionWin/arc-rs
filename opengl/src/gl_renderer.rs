@@ -1,10 +1,13 @@
-use std::rc::Rc;
+use std::{cell::RefCell, rc::Rc};
 
 use graphic::Texture;
+
+use crate::FrameData;
 
 #[derive(Debug)]
 pub struct GLRenderer {
     _program: crate::Program,
+    _frame_data: RefCell<FrameData>,
 }
 
 impl GLRenderer {
@@ -15,6 +18,7 @@ impl GLRenderer {
         crate::load_with(loadfn);
         Self {
             _program: crate::Program::new("resource/shader/arc.vert", "resource/shader/arc.frag"),
+            _frame_data: RefCell::new(FrameData::new()),
         }
     }
 }
@@ -72,6 +76,17 @@ impl graphic::Renderer for GLRenderer {
 
     fn drop_texture(&self, texture: &dyn graphic::Texture) {
         crate::gl::delete_texture(texture.get_id());
+    }
+
+    fn add_primitive(&self, primitive: vector::Primitive) {
+        self._frame_data.borrow_mut().add_call(
+            crate::CallType::Fill,
+            primitive.get_vertices(),
+            primitive.get_state().into(),
+            None,
+        );
+
+        util::print_debug_with_title!("frame_data", "{:?}", self._frame_data)
     }
 }
 

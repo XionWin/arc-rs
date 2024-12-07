@@ -20,6 +20,7 @@ impl Into<f32> for FragUniformType {
 }
 
 #[repr(C)]
+#[derive(Debug)]
 pub struct FragUniform {
     _type: f32,
     _font_type: f32,

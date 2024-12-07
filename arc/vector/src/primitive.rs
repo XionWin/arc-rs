@@ -14,7 +14,7 @@ impl Primitive {
         }
     }
 
-    pub fn get_vertexes(&self) -> &[core::Vertex2] {
+    pub fn get_vertices(&self) -> &[core::Vertex2] {
         self._vertexes.borrow()
     }
 
