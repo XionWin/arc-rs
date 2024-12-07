@@ -1,4 +1,4 @@
-use core::Vertex2;
+use core::{Vector2, Vertex2};
 use std::{cell::RefCell, fmt::Debug, rc::Rc};
 
 use crate::{
@@ -7,92 +7,103 @@ use crate::{
 };
 
 pub trait VectorShape: Debug {
-    fn get_stroke_primitive(&self) -> Primitive;
-    fn get_fill_primitive(&self) -> Primitive;
+    fn get_stroke_primitive(&self) -> Option<Primitive>;
+    fn get_fill_primitive(&self) -> Option<Primitive>;
 }
 
 impl<T: core::Shape + ?Sized> VectorShape for T {
-    fn get_stroke_primitive(&self) -> Primitive {
+    fn get_stroke_primitive(&self) -> Option<Primitive> {
         get_stroke_primitive(self.get_commands(), self.get_style())
     }
 
-    fn get_fill_primitive(&self) -> Primitive {
+    fn get_fill_primitive(&self) -> Option<Primitive> {
         get_fill_primitive(self.get_commands(), self.get_style())
     }
 }
 
-fn get_stroke_primitive(_commands: &[core::Command], _style: &core::Style) -> Primitive {
-    Primitive::new(Box::new([]), Box::new(StrokeState::new(1f32)))
+fn get_stroke_primitive(_commands: &[core::Command], _style: &core::Style) -> Option<Primitive> {
+    Some(Primitive::new(
+        Box::new([]),
+        Box::new(StrokeState::new(1f32)),
+    ))
 }
 
-fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Primitive {
+fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Option<Primitive> {
     let _is_closed = commands.iter().any(|x| x == &core::Command::Close);
     // util::print_debug!("is_closed: {}", is_closed);
-    let _points = get_points(commands);
+    let points = get_points(commands);
     // util::print_debug!("points: {:#?}", points);
 
-    let x = 100;
-    let y = 100;
-    let width = 100;
-    let height = 100;
-    let vec = vec![
-        Vertex2::new(x, y, 0.5f32, 1f32),
-        Vertex2::new(x, y + height, 0.5f32, 1f32),
-        Vertex2::new(x + width, y + height, 0.5f32, 1f32),
-        Vertex2::new(x + width, y, 0.5f32, 1f32),
-    ];
-    Primitive::new(
-        Box::<[core::Vertex2]>::from(vec),
-        Box::new(FillState::default()),
-    )
-}
-
-fn get_points(commands: &[core::Command]) -> Option<(Vec<Point>, bool)> {
-    let (command_points, is_closed) = crate::CommandCalculator::to_points(commands);
-
-    let points = {
-        let mut point_0 = Option::<Rc<RefCell<Point>>>::None;
-        let points = command_points
-            .iter()
-            .map(|command_point| {
-                let point_1 = Rc::new(RefCell::new(Point::new_from_command_point(
-                    command_point,
-                    if command_point.is_corner {
-                        PointFlag::CORNER
-                    } else {
-                        PointFlag::NONE
-                    },
-                )));
-                if let Some(point_0) = point_0.clone() {
-                    whirling_update_point(&mut point_0.borrow_mut(), &mut point_1.borrow_mut());
-                }
-                point_0 = Some(point_1.clone());
-                point_1
-            })
-            .collect::<Vec<_>>();
-
-        if is_closed {
-            whirling_update_point(
-                &mut points.last().unwrap().borrow_mut(),
-                &mut points.first().unwrap().borrow_mut(),
-            );
-        }
-
-        points
+    let vertices = match points {
+        Some(points) => Some(
+            points
+                .iter()
+                .map(|point| Vertex2::new(point.x, point.y, 0.5f32, 1f32))
+                .collect::<Vec<Vertex2>>(),
+        ),
+        None => None,
     };
 
-    whirling_update_reversed(&points, is_closed);
-
-    let points = points
-        .iter()
-        .map(|cell| Point::new_from_point(&cell.borrow()))
-        .collect::<Vec<Point>>();
-
-    for point in &points {
-        util::print_debug!("{}", point);
+    match vertices {
+        Some(vertices) => Some(Primitive::new(
+            Box::<[core::Vertex2]>::from(vertices),
+            Box::new(FillState::default()),
+        )),
+        None => None,
     }
+}
 
-    Some((points, is_closed))
+fn get_points(commands: &[core::Command]) -> Option<Vec<Point>> {
+    let is_closed = commands.last() == Some(&core::Command::Close);
+    match crate::CommandCalculator::to_points(commands) {
+        Some(command_points) => {
+            let points = {
+                let mut point_0 = Option::<Rc<RefCell<Point>>>::None;
+                let points = command_points
+                    .iter()
+                    .map(|command_point| {
+                        let point_1 = Rc::new(RefCell::new(Point::new_from_command_point(
+                            command_point,
+                            if command_point.is_corner {
+                                PointFlag::CORNER
+                            } else {
+                                PointFlag::NONE
+                            },
+                        )));
+                        if let Some(point_0) = point_0.clone() {
+                            whirling_update_point(
+                                &mut point_0.borrow_mut(),
+                                &mut point_1.borrow_mut(),
+                            );
+                        }
+                        point_0 = Some(point_1.clone());
+                        point_1
+                    })
+                    .collect::<Vec<_>>();
+
+                if is_closed {
+                    whirling_update_point(
+                        &mut points.last().unwrap().borrow_mut(),
+                        &mut points.first().unwrap().borrow_mut(),
+                    );
+                }
+                points
+            };
+
+            whirling_update_reversed(&points, is_closed);
+
+            let points = points
+                .iter()
+                .map(|cell| Point::new_from_point(&cell.borrow()))
+                .collect::<Vec<Point>>();
+
+            for point in &points {
+                util::print_debug!("{}", point);
+            }
+            Some(points)
+        }
+        None => None,
+    }
 }
 
 fn whirling_update_reversed(points: &[Rc<RefCell<Point>>], is_closed: bool) {
@@ -107,8 +118,8 @@ fn whirling_update_reversed(points: &[Rc<RefCell<Point>>], is_closed: bool) {
     }
     if is_closed {
         whirling_update_point_reversed(
-            &mut points.get(0).unwrap().borrow_mut(),
-            &mut points.get(points.len() - 1).unwrap().borrow_mut(),
+            &mut points.first().unwrap().borrow_mut(),
+            &mut points.last().unwrap().borrow_mut(),
         );
     }
 }

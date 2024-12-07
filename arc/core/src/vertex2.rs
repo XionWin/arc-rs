@@ -1,5 +1,3 @@
-use std::usize;
-
 use crate::Vector2;
 
 #[repr(C)]
@@ -10,9 +8,9 @@ pub struct Vertex2 {
 }
 
 impl Vertex2 {
-    pub fn new(x: usize, y: usize, u: impl Into<f32>, v: impl Into<f32>) -> Self {
+    pub fn new(x: impl Into<f32>, y: impl Into<f32>, u: impl Into<f32>, v: impl Into<f32>) -> Self {
         Self {
-            position: Vector2::new(x as _, y as _),
+            position: Vector2::new(x.into(), y.into()),
             coorinate: Vector2::new(u.into(), v.into()),
         }
     }

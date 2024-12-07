@@ -18,11 +18,11 @@ impl Command {
         }
     }
 
-    pub fn to_points(&self, previous: Option<&Command>, tess_tol: f32) -> Vec<Point<f32>> {
+    pub fn to_points(&self, command_0: Option<&Command>, tess_tol: f32) -> Vec<Point<f32>> {
         match self {
             Command::MoveTo(point1) | Command::LineTo(point1) => vec![point1.clone()],
             Command::BezierTo(point1, point2, point3) => Self::get_bezier_points(
-                previous
+                command_0
                     .expect("command::bezierto must have the preview command")
                     .get_end_point(),
                 point1,

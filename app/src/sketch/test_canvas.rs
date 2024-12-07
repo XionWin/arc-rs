@@ -5,7 +5,7 @@ pub struct TestCanvas {
 impl TestCanvas {
     pub fn new() -> Self {
         Self {
-            vertex: vec![core::Vertex2::new(0, 0, 0u8, 0u8); 3],
+            vertex: vec![core::Vertex2::new(0u8, 0u8, 0u8, 0u8); 3],
         }
     }
 
