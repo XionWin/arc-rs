@@ -3,7 +3,6 @@ pub mod test;
 
 mod as_any;
 mod bolck_texture;
-mod call_type;
 mod color;
 mod color_type;
 mod command;
@@ -38,7 +37,6 @@ mod window;
 
 pub use as_any::*;
 pub use bolck_texture::*;
-pub use call_type::*;
 pub use color::*;
 pub use color_type::*;
 pub use command::*;
