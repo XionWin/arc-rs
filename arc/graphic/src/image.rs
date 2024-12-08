@@ -1,27 +1,27 @@
 use core::Size;
-use std::borrow::{Borrow, BorrowMut};
+use std::{borrow::Borrow, rc::Rc};
 
 use crate::Texture;
 
 #[derive(Debug)]
 pub struct Image {
-    texture: Box<dyn Texture>,
+    texture: Rc<dyn Texture>,
 }
 
 impl Image {
-    pub fn new(texture: Box<dyn Texture>) -> Self {
+    pub fn new(texture: Rc<dyn Texture>) -> Self {
         Self { texture }
     }
 
-    pub fn new_from_file<T>(path: &str, get_texture_func: T) -> Self
-    where
-        T: Fn(core::Size<i32>, core::ColorType) -> Box<dyn Texture>,
-    {
-        use core::ImageData;
-        let image = image::ImageData::new_from_file(path);
-        let texture = get_texture_func(image.get_size(), image.get_color_type());
-        Self { texture }
-    }
+    // pub fn new_from_file<T>(path: &str, get_texture_func: T) -> Self
+    // where
+    //     T: Fn(core::Size<i32>, core::ColorType) -> Box<dyn Texture>,
+    // {
+    //     use core::ImageData;
+    //     let image = image::ImageData::new_from_file(path);
+    //     let texture = get_texture_func(image.get_size(), image.get_color_type());
+    //     Self { texture }
+    // }
 }
 
 impl core::Image for Image {
@@ -44,9 +44,5 @@ impl core::Image for Image {
 impl crate::TextureComponent for Image {
     fn get_texture(&self) -> &dyn Texture {
         self.texture.borrow()
-    }
-
-    fn get_texture_mut(&mut self) -> &mut dyn Texture {
-        self.texture.borrow_mut()
     }
 }

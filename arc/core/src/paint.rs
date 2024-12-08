@@ -21,7 +21,7 @@ impl Paint {
             _alpha: 1f32,
         }
     }
-    pub fn get_image(&self) -> Option<&PaintImage> {
+    pub fn get_paint_image(&self) -> Option<&PaintImage> {
         match &self._image {
             Some(x) => Some(x),
             None => None,

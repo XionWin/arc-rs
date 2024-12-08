@@ -57,7 +57,7 @@ fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
         _feather: state.get_paint().get_feather(),
         _stroke_multiple: vector::get_stroke_multiple(state.get_stroke_width()),
         _stroke_threshold: 0f32, // DEFAULT
-        _extent: match state.get_paint().get_image() {
+        _extent: match state.get_paint().get_paint_image() {
             Some(x) => x.get_extent(),
             None => core::Extent::default(),
         },
@@ -70,7 +70,7 @@ fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
             None => core::Extent::default(),
         },
         _scissor_scale: core::Scale::default(), // DEFAULT
-        _paint_matrix: match state.get_paint().get_image() {
+        _paint_matrix: match state.get_paint().get_paint_image() {
             Some(x) => x.get_transform().into(),
             None => crate::Matrix4x3::default(),
         },
@@ -87,7 +87,7 @@ fn from_fill_state(state: &vector::FillState) -> FragUniform {
         _feather: state.get_paint().get_feather(),
         _stroke_multiple: f32::MAX,
         _stroke_threshold: 0f32, // DEFAULT
-        _extent: match state.get_paint().get_image() {
+        _extent: match state.get_paint().get_paint_image() {
             Some(x) => x.get_extent(),
             None => core::Extent::default(),
         },
@@ -100,7 +100,7 @@ fn from_fill_state(state: &vector::FillState) -> FragUniform {
             None => core::Extent::default(),
         },
         _scissor_scale: core::Scale::default(), // DEFAULT
-        _paint_matrix: match state.get_paint().get_image() {
+        _paint_matrix: match state.get_paint().get_paint_image() {
             Some(x) => x.get_transform().into(),
             None => crate::Matrix4x3::default(),
         },

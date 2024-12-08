@@ -8,6 +8,7 @@ use crate::FrameData;
 pub struct GLRenderer {
     _program: crate::Program,
     _frame_data: RefCell<FrameData>,
+    _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
 
 impl GLRenderer {
@@ -19,6 +20,7 @@ impl GLRenderer {
         Self {
             _program: crate::Program::new("resource/shader/arc.vert", "resource/shader/arc.frag"),
             _frame_data: RefCell::new(FrameData::new()),
+            _textures: RefCell::new(Vec::new()),
         }
     }
 }
@@ -48,30 +50,33 @@ impl graphic::Renderer for GLRenderer {
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
-    ) -> Box<dyn graphic::Texture> {
-        Box::new(crate::Texture::new(
+    ) -> Rc<dyn graphic::Texture> {
+        let texture = Rc::new(crate::Texture::new(
             self.clone(),
             size,
             color_type,
             texture_filter,
-        ))
+        ));
+        self._textures.borrow_mut().push(texture.clone());
+        texture
     }
 
     fn create_texture_from_file(
         self: Rc<Self>,
         path: &str,
         texture_filter: graphic::TextureFilter,
-    ) -> Box<dyn graphic::Texture> {
+    ) -> Rc<dyn graphic::Texture> {
         use core::ImageData;
         let image_data = image::ImageData::new_from_file(path);
-        let texture = crate::Texture::new(
+        let texture = Rc::new(crate::Texture::new(
             self.clone(),
             image_data.get_size(),
             image_data.get_color_type(),
             texture_filter,
-        );
+        ));
         texture.load(&image_data);
-        Box::new(texture)
+        self._textures.borrow_mut().push(texture.clone());
+        texture
     }
 
     fn drop_texture(&self, texture: &dyn graphic::Texture) {
@@ -79,10 +84,16 @@ impl graphic::Renderer for GLRenderer {
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {
+        let state = primitive.get_state();
+        let texture_id = if let Some(paint_image) = state.get_paint().get_paint_image() {
+            Some(paint_image.get_image())
+        } else {
+            None
+        };
         self._frame_data.borrow_mut().add_call(
             crate::CallType::Fill,
             primitive.get_vertices(),
-            primitive.get_state().into(),
+            state.into(),
             None,
         );
 
