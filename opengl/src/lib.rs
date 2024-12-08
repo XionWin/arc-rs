@@ -12,7 +12,6 @@ mod frame_data;
 mod gl_program;
 mod matrix4x3;
 mod texture;
-mod texture_image;
 
 pub use call::*;
 pub use call_type::*;
@@ -22,7 +21,6 @@ pub use frame_data::*;
 pub use gl_renderer::*;
 pub use matrix4x3::*;
 pub use texture::*;
-pub use texture_image::*;
 
 mod gl_renderer;
 mod gl_shader;

@@ -1,3 +1,5 @@
+use std::ffi::c_uint;
+
 use crate::{Call, CallType, FragUniform};
 
 #[derive(Debug)]
@@ -21,7 +23,7 @@ impl FrameData {
         call_type: CallType,
         vertices: &[core::Vertex2],
         frag_uniforms: FragUniform,
-        texture: Option<Box<dyn graphic::Texture>>,
+        texture_id: Option<c_uint>,
     ) {
         let vertex_offset = self._vertices.len();
         let vertex_len = vertices.len();
@@ -38,7 +40,7 @@ impl FrameData {
             vertex_offset,
             vertex_len,
             uniform_offset,
-            texture,
+            texture_id,
         ));
     }
 }

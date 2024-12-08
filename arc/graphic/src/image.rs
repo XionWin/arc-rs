@@ -1,4 +1,4 @@
-use core::Size;
+use core::{AsAny, Size};
 use std::{borrow::Borrow, rc::Rc};
 
 use crate::Texture;
@@ -22,6 +22,12 @@ impl Image {
     //     let texture = get_texture_func(image.get_size(), image.get_color_type());
     //     Self { texture }
     // }
+}
+
+impl AsAny for Image {
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
 }
 
 impl core::Image for Image {

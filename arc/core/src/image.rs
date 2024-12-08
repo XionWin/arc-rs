@@ -1,8 +1,8 @@
 use std::{ffi::c_uint, fmt::Debug};
 
-use crate::{ColorType, ImageFilter, Size};
+use crate::{AsAny, ColorType, ImageFilter, Size};
 
-pub trait Image: Debug {
+pub trait Image: Debug + AsAny {
     fn get_id(&self) -> c_uint;
     fn get_size(&self) -> Size<i32>;
     fn get_color_type(&self) -> ColorType;

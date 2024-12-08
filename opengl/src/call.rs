@@ -1,3 +1,5 @@
+use std::ffi::c_uint;
+
 use crate::CallType;
 
 #[derive(Debug)]
@@ -6,7 +8,7 @@ pub struct Call {
     pub vertex_offset: usize,
     pub vertex_len: usize,
     pub uniform_offset: usize,
-    pub texture: Option<Box<dyn graphic::Texture>>,
+    pub texture_id: Option<c_uint>,
 }
 
 impl Call {
@@ -15,14 +17,14 @@ impl Call {
         vertex_offset: usize,
         vertex_len: usize,
         uniform_offset: usize,
-        texture: Option<Box<dyn graphic::Texture>>,
+        texture_id: Option<c_uint>,
     ) -> Self {
         Self {
             call_type,
             vertex_offset,
             vertex_len,
             uniform_offset,
-            texture,
+            texture_id,
         }
     }
 }
