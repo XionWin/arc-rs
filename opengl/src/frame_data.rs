@@ -43,4 +43,10 @@ impl FrameData {
             texture_id,
         ));
     }
+
+    pub fn reset(&mut self) {
+        self._calls.clear();
+        self._vertices.clear();
+        self._frag_uniforms.clear();
+    }
 }

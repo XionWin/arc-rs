@@ -29,8 +29,9 @@ impl graphic::Renderer for GLRenderer {
     fn init(&self) {
         self._program.use_program();
     }
-    fn begin_render(&self) {}
-    fn render(&self) {}
+    fn begin_render(&self) {
+        self._frame_data.borrow_mut().reset();
+    }
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         crate::gl::viewport(x, y, width, height);
     }
@@ -102,6 +103,8 @@ impl graphic::Renderer for GLRenderer {
 
         util::print_debug_with_title!("frame_data", "{:?}", self._frame_data)
     }
+
+    fn render(&self) {}
 }
 
 impl Drop for GLRenderer {
