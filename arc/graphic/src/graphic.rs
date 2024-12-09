@@ -13,6 +13,18 @@ impl Graphic {
 }
 
 impl core::Graphic for Graphic {
+    fn init(&self) {
+        self.renderer.init();
+    }
+
+    fn begin_render(&self) {
+        self.renderer.begin_render();
+    }
+
+    fn render(&self) {
+        self.renderer.render();
+    }
+
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         self.renderer.viewport(x, y, width, height);
     }

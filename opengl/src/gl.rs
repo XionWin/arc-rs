@@ -1,8 +1,5 @@
 use crate::{def::StringName, ClearBufferMasks};
-use std::{
-    ffi::{c_char, c_float, c_int, c_uint, c_void, CStr, CString},
-    str::from_utf8,
-};
+use std::ffi::{c_char, c_float, c_int, c_uint, c_void, CStr, CString};
 use util::LibraryLoader;
 
 pub fn load() {
@@ -30,7 +27,7 @@ pub fn get_string(name: StringName) -> Option<String> {
         let c_str = gl::GetString(name as _);
 
         if !c_str.is_null() {
-            match from_utf8(CStr::from_ptr(c_str as _).to_bytes()) {
+            match std::str::from_utf8(CStr::from_ptr(c_str as _).to_bytes()) {
                 Ok(s) => Some(s.to_string()),
                 Err(_) => None,
             }
@@ -110,8 +107,8 @@ pub fn check_link_status(program_id: c_uint) {
     }
     if is_linked == 0 {
         match get_program_information(program_id) {
-            Some(msg) => panic!("GLES program link faild error: {:?}", msg),
-            None => panic!("GLES program link faild error: NONE"),
+            Some(msg) => panic!("check_link_status faild, error: {:?}", msg),
+            None => panic!("check_link_status faild, error: NONE"),
         }
     }
 }
@@ -157,6 +154,43 @@ pub fn get_shader_information(shader_id: c_uint) -> Option<String> {
             Some(util::expect!(String::from_utf8(buf)))
         }
         _ => None,
+    }
+}
+
+pub fn get_active_uniform(
+    program_id: c_uint,
+    index: c_uint,
+) -> (String, crate::def::ActiveUniformType, usize) {
+    let buf_size = self::get_programiv(
+        program_id,
+        crate::def::GetProgramParameterName::ActiveUniformMaxLength,
+    );
+    let mut size_out = 0i32;
+    let mut type_out = 0u32;
+    let mut name_len_out = 0i32;
+    let name_buffer = vec![0u8; buf_size as _];
+
+    unsafe {
+        gl::GetActiveUniform(
+            program_id,
+            index,
+            if buf_size == 0 { 1 } else { buf_size as _ },
+            &mut name_len_out,
+            &mut size_out,
+            &mut type_out,
+            name_buffer.as_ptr() as _,
+        );
+
+        let name = if name_len_out > 0 {
+            match std::str::from_utf8(&name_buffer[0..name_len_out as _]) {
+                Ok(s) => String::from(s.to_string()),
+                Err(_) => util::print_panic!("get_active_uniform error"),
+            }
+        } else {
+            util::print_panic!("get_active_uniform error")
+        };
+
+        (name, type_out.into(), size_out as _)
     }
 }
 
@@ -254,12 +288,27 @@ pub fn delete_buffer(buffer_id: c_uint) {
     delete_buffers(1, &vec![buffer_id])
 }
 
+pub fn get_programiv(program_id: c_uint, param: crate::def::GetProgramParameterName) -> c_uint {
+    let mut buffer = 0i32;
+    unsafe {
+        gl::GetProgramiv(program_id, param as _, &mut buffer);
+    }
+
+    if buffer == 0 {
+        match get_program_information(program_id) {
+            Some(msg) => panic!("get_programiv faild, error: {:?}", msg),
+            None => panic!("get_programiv faild, error: NONE"),
+        }
+    }
+    buffer as _
+}
+
 pub fn get_attrib_location(program_id: c_uint, name: &str) -> c_uint {
     let mut buffer = name.bytes().collect::<Vec<u8>>();
     buffer.push(b'\0');
     match unsafe { gl::GetAttribLocation(program_id, buffer.as_ptr() as _) } {
         value if value >= 0 => value as c_uint,
-        _ => panic!("GLES get_attrib_location error"),
+        _ => panic!("get_attrib_location error"),
     }
 }
 

@@ -69,9 +69,12 @@ impl core::Window for Window {
         }
     }
 
-    fn init(&mut self) {}
+    fn init(&mut self) {
+        self.graphic.init();
+    }
 
     fn frame_init(&mut self) {
+        self.graphic.begin_render();
         self.fps_counter.update(|fps| {
             util::print_debug!("fps: {fps:.0}");
             // util::expect!(self.sdl_window.set_title(&format!(
@@ -82,6 +85,7 @@ impl core::Window for Window {
         });
         self.get_graphic().clear_color(self.background_color);
         self.get_graphic().clear();
+        self.graphic.render();
     }
 
     fn swap_buffers(&self) {

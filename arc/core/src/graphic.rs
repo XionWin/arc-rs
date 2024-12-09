@@ -1,6 +1,9 @@
 use crate::{Color, ColorType, Image, ImageFilter, Shape, Size};
 
 pub trait Graphic {
+    fn init(&self);
+    fn begin_render(&self);
+    fn render(&self);
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32);
     fn clear_color(&self, color: Color);
     fn clear(&self);
