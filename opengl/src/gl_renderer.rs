@@ -85,13 +85,9 @@ impl graphic::Renderer for GLRenderer {
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {
-        use graphic::TextureImage;
         let state = primitive.get_state();
         let texture_id = match state.get_paint().get_paint_image() {
-            Some(paint_image) => match paint_image.get_image().try_get_texture() {
-                Some(texture) => Some(texture.get_id()),
-                None => None,
-            },
+            Some(paint_image) => Some(paint_image.get_image().get_id()),
             None => None,
         };
         self._frame_data.borrow_mut().add_call(
