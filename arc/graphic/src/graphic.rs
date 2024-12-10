@@ -22,7 +22,7 @@ impl core::Graphic for Graphic {
     }
 
     fn render(&self) {
-        self.renderer.render();
+        // self.renderer.render();
     }
 
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {

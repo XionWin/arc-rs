@@ -302,6 +302,14 @@ pub fn delete_buffer(buffer_id: c_uint) {
     delete_buffers(1, &vec![buffer_id])
 }
 
+pub fn gen_frame_buffer() -> c_uint {
+    let mut buffer = 0u32;
+    unsafe {
+        gl::GenFramebuffers(1, &mut buffer);
+    }
+    buffer
+}
+
 pub fn get_programiv(program_id: c_uint, param: crate::def::GetProgramParameterName) -> c_int {
     let mut buffer = 0i32;
     unsafe {
@@ -342,14 +350,14 @@ pub fn enable_vertex_attrib_array(index: c_uint) {
     }
 }
 
-pub fn draw_arrays(begin_mode: crate::def::BeginMode, first: c_int, count: c_int) {
+pub fn draw_arrays(begin_mode: crate::def::PrimitiveType, first: c_int, count: c_int) {
     unsafe {
         gl::DrawArrays(begin_mode as _, first, count);
     }
 }
 
 pub fn draw_elements<T>(
-    begin_mode: crate::def::BeginMode,
+    begin_mode: crate::def::PrimitiveType,
     count: c_int,
     draw_elements_type: crate::def::DrawElementsType,
     indices: Option<&[T]>,

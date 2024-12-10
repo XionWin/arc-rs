@@ -1,4 +1,4 @@
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
 use graphic::Texture;
 
@@ -6,6 +6,9 @@ use crate::FrameData;
 
 #[derive(Debug)]
 pub struct GLRenderer {
+    _vao: c_uint,
+    _vbo: c_uint,
+    _vfo: c_uint,
     _program: crate::Program,
     _frame_data: RefCell<FrameData>,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
@@ -18,6 +21,9 @@ impl GLRenderer {
     {
         crate::load_with(loadfn);
         Self {
+            _vao: crate::gl::gen_vertex_array(),
+            _vbo: crate::gl::gen_buffer(),
+            _vfo: crate::gl::gen_frame_buffer(),
             _program: crate::Program::new("resource/shader/arc.vert", "resource/shader/arc.frag"),
             _frame_data: RefCell::new(FrameData::new()),
             _textures: RefCell::new(Vec::new()),
@@ -35,9 +41,31 @@ impl graphic::Renderer for GLRenderer {
     fn render(&self) {
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
+
+        let vertices = frame_data.get_vertices();
+        // binding vertices
+        bind_vertex_array(self._vao);
+        bind_buffer(self._vbo, vertices);
+
         for call in frame_data.get_calls() {
             let frag_uniform = frag_uniforms.get(call.uniform_offset).unwrap();
             self._program.set_uniform_frag(frag_uniform);
+            if let Some(texture_id) = call.texture_id {
+                self._program.set_texture_id(texture_id);
+            }
+
+            let primitive_type = match call.call_type {
+                crate::CallType::Fill => crate::def::PrimitiveType::TriangleFan,
+                crate::CallType::ConvexFill => crate::def::PrimitiveType::TriangleFan,
+                crate::CallType::Stroke => crate::def::PrimitiveType::TriangleStrip,
+                crate::CallType::Image => crate::def::PrimitiveType::TriangleFan,
+            };
+
+            crate::gl::draw_arrays(
+                primitive_type,
+                call.vertex_offset as _,
+                call.vertex_len as _,
+            );
         }
     }
 
@@ -108,6 +136,18 @@ impl graphic::Renderer for GLRenderer {
 
         util::print_debug_with_title!("frame_data", "{:?}", self._frame_data);
     }
+}
+
+fn bind_vertex_array(vao: c_uint) {
+    crate::gl::bind_vertex_array(vao);
+}
+fn bind_buffer(vbo: c_uint, vertices: &[core::Vertex2]) {
+    crate::gl::bind_buffer(crate::def::BufferTarget::ArrayBuffer, vbo);
+    crate::gl::buffer_data(
+        crate::def::BufferTarget::ArrayBuffer,
+        vertices,
+        crate::def::BufferUsageHint::StaticDraw,
+    );
 }
 
 impl Drop for GLRenderer {

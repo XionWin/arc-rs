@@ -42,6 +42,10 @@ impl Program {
     pub fn set_uniform_frag(&self, value: &FragUniform) {
         set_frag_uniform(self._attribute_locations["aFrag"], value);
     }
+    pub fn set_texture_id(&self, texture_id: c_uint) {
+        uniform_1i(self._attribute_locations["aTexture"], 0i32);
+        crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
+    }
 }
 
 fn use_program(program_id: c_uint, vertex_shader_id: c_uint, fragment_shader_id: c_uint) {

@@ -23,18 +23,18 @@ fn main() {
             )));
 
             canvas.borrow().load();
-
-            let rectangle = vector::Rectangle::new(100, 100, 100, 100);
-            g.draw_shape(&rectangle);
         },
         |window| {
-            let _g = window.get_graphic();
+            let g = window.get_graphic();
 
             match image.borrow().as_ref() {
                 Some(_v) => {}
                 None => util::print_panic!("image is null"),
             }
+
             canvas.borrow().render();
+            let rectangle = vector::Rectangle::new(100, 100, 100, 100);
+            g.draw_shape(&rectangle);
         },
     );
 }

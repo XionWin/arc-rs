@@ -48,6 +48,10 @@ impl FrameData {
         &self._calls
     }
 
+    pub fn get_vertices(&self) -> &[core::Vertex2] {
+        &self._vertices
+    }
+
     pub fn get_frag_uniforms(&self) -> &[FragUniform] {
         &self._frag_uniforms
     }

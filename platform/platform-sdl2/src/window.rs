@@ -42,7 +42,9 @@ impl core::Window for Window {
                 }
             }
             self.frame_init();
+            self.graphic.begin_render();
             on_render(self);
+            self.graphic.render();
             self.swap_buffers();
             match &mut self.fps_limiter {
                 Some(fps_limiter) => fps_limiter.delay(),
@@ -74,7 +76,6 @@ impl core::Window for Window {
     }
 
     fn frame_init(&mut self) {
-        self.graphic.begin_render();
         self.fps_counter.update(|fps| {
             util::print_debug!("fps: {fps:.0}");
             // util::expect!(self.sdl_window.set_title(&format!(
@@ -85,7 +86,6 @@ impl core::Window for Window {
         });
         self.get_graphic().clear_color(self.background_color);
         self.get_graphic().clear();
-        self.graphic.render();
     }
 
     fn swap_buffers(&self) {
