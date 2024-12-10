@@ -1,13 +1,16 @@
-use std::{collections::HashMap, ffi::c_uint};
+use std::{
+    collections::HashMap,
+    ffi::{c_int, c_uint},
+};
 
-use crate::Shader;
+use crate::{FragUniform, Shader};
 
 #[derive(Debug)]
 pub struct Program {
     pub(crate) id: c_uint,
-    pub(crate) _vertex_shader: Shader,
-    pub(crate) _fragment_shader: Shader,
-    _attribute_locations: HashMap<String, c_uint>,
+    _vertex_shader: Shader,
+    _fragment_shader: Shader,
+    _attribute_locations: HashMap<String, c_int>,
 }
 
 impl Program {
@@ -18,11 +21,13 @@ impl Program {
         let fragment_shader =
             Shader::new(crate::def::ShaderType::FragmentShader, fragment_shader_path).load();
         use_program(program_id, vertex_shader.id, fragment_shader.id);
+
+        let attribute_locations = get_attribute_locations(program_id);
         Self {
             id: program_id,
             _vertex_shader: vertex_shader,
             _fragment_shader: fragment_shader,
-            _attribute_locations: get_attribute_locations(program_id),
+            _attribute_locations: attribute_locations,
         }
     }
 
@@ -30,8 +35,12 @@ impl Program {
         use_program(self.id, self._vertex_shader.id, self._fragment_shader.id);
     }
 
-    pub fn uniform1(&self) {
-        util::print_debug!("{:?}", self._attribute_locations);
+    #[allow(dead_code)]
+    pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {
+        uniform_1i(self._attribute_locations["aPointSize"], value);
+    }
+    pub fn set_uniform_frag(&self, value: &FragUniform) {
+        set_frag_uniform(self._attribute_locations["aFrag"], value);
     }
 }
 
@@ -43,7 +52,7 @@ fn use_program(program_id: c_uint, vertex_shader_id: c_uint, fragment_shader_id:
     crate::gl::check_link_status(program_id);
 }
 
-fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_uint> {
+fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_int> {
     let uniforms_len = crate::gl::get_programiv(
         program_id,
         crate::def::GetProgramParameterName::ActiveUniforms,
@@ -51,7 +60,7 @@ fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_uint> {
 
     let mut result = HashMap::new();
     for index in 0..uniforms_len {
-        let (name, uniform_type, size) = crate::gl::get_active_uniform(program_id, index);
+        let (name, uniform_type, size) = crate::gl::get_active_uniform(program_id, index as _);
         let name = match name.find('[') {
             Some(index) => name.split_at(index).0,
             None => &name,
@@ -61,6 +70,14 @@ fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_uint> {
         result.insert(String::from(name), index);
     }
     result
+}
+
+fn uniform_1i(location: c_int, v: std::ffi::c_int) {
+    crate::gl::uniform_1i(location, v);
+}
+
+fn set_frag_uniform(location: c_int, value: &FragUniform) {
+    crate::gl::uniform4fv(location, &Into::<[f32; 44]>::into(value));
 }
 
 impl Drop for Program {

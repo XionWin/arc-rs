@@ -23,6 +23,12 @@ impl Into<(f32, f32, f32, f32)> for Rgba {
     }
 }
 
+impl Into<[f32; 4]> for &Rgba {
+    fn into(self) -> [f32; 4] {
+        [self.r as _, self.g as _, self.b as _, self.a as _]
+    }
+}
+
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 #[allow(missing_docs)]
 pub enum Color {
@@ -53,7 +59,7 @@ impl Default for Color {
     }
 }
 
-impl Into<Rgba> for Color {
+impl Into<Rgba> for &Color {
     fn into(self) -> Rgba {
         match self {
             Color::Black => Rgba {
@@ -164,7 +170,25 @@ impl Into<Rgba> for Color {
                 b: 0u8,
                 a: 0u8,
             },
-            Color::TrueColor { r, g, b, a } => Rgba { r, g, b, a },
+            Color::TrueColor { r, g, b, a } => Rgba {
+                r: *r,
+                g: *g,
+                b: *b,
+                a: *a,
+            },
         }
+    }
+}
+
+impl Into<Rgba> for Color {
+    fn into(self) -> Rgba {
+        Into::<Rgba>::into(&self)
+    }
+}
+
+impl Into<[f32; 4]> for &Color {
+    fn into(self) -> [f32; 4] {
+        let rgba = Into::<Rgba>::into(self);
+        [rgba.r as _, rgba.g as _, rgba.b as _, rgba.a as _]
     }
 }

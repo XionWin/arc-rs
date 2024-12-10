@@ -112,6 +112,43 @@ impl From<core::Matrix2D> for Matrix4x3 {
     }
 }
 
+impl Into<[f32; 12]> for Matrix4x3 {
+    fn into(self) -> [f32; 12] {
+        [
+            self._row_0._x,
+            self._row_0._y,
+            self._row_0._z,
+            self._row_0._w,
+            self._row_1._x,
+            self._row_1._y,
+            self._row_1._z,
+            self._row_1._w,
+            self._row_2._x,
+            self._row_2._y,
+            self._row_2._z,
+            self._row_2._w,
+        ]
+    }
+}
+impl Into<[f32; 12]> for &Matrix4x3 {
+    fn into(self) -> [f32; 12] {
+        [
+            self._row_0._x,
+            self._row_0._y,
+            self._row_0._z,
+            self._row_0._w,
+            self._row_1._x,
+            self._row_1._y,
+            self._row_1._z,
+            self._row_1._w,
+            self._row_2._x,
+            self._row_2._y,
+            self._row_2._z,
+            self._row_2._w,
+        ]
+    }
+}
+
 impl Display for Matrix4x3 {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}\n{}\n{}\n", self._row_0, self._row_1, self._row_2)

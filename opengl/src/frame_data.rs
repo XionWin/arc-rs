@@ -44,6 +44,14 @@ impl FrameData {
         ));
     }
 
+    pub fn get_calls(&self) -> &[Call] {
+        &self._calls
+    }
+
+    pub fn get_frag_uniforms(&self) -> &[FragUniform] {
+        &self._frag_uniforms
+    }
+
     pub fn reset(&mut self) {
         self._calls.clear();
         self._vertices.clear();

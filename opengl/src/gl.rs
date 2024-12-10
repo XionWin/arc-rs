@@ -201,6 +201,14 @@ pub fn get_uniform_location(program_id: c_uint, name: &str) -> c_int {
     }
 }
 
+pub fn uniform_1i(location: c_int, v: c_int) {
+    unsafe { gl::Uniform1i(location, v) }
+}
+
+pub fn uniform_1f(location: c_int, v: c_float) {
+    unsafe { gl::Uniform1f(location, v) }
+}
+
 pub fn uniform2i(location: c_int, x: c_int, y: c_int) {
     unsafe { gl::Uniform2i(location, x, y) }
 }
@@ -209,12 +217,18 @@ pub fn uniform2f(location: c_int, x: c_float, y: c_float) {
     unsafe { gl::Uniform2f(location, x, y) }
 }
 
-pub fn uniform_1i(location: c_int, v: c_int) {
-    unsafe { gl::Uniform1i(location, v) }
+pub fn uniform4i(location: c_int, x: c_int, y: c_int, z: c_int, w: c_int) {
+    unsafe { gl::Uniform4i(location, x, y, z, w) }
+}
+pub fn uniform4iv(location: c_int, value: &[c_int]) {
+    unsafe { gl::Uniform4iv(location, value.len() as _, value.as_ptr()) }
 }
 
-pub fn uniform_1f(location: c_int, v: c_float) {
-    unsafe { gl::Uniform1f(location, v) }
+pub fn uniform4f(location: c_int, x: c_float, y: c_float, z: c_float, w: c_float) {
+    unsafe { gl::Uniform4f(location, x, y, z, w) }
+}
+pub fn uniform4fv(location: c_int, value: &[c_float]) {
+    unsafe { gl::Uniform4fv(location, value.len() as _, value.as_ptr()) }
 }
 
 pub fn viewport(x: c_int, y: c_int, width: c_int, height: c_int) {
@@ -288,7 +302,7 @@ pub fn delete_buffer(buffer_id: c_uint) {
     delete_buffers(1, &vec![buffer_id])
 }
 
-pub fn get_programiv(program_id: c_uint, param: crate::def::GetProgramParameterName) -> c_uint {
+pub fn get_programiv(program_id: c_uint, param: crate::def::GetProgramParameterName) -> c_int {
     let mut buffer = 0i32;
     unsafe {
         gl::GetProgramiv(program_id, param as _, &mut buffer);
@@ -300,7 +314,7 @@ pub fn get_programiv(program_id: c_uint, param: crate::def::GetProgramParameterN
             None => panic!("get_programiv faild, error: NONE"),
         }
     }
-    buffer as _
+    buffer
 }
 
 pub fn get_attrib_location(program_id: c_uint, name: &str) -> c_uint {

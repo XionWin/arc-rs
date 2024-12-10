@@ -33,7 +33,12 @@ impl graphic::Renderer for GLRenderer {
         self._frame_data.borrow_mut().reset();
     }
     fn render(&self) {
-        self._program.uniform1();
+        let frame_data = self._frame_data.borrow();
+        let frag_uniforms = frame_data.get_frag_uniforms();
+        for call in frame_data.get_calls() {
+            let frag_uniform = frag_uniforms.get(call.uniform_offset).unwrap();
+            self._program.set_uniform_frag(frag_uniform);
+        }
     }
 
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {

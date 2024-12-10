@@ -29,3 +29,12 @@ where
         }
     }
 }
+
+impl<T> Into<[f32; 2]> for &Extent<T>
+where
+    T: Number,
+{
+    fn into(self) -> [f32; 2] {
+        [self.x.into_f32(), self.y.into_f32()]
+    }
+}

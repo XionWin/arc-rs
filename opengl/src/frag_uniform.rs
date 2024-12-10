@@ -49,6 +49,70 @@ impl From<&dyn vector::State> for FragUniform {
     }
 }
 
+impl Into<[f32; 44]> for &FragUniform {
+    fn into(self) -> [f32; 44] {
+        let extent = Into::<[f32; 2]>::into(&self._extent);
+        let scissor_matrix = Into::<[f32; 12]>::into(&self._scissor_matrix);
+        let scissor_extent = Into::<[f32; 2]>::into(&self._scissor_extent);
+        let scissor_scale = Into::<[f32; 2]>::into(&self._scissor_scale);
+        let paint_matrix = Into::<[f32; 12]>::into(&self._paint_matrix);
+        let inner_color = Into::<[f32; 4]>::into(&self._inner_color);
+        let outer_color = Into::<[f32; 4]>::into(&self._outer_color);
+        [
+            self._type,
+            self._font_type,
+            self._radius,
+            self._feather,
+            self._stroke_multiple,
+            self._stroke_threshold,
+            extent[0],
+            extent[1],
+            scissor_matrix[0],
+            scissor_matrix[1],
+            scissor_matrix[2],
+            scissor_matrix[3],
+            scissor_matrix[4],
+            scissor_matrix[5],
+            scissor_matrix[6],
+            scissor_matrix[7],
+            scissor_matrix[8],
+            scissor_matrix[9],
+            scissor_matrix[10],
+            scissor_matrix[11],
+            scissor_extent[0],
+            scissor_extent[1],
+            scissor_scale[0],
+            scissor_scale[1],
+            paint_matrix[0],
+            paint_matrix[1],
+            paint_matrix[2],
+            paint_matrix[3],
+            paint_matrix[4],
+            paint_matrix[5],
+            paint_matrix[6],
+            paint_matrix[7],
+            paint_matrix[8],
+            paint_matrix[9],
+            paint_matrix[10],
+            paint_matrix[11],
+            inner_color[0],
+            inner_color[1],
+            inner_color[2],
+            inner_color[3],
+            outer_color[0],
+            outer_color[1],
+            outer_color[2],
+            outer_color[3],
+        ]
+    }
+}
+
+impl Into<[f32; 44]> for FragUniform {
+    fn into(self) -> [f32; 44] {
+        Into::<[f32; 44]>::into(&self)
+    }
+}
+
 fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
     FragUniform {
         _type: FragUniformType::FillGradient.into(),
