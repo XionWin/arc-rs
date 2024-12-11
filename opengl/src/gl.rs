@@ -14,6 +14,16 @@ where
     gl::load_with(load_func)
 }
 
+pub fn enable_multisample() {
+    unsafe {
+        gl::Enable(gl::MULTISAMPLE);
+        gl::Hint(gl::LINE_SMOOTH_HINT, gl::NICEST);
+        gl::Hint(gl::POLYGON_SMOOTH_HINT, gl::NICEST);
+        gl::Enable(gl::LINE_SMOOTH);
+        gl::Enable(gl::POLYGON_SMOOTH);
+    }
+}
+
 pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {
     unsafe { gl::ClearColor(r, g, b, a) };
 }

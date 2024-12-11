@@ -1,8 +1,25 @@
-use std::{cell::RefCell, ffi::c_uint, rc::Rc};
+use std::{borrow::Borrow, cell::RefCell, ffi::c_uint, rc::Rc};
 
 use graphic::Texture;
 
 use crate::FrameData;
+
+#[derive(Debug)]
+pub struct AttributeLocation {
+    pub name: String,
+    pub offset: usize,
+    pub len: usize,
+}
+
+impl AttributeLocation {
+    pub fn new(name: &str, offset: usize, len: usize) -> Self {
+        Self {
+            name: String::from(name),
+            offset,
+            len,
+        }
+    }
+}
 
 #[derive(Debug)]
 pub struct GLRenderer {
@@ -10,6 +27,7 @@ pub struct GLRenderer {
     _vbo: c_uint,
     _vfo: c_uint,
     _program: crate::Program,
+    _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
@@ -25,6 +43,10 @@ impl GLRenderer {
             _vbo: crate::gl::gen_buffer(),
             _vfo: crate::gl::gen_frame_buffer(),
             _program: crate::Program::new("resource/shader/arc.vert", "resource/shader/arc.frag"),
+            _attribute_locations: Box::new([
+                AttributeLocation::new("aPos", 0, 2),
+                AttributeLocation::new("aCoord", 2, 2),
+            ]),
             _frame_data: RefCell::new(FrameData::new()),
             _textures: RefCell::new(Vec::new()),
         }
@@ -47,12 +69,13 @@ impl graphic::Renderer for GLRenderer {
         bind_vertex_array(self._vao);
         let vertices = frame_data.get_vertices();
         // binding vertices
-        bind_buffer(self._program.id, self._vbo, vertices);
+        bind_buffer(self, vertices);
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
         self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
 
+        crate::gl::enable_multisample();
         crate::gl::enable(crate::def::EnableCap::Blend);
         crate::gl::blend_func(
             crate::def::BlendingFactorSrc::SrcAlpha,
@@ -153,32 +176,26 @@ impl graphic::Renderer for GLRenderer {
 fn bind_vertex_array(vao: c_uint) {
     crate::gl::bind_vertex_array(vao);
 }
-fn bind_buffer(program_id: c_uint, vbo: c_uint, vertices: &[core::Vertex2]) {
-    crate::gl::bind_buffer(crate::def::BufferTarget::ArrayBuffer, vbo);
+fn bind_buffer<T>(renderer: &GLRenderer, vertices: &[T]) {
+    crate::gl::bind_buffer(crate::def::BufferTarget::ArrayBuffer, renderer._vbo);
     crate::gl::buffer_data(
         crate::def::BufferTarget::ArrayBuffer,
         vertices,
         crate::def::BufferUsageHint::StaticDraw,
     );
 
-    let vertex_idx = crate::gl::get_attrib_location(program_id, "aPos");
-    crate::gl::enable_vertex_attrib_array(vertex_idx);
-    crate::gl::vertex_attrib_pointer_f32(
-        vertex_idx,
-        2,
-        false,
-        std::mem::size_of::<core::Vertex2>() as _,
-        0,
-    );
-    let coord_idx = crate::gl::get_attrib_location(program_id, "aCoord");
-    crate::gl::enable_vertex_attrib_array(coord_idx);
-    crate::gl::vertex_attrib_pointer_f32(
-        coord_idx,
-        2,
-        false,
-        std::mem::size_of::<core::Vertex2>() as _,
-        (std::mem::size_of::<f32>() * 2) as _,
-    );
+    for attribute_location in Borrow::<[AttributeLocation]>::borrow(&renderer._attribute_locations)
+    {
+        let index = crate::gl::get_attrib_location(renderer._program.id, &attribute_location.name);
+        crate::gl::enable_vertex_attrib_array(index);
+        crate::gl::vertex_attrib_pointer_f32(
+            index,
+            attribute_location.len as _,
+            false,
+            std::mem::size_of::<T>() as _,
+            (std::mem::size_of::<f32>() * attribute_location.offset) as _,
+        );
+    }
 }
 
 impl Drop for GLRenderer {

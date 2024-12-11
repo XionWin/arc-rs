@@ -138,9 +138,10 @@ impl Window {
         // Unlike the other example above, nobody created a context for your window,
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
+        set_multisample(&video_subsystem);
+
         let renderer = opengl::GLRenderer::new(|name| get_proc_address(&video_subsystem, name));
         let graphic = graphic::Graphic::new(Rc::new(renderer));
-
         Ok(Window {
             parameter,
             sdl_context,
@@ -154,6 +155,32 @@ impl Window {
             graphic: Box::new(graphic),
         })
     }
+}
+
+pub fn set_multisample(video_subsystem: &VideoSubsystem) {
+    let gl_attr: sdl2::video::gl_attr::GLAttr<'_> = video_subsystem.gl_attr();
+    sdl2::video::gl_attr::GLAttr::set_context_flags(&gl_attr)
+        .debug()
+        .set();
+    sdl2::video::gl_attr::GLAttr::set_context_profile(
+        &gl_attr,
+        sdl2::video::GLProfile::Compatibility,
+    );
+    sdl2::video::gl_attr::GLAttr::set_context_major_version(&gl_attr, 2);
+    sdl2::video::gl_attr::GLAttr::set_context_minor_version(&gl_attr, 0);
+
+    sdl2::video::gl_attr::GLAttr::set_red_size(&gl_attr, 8);
+    sdl2::video::gl_attr::GLAttr::set_green_size(&gl_attr, 8);
+    sdl2::video::gl_attr::GLAttr::set_blue_size(&gl_attr, 8);
+    sdl2::video::gl_attr::GLAttr::set_alpha_size(&gl_attr, 8);
+
+    sdl2::video::gl_attr::GLAttr::set_buffer_size(&gl_attr, 32);
+    sdl2::video::gl_attr::GLAttr::set_depth_size(&gl_attr, 32);
+
+    sdl2::video::gl_attr::GLAttr::set_double_buffer(&gl_attr, true);
+    sdl2::video::gl_attr::GLAttr::set_multisample_buffers(&gl_attr, 1);
+    sdl2::video::gl_attr::GLAttr::set_multisample_samples(&gl_attr, 16);
+    sdl2::video::gl_attr::GLAttr::set_accelerated_visual(&gl_attr, true);
 }
 
 pub fn get_proc_address(video_subsystem: &VideoSubsystem, name: &str) -> *const std::ffi::c_void {
