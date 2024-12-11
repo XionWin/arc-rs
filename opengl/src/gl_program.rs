@@ -20,7 +20,7 @@ impl Program {
             Shader::new(crate::def::ShaderType::VertexShader, vertex_shader_path).load();
         let fragment_shader =
             Shader::new(crate::def::ShaderType::FragmentShader, fragment_shader_path).load();
-        use_program(program_id, vertex_shader.id, fragment_shader.id);
+        link_program(program_id, vertex_shader.id, fragment_shader.id);
 
         let attribute_locations = get_attribute_locations(program_id);
         Self {
@@ -32,7 +32,7 @@ impl Program {
     }
 
     pub fn use_program(&self) {
-        use_program(self.id, self._vertex_shader.id, self._fragment_shader.id);
+        crate::gl::use_program(self.id);
     }
 
     pub fn set_viewport(&self, value: core::Rect<i32>) {
@@ -42,31 +42,33 @@ impl Program {
             value.size.width,
             value.size.height,
         );
-        uniform_2f(
+        crate::gl::uniform_2f(
             self._attribute_locations["aViewport"],
             value.size.width as _,
             value.size.height as _,
         );
-        uniform_2f(self._attribute_locations["aOffset"], 0f32, 0f32);
+        crate::gl::uniform_2f(self._attribute_locations["aOffset"], 0f32, 0f32);
     }
 
     pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {
-        uniform_1i(self._attribute_locations["aPointSize"], value);
+        crate::gl::uniform_1i(self._attribute_locations["aPointSize"], value);
     }
     pub fn set_uniform_frag(&self, value: &FragUniform) {
-        set_frag_uniform(self._attribute_locations["aFrag"], value);
+        crate::gl::uniform_4fv(
+            self._attribute_locations["aFrag"],
+            &Into::<[f32; 44]>::into(value),
+        );
     }
     pub fn set_texture_id(&self, texture_id: c_uint) {
-        uniform_1i(self._attribute_locations["aTexture"], 0i32);
+        crate::gl::uniform_1i(self._attribute_locations["aTexture"], 0i32);
         crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
     }
 }
 
-fn use_program(program_id: c_uint, vertex_shader_id: c_uint, fragment_shader_id: c_uint) {
+fn link_program(program_id: c_uint, vertex_shader_id: c_uint, fragment_shader_id: c_uint) {
     crate::gl::attach_shader(program_id, vertex_shader_id);
     crate::gl::attach_shader(program_id, fragment_shader_id);
     crate::gl::link_program(program_id);
-    crate::gl::use_program(program_id);
     crate::gl::check_link_status(program_id);
 }
 
@@ -88,20 +90,6 @@ fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_int> {
         result.insert(String::from(name), index);
     }
     result
-}
-
-fn uniform_1i(location: c_int, v: std::ffi::c_int) {
-    crate::gl::uniform_1i(location, v);
-}
-fn uniform_2i(location: c_int, v0: std::ffi::c_int, v1: std::ffi::c_int) {
-    crate::gl::uniform_2i(location, v0, v1);
-}
-fn uniform_2f(location: c_int, v0: std::ffi::c_float, v1: std::ffi::c_float) {
-    crate::gl::uniform_2f(location, v0, v1);
-}
-
-fn set_frag_uniform(location: c_int, value: &FragUniform) {
-    crate::gl::uniform_4fv(location, &Into::<[f32; 44]>::into(value));
 }
 
 impl Drop for Program {
