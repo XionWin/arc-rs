@@ -166,8 +166,6 @@ pub fn set_multisample(video_subsystem: &VideoSubsystem) {
         &gl_attr,
         sdl2::video::GLProfile::Compatibility,
     );
-    sdl2::video::gl_attr::GLAttr::set_context_major_version(&gl_attr, 2);
-    sdl2::video::gl_attr::GLAttr::set_context_minor_version(&gl_attr, 0);
 
     sdl2::video::gl_attr::GLAttr::set_red_size(&gl_attr, 8);
     sdl2::video::gl_attr::GLAttr::set_green_size(&gl_attr, 8);
@@ -181,6 +179,9 @@ pub fn set_multisample(video_subsystem: &VideoSubsystem) {
     sdl2::video::gl_attr::GLAttr::set_multisample_buffers(&gl_attr, 1);
     sdl2::video::gl_attr::GLAttr::set_multisample_samples(&gl_attr, 16);
     sdl2::video::gl_attr::GLAttr::set_accelerated_visual(&gl_attr, true);
+
+    let r1 = sdl2::video::gl_attr::GLAttr::multisample_samples(&gl_attr);
+    println!("multisample_samples: {:?}", r1);
 }
 
 pub fn get_proc_address(video_subsystem: &VideoSubsystem, name: &str) -> *const std::ffi::c_void {
