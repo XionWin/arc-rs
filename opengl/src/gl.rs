@@ -209,25 +209,25 @@ pub fn uniform_1f(location: c_int, v: c_float) {
     unsafe { gl::Uniform1f(location, v) }
 }
 
-pub fn uniform2i(location: c_int, x: c_int, y: c_int) {
+pub fn uniform_2i(location: c_int, x: c_int, y: c_int) {
     unsafe { gl::Uniform2i(location, x, y) }
 }
 
-pub fn uniform2f(location: c_int, x: c_float, y: c_float) {
+pub fn uniform_2f(location: c_int, x: c_float, y: c_float) {
     unsafe { gl::Uniform2f(location, x, y) }
 }
 
-pub fn uniform4i(location: c_int, x: c_int, y: c_int, z: c_int, w: c_int) {
+pub fn uniform_4i(location: c_int, x: c_int, y: c_int, z: c_int, w: c_int) {
     unsafe { gl::Uniform4i(location, x, y, z, w) }
 }
-pub fn uniform4iv(location: c_int, value: &[c_int]) {
+pub fn uniform_4iv(location: c_int, value: &[c_int]) {
     unsafe { gl::Uniform4iv(location, value.len() as _, value.as_ptr()) }
 }
 
-pub fn uniform4f(location: c_int, x: c_float, y: c_float, z: c_float, w: c_float) {
+pub fn uniform_4f(location: c_int, x: c_float, y: c_float, z: c_float, w: c_float) {
     unsafe { gl::Uniform4f(location, x, y, z, w) }
 }
-pub fn uniform4fv(location: c_int, value: &[c_float]) {
+pub fn uniform_4fv(location: c_int, value: &[c_float]) {
     unsafe { gl::Uniform4fv(location, value.len() as _, value.as_ptr()) }
 }
 

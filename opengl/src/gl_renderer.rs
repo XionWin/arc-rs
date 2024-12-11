@@ -34,6 +34,28 @@ impl GLRenderer {
 impl graphic::Renderer for GLRenderer {
     fn init(&self) {
         self._program.use_program();
+
+        bind_vertex_array(self._vao);
+
+        let vertex_idx = crate::gl::get_attrib_location(self._program.id, "aPos");
+        crate::gl::enable_vertex_attrib_array(vertex_idx);
+
+        crate::gl::vertex_attrib_pointer_f32(
+            vertex_idx,
+            2,
+            false,
+            std::mem::size_of::<core::Vertex2>() as _,
+            0,
+        );
+        let coord_idx = crate::gl::get_attrib_location(self._program.id, "aCoord");
+        crate::gl::enable_vertex_attrib_array(coord_idx);
+        crate::gl::vertex_attrib_pointer_f32(
+            coord_idx,
+            2,
+            false,
+            std::mem::size_of::<core::Vertex2>() as _,
+            (std::mem::size_of::<f32>() * 2) as _,
+        );
     }
     fn begin_render(&self) {
         self._frame_data.borrow_mut().reset();
@@ -42,13 +64,20 @@ impl graphic::Renderer for GLRenderer {
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
 
+        bind_vertex_array(self._vao);
         let vertices = frame_data.get_vertices();
         // binding vertices
-        bind_vertex_array(self._vao);
         bind_buffer(self._vbo, vertices);
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
+        self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
+
+        crate::gl::enable(crate::def::EnableCap::Blend);
+        crate::gl::blend_func(
+            crate::def::BlendingFactorSrc::SrcAlpha,
+            crate::def::BlendingFactorDest::OneMinusSrcAlpha,
+        );
 
         for call in frame_data.get_calls() {
             let frag_uniform = frag_uniforms.get(call.uniform_offset).unwrap();
@@ -57,13 +86,14 @@ impl graphic::Renderer for GLRenderer {
                 self._program.set_texture_id(texture_id);
             }
 
-            let primitive_type = match call.call_type {
+            let mut primitive_type = match call.call_type {
                 crate::CallType::Fill => crate::def::PrimitiveType::TriangleFan,
                 crate::CallType::ConvexFill => crate::def::PrimitiveType::TriangleFan,
                 crate::CallType::Stroke => crate::def::PrimitiveType::TriangleStrip,
                 crate::CallType::Image => crate::def::PrimitiveType::TriangleFan,
             };
 
+            primitive_type = crate::def::PrimitiveType::Points;
             crate::gl::draw_arrays(
                 primitive_type,
                 call.vertex_offset as _,
@@ -148,10 +178,7 @@ fn bind_buffer(vbo: c_uint, vertices: &[core::Vertex2]) {
     crate::gl::bind_buffer(crate::def::BufferTarget::ArrayBuffer, vbo);
     crate::gl::buffer_data(
         crate::def::BufferTarget::ArrayBuffer,
-        &vertices
-            .iter()
-            .flat_map(|v| [v.position.x, v.position.y, v.coorinate.x, v.coorinate.y])
-            .collect::<Vec<f32>>(),
+        vertices,
         crate::def::BufferUsageHint::StaticDraw,
     );
 }

@@ -35,7 +35,21 @@ impl Program {
         use_program(self.id, self._vertex_shader.id, self._fragment_shader.id);
     }
 
-    #[allow(dead_code)]
+    pub fn set_viewport(&self, value: core::Rect<i32>) {
+        crate::gl::viewport(
+            value.location.x,
+            value.location.y,
+            value.size.width,
+            value.size.height,
+        );
+        uniform_2i(
+            self._attribute_locations["aViewport"],
+            value.size.width,
+            value.size.height,
+        );
+        uniform_2i(self._attribute_locations["aOffset"], 0, 0);
+    }
+
     pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {
         uniform_1i(self._attribute_locations["aPointSize"], value);
     }
@@ -79,9 +93,12 @@ fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_int> {
 fn uniform_1i(location: c_int, v: std::ffi::c_int) {
     crate::gl::uniform_1i(location, v);
 }
+fn uniform_2i(location: c_int, v0: std::ffi::c_int, v1: std::ffi::c_int) {
+    crate::gl::uniform_2i(location, v0, v1);
+}
 
 fn set_frag_uniform(location: c_int, value: &FragUniform) {
-    crate::gl::uniform4fv(location, &Into::<[f32; 44]>::into(value));
+    crate::gl::uniform_4fv(location, &Into::<[f32; 44]>::into(value));
 }
 
 impl Drop for Program {

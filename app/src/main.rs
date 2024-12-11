@@ -34,8 +34,8 @@ fn main() {
 
             canvas.borrow().render();
             let rectangle = vector::Rectangle::new(
-                100,
-                100,
+                0,
+                0,
                 100,
                 100,
                 Style {
