@@ -177,7 +177,7 @@ pub fn set_multisample(video_subsystem: &VideoSubsystem) {
 
     sdl2::video::gl_attr::GLAttr::set_double_buffer(&gl_attr, true);
     sdl2::video::gl_attr::GLAttr::set_multisample_buffers(&gl_attr, 1);
-    sdl2::video::gl_attr::GLAttr::set_multisample_samples(&gl_attr, 16);
+    sdl2::video::gl_attr::GLAttr::set_multisample_samples(&gl_attr, 2);
     sdl2::video::gl_attr::GLAttr::set_accelerated_visual(&gl_attr, true);
 
     let r1 = sdl2::video::gl_attr::GLAttr::multisample_samples(&gl_attr);
