@@ -1,5 +1,4 @@
 mod active_uniform_type;
-mod begin_mode;
 mod blending_factor_dest;
 mod blending_factor_src;
 mod buffer_target;
@@ -28,7 +27,6 @@ mod texture_wrap_mode;
 mod vertex_attrib_pointer_type;
 
 pub use active_uniform_type::*;
-pub use begin_mode::*;
 pub use blending_factor_dest::*;
 pub use blending_factor_src::*;
 pub use buffer_target::*;

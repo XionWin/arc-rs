@@ -86,14 +86,13 @@ impl graphic::Renderer for GLRenderer {
                 self._program.set_texture_id(texture_id);
             }
 
-            let mut primitive_type = match call.call_type {
+            let primitive_type = match call.call_type {
                 crate::CallType::Fill => crate::def::PrimitiveType::TriangleFan,
                 crate::CallType::ConvexFill => crate::def::PrimitiveType::TriangleFan,
                 crate::CallType::Stroke => crate::def::PrimitiveType::TriangleStrip,
                 crate::CallType::Image => crate::def::PrimitiveType::TriangleFan,
             };
 
-            primitive_type = crate::def::PrimitiveType::Points;
             crate::gl::draw_arrays(
                 primitive_type,
                 call.vertex_offset as _,
