@@ -36,10 +36,20 @@ impl graphic::Renderer for GLRenderer {
         self._program.use_program();
 
         bind_vertex_array(self._vao);
+    }
+    fn begin_render(&self) {
+        self._frame_data.borrow_mut().reset();
+    }
+    fn render(&self) {
+        let frame_data = self._frame_data.borrow();
+        let frag_uniforms = frame_data.get_frag_uniforms();
 
+        bind_vertex_array(self._vao);
+        let vertices = frame_data.get_vertices();
+        // binding vertices
+        bind_buffer(self._vbo, vertices);
         let vertex_idx = crate::gl::get_attrib_location(self._program.id, "aPos");
         crate::gl::enable_vertex_attrib_array(vertex_idx);
-
         crate::gl::vertex_attrib_pointer_f32(
             vertex_idx,
             2,
@@ -56,18 +66,6 @@ impl graphic::Renderer for GLRenderer {
             std::mem::size_of::<core::Vertex2>() as _,
             (std::mem::size_of::<f32>() * 2) as _,
         );
-    }
-    fn begin_render(&self) {
-        self._frame_data.borrow_mut().reset();
-    }
-    fn render(&self) {
-        let frame_data = self._frame_data.borrow();
-        let frag_uniforms = frame_data.get_frag_uniforms();
-
-        bind_vertex_array(self._vao);
-        let vertices = frame_data.get_vertices();
-        // binding vertices
-        bind_buffer(self._vbo, vertices);
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);

@@ -42,12 +42,12 @@ impl Program {
             value.size.width,
             value.size.height,
         );
-        uniform_2i(
+        uniform_2f(
             self._attribute_locations["aViewport"],
-            value.size.width,
-            value.size.height,
+            value.size.width as _,
+            value.size.height as _,
         );
-        uniform_2i(self._attribute_locations["aOffset"], 0, 0);
+        uniform_2f(self._attribute_locations["aOffset"], 0f32, 0f32);
     }
 
     pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {
@@ -95,6 +95,9 @@ fn uniform_1i(location: c_int, v: std::ffi::c_int) {
 }
 fn uniform_2i(location: c_int, v0: std::ffi::c_int, v1: std::ffi::c_int) {
     crate::gl::uniform_2i(location, v0, v1);
+}
+fn uniform_2f(location: c_int, v0: std::ffi::c_float, v1: std::ffi::c_float) {
+    crate::gl::uniform_2f(location, v0, v1);
 }
 
 fn set_frag_uniform(location: c_int, value: &FragUniform) {

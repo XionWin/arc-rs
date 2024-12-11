@@ -115,7 +115,7 @@ impl Into<[f32; 44]> for FragUniform {
 
 fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
     FragUniform {
-        _type: FragUniformType::FillStencil.into(),
+        _type: FragUniformType::FillGradient.into(),
         _font_type: 0f32, // DEFAULT
         _radius: state.get_paint().get_radius(),
         _feather: state.get_paint().get_feather(),
@@ -145,7 +145,7 @@ fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
 
 fn from_fill_state(state: &vector::FillState) -> FragUniform {
     FragUniform {
-        _type: FragUniformType::FillStencil.into(),
+        _type: FragUniformType::FillGradient.into(),
         _font_type: 0f32, // DEFAULT
         _radius: state.get_paint().get_radius(),
         _feather: state.get_paint().get_feather(),
