@@ -1,4 +1,4 @@
-use std::fmt::Debug;
+use std::{borrow::Borrow, fmt::Debug};
 
 pub trait State: core::AsAny + Debug {
     fn get_paint(&self) -> &core::Paint;
@@ -69,6 +69,22 @@ impl State for StrokeState {
     }
 }
 
+impl From<&core::Style> for StrokeState {
+    fn from(value: &core::Style) -> Self {
+        let stroke_width = value.stroke_width.unwrap_or_default() as _;
+        Self {
+            _paint: Into::<core::Paint>::into(value.background.borrow()),
+            _stroke_width: stroke_width,
+            _stroke_multiple: (stroke_width / 2f32 + crate::parameter::FRINGE_WIDTH / 2f32)
+                / crate::parameter::FRINGE_WIDTH,
+            _line_join: core::LineJoin::default(),
+            _line_cap: core::LineCap::default(),
+            _transform: core::Matrix2D::default(),
+            _scissor: None,
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct FillState {
     _paint: core::Paint,
@@ -105,6 +121,16 @@ impl State for FillState {
         match &self._scissor {
             Some(x) => Some(x),
             None => None,
+        }
+    }
+}
+
+impl From<&core::Style> for FillState {
+    fn from(value: &core::Style) -> Self {
+        Self {
+            _paint: Into::<core::Paint>::into(value.background.borrow()),
+            _transform: core::Matrix2D::default(),
+            _scissor: None,
         }
     }
 }

@@ -8,7 +8,7 @@ pub struct Rectangle {
 }
 
 impl Rectangle {
-    pub fn new(x: i32, y: i32, width: i32, height: i32) -> Self {
+    pub fn new(x: i32, y: i32, width: i32, height: i32, style: Style) -> Self {
         let commands = vec![
             // Command::MoveTo(Point::new(x as _, y as _)),
             // Command::LineTo(Point::new(x as _, (y + height) as _)),
@@ -34,7 +34,7 @@ impl Rectangle {
 
         Self {
             rect: Rect::new(x, y, width, height),
-            style: Style::default(),
+            style,
             commands,
         }
     }

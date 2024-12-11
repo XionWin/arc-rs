@@ -2,7 +2,7 @@ mod sketch;
 
 use sketch::*;
 
-use core::Window;
+use core::{Style, Window};
 use std::cell::RefCell;
 
 fn main() {
@@ -33,7 +33,20 @@ fn main() {
             }
 
             canvas.borrow().render();
-            let rectangle = vector::Rectangle::new(100, 100, 100, 100);
+            let rectangle = vector::Rectangle::new(
+                100,
+                100,
+                100,
+                100,
+                Style {
+                    background: Box::new(core::ColorBackground::new(
+                        core::Color::Red,
+                        core::Color::Blue,
+                    )),
+                    stroke: core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+                    stroke_width: Some(1i32),
+                },
+            );
             g.draw_shape(&rectangle);
         },
     );

@@ -21,14 +21,14 @@ impl<T: core::Shape + ?Sized> VectorShape for T {
     }
 }
 
-fn get_stroke_primitive(_commands: &[core::Command], _style: &core::Style) -> Option<Primitive> {
+fn get_stroke_primitive(_commands: &[core::Command], style: &core::Style) -> Option<Primitive> {
     Some(Primitive::new(
         Box::new([]),
-        Box::new(StrokeState::new(1f32)),
+        Box::new(Into::<StrokeState>::into(style)),
     ))
 }
 
-fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Option<Primitive> {
+fn get_fill_primitive(commands: &[core::Command], style: &core::Style) -> Option<Primitive> {
     let _is_closed = commands.iter().any(|x| x == &core::Command::Close);
     // util::print_debug!("is_closed: {}", is_closed);
     let points = get_points(commands);
@@ -43,11 +43,10 @@ fn get_fill_primitive(commands: &[core::Command], _style: &core::Style) -> Optio
         ),
         None => None,
     };
-
     match vertices {
         Some(vertices) => Some(Primitive::new(
             Box::<[core::Vertex2]>::from(vertices),
-            Box::new(FillState::default()),
+            Box::new(Into::<FillState>::into(style)),
         )),
         None => None,
     }

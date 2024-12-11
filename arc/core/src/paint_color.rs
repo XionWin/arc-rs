@@ -29,3 +29,12 @@ impl Default for PaintColor {
         }
     }
 }
+
+impl Clone for PaintColor {
+    fn clone(&self) -> Self {
+        Self {
+            _inner_color: self._inner_color.clone(),
+            _outer_color: self._outer_color.clone(),
+        }
+    }
+}
