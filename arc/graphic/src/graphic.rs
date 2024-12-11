@@ -22,7 +22,7 @@ impl core::Graphic for Graphic {
     }
 
     fn render(&self) {
-        // self.renderer.render();
+        self.renderer.render();
     }
 
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
@@ -62,7 +62,7 @@ impl core::Graphic for Graphic {
         let fill_primitive = shape.get_fill_primitive();
         match fill_primitive {
             Some(fill_primitive) => {
-                util::print_debug!("fill_primitive: {}", fill_primitive);
+                // util::print_debug!("fill_primitive: {}", fill_primitive);
                 self.renderer.add_primitive(fill_primitive);
             }
             None => {}

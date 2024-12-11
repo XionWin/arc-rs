@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, rc::Rc};
+use std::{borrow::Borrow, cell::RefCell, rc::Rc};
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
@@ -10,7 +10,7 @@ pub struct Window {
     pub(crate) video_subsystem: sdl2::VideoSubsystem,
     pub(crate) sdl_window: sdl2::video::Window,
     pub(crate) _gl_context: sdl2::video::GLContext,
-    pub(crate) fps_counter: FpsCounter,
+    pub(crate) fps_counter: RefCell<FpsCounter>,
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
     pub background_color: core::Color,
@@ -41,10 +41,9 @@ impl core::Window for Window {
                     _ => {}
                 }
             }
-            self.frame_init();
-            self.graphic.begin_render();
+            self.begin_render();
             on_render(self);
-            self.graphic.render();
+            self.render();
             self.swap_buffers();
             match &mut self.fps_limiter {
                 Some(fps_limiter) => fps_limiter.delay(),
@@ -71,12 +70,13 @@ impl core::Window for Window {
         }
     }
 
-    fn init(&mut self) {
+    fn init(&self) {
         self.graphic.init();
     }
 
-    fn frame_init(&mut self) {
-        self.fps_counter.update(|fps| {
+    fn begin_render(&self) {
+        self.get_graphic().begin_render();
+        self.fps_counter.borrow_mut().update(|fps| {
             util::print_debug!("fps: {fps:.0}");
             // util::expect!(self.sdl_window.set_title(&format!(
             //     "{} fps: {:#.0}",
@@ -86,6 +86,10 @@ impl core::Window for Window {
         });
         self.get_graphic().clear_color(self.background_color);
         self.get_graphic().clear();
+    }
+
+    fn render(&self) {
+        self.get_graphic().render();
     }
 
     fn swap_buffers(&self) {
@@ -143,7 +147,7 @@ impl Window {
             video_subsystem,
             sdl_window,
             _gl_context,
-            fps_counter: FpsCounter::new(std::time::Duration::from_secs(2)),
+            fps_counter: RefCell::new(FpsCounter::new(std::time::Duration::from_secs(2))),
             fps_limiter: None,
             title_function,
             background_color: core::Color::MidnightBlue,

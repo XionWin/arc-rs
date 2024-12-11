@@ -47,6 +47,9 @@ impl graphic::Renderer for GLRenderer {
         bind_vertex_array(self._vao);
         bind_buffer(self._vbo, vertices);
 
+        // [TEST]
+        self._program.set_uniform_point_size(5i32);
+
         for call in frame_data.get_calls() {
             let frag_uniform = frag_uniforms.get(call.uniform_offset).unwrap();
             self._program.set_uniform_frag(frag_uniform);
@@ -134,7 +137,7 @@ impl graphic::Renderer for GLRenderer {
             texture_id,
         );
 
-        util::print_debug_with_title!("frame_data", "{:?}", self._frame_data);
+        // util::print_debug_with_title!("frame_data", "{:?}", self._frame_data);
     }
 }
 
@@ -145,7 +148,10 @@ fn bind_buffer(vbo: c_uint, vertices: &[core::Vertex2]) {
     crate::gl::bind_buffer(crate::def::BufferTarget::ArrayBuffer, vbo);
     crate::gl::buffer_data(
         crate::def::BufferTarget::ArrayBuffer,
-        vertices,
+        &vertices
+            .iter()
+            .flat_map(|v| [v.position.x, v.position.y, v.coorinate.x, v.coorinate.y])
+            .collect::<Vec<f32>>(),
         crate::def::BufferUsageHint::StaticDraw,
     );
 }

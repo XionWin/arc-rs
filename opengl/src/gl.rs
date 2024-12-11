@@ -350,21 +350,21 @@ pub fn enable_vertex_attrib_array(index: c_uint) {
     }
 }
 
-pub fn draw_arrays(begin_mode: crate::def::PrimitiveType, first: c_int, count: c_int) {
+pub fn draw_arrays(primitive_type: crate::def::PrimitiveType, first: c_int, count: c_int) {
     unsafe {
-        gl::DrawArrays(begin_mode as _, first, count);
+        gl::DrawArrays(primitive_type as _, first, count);
     }
 }
 
 pub fn draw_elements<T>(
-    begin_mode: crate::def::PrimitiveType,
+    primitive_type: crate::def::PrimitiveType,
     count: c_int,
     draw_elements_type: crate::def::DrawElementsType,
     indices: Option<&[T]>,
 ) {
     unsafe {
         gl::DrawElements(
-            begin_mode as _,
+            primitive_type as _,
             match indices {
                 Some(i) => std::cmp::min(count, i.len() as _),
                 None => count,
