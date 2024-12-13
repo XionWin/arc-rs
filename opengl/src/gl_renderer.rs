@@ -56,7 +56,7 @@ impl GLRenderer {
 impl graphic::Renderer for GLRenderer {
     fn init(&self) {
         self._program.use_program();
-
+        crate::gl::enable_multisample();
         bind_vertex_array(self._vao);
     }
     fn begin_render(&self) {
@@ -75,7 +75,6 @@ impl graphic::Renderer for GLRenderer {
         self._program.set_uniform_point_size(5i32);
         self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
 
-        crate::gl::enable_multisample();
         crate::gl::enable(crate::def::EnableCap::Blend);
         crate::gl::blend_func(
             crate::def::BlendingFactorSrc::SrcAlpha,

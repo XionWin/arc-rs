@@ -71,6 +71,8 @@ impl core::Window for Window {
     }
 
     fn init(&self) {
+        set_multisample(&self.video_subsystem);
+        get_multisample(&self.video_subsystem);
         self.graphic.init();
     }
 
@@ -138,7 +140,6 @@ impl Window {
         // Unlike the other example above, nobody created a context for your window,
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
-        set_multisample(&video_subsystem);
 
         let renderer = opengl::GLRenderer::new(|name| get_proc_address(&video_subsystem, name));
         let graphic = graphic::Graphic::new(Rc::new(renderer));
@@ -157,48 +158,6 @@ impl Window {
     }
 }
 
-pub fn set_multisample(video_subsystem: &VideoSubsystem) {
-    // let gl_attr: sdl2::video::gl_attr::GLAttr<'_> = video_subsystem.gl_attr();
-    // sdl2::video::gl_attr::GLAttr::set_context_flags(&gl_attr)
-    //     .debug()
-    //     .set();
-    // sdl2::video::gl_attr::GLAttr::set_context_profile(
-    //     &gl_attr,
-    //     sdl2::video::GLProfile::Compatibility,
-    // );
-
-    // sdl2::video::gl_attr::GLAttr::set_red_size(&gl_attr, 8);
-    // sdl2::video::gl_attr::GLAttr::set_green_size(&gl_attr, 8);
-    // sdl2::video::gl_attr::GLAttr::set_blue_size(&gl_attr, 8);
-    // sdl2::video::gl_attr::GLAttr::set_alpha_size(&gl_attr, 8);
-
-    // // sdl2::video::gl_attr::GLAttr::set_buffer_size(&gl_attr, 32);
-    // // sdl2::video::gl_attr::GLAttr::set_depth_size(&gl_attr, 32);
-
-    // // sdl2::video::gl_attr::GLAttr::set_double_buffer(&gl_attr, true);
-    // sdl2::video::gl_attr::GLAttr::set_multisample_buffers(&gl_attr, 1);
-    // sdl2::video::gl_attr::GLAttr::set_multisample_samples(&gl_attr, 4);
-    // // sdl2::video::gl_attr::GLAttr::set_accelerated_visual(&gl_attr, true);
-
-    let gl_attr = video_subsystem.gl_attr();
-
-    // Don't use deprecated OpenGL functions
-    gl_attr.set_context_profile(sdl2::video::GLProfile::Core);
-
-    // Set the context into debug mode
-    gl_attr.set_context_flags().debug().set();
-
-    // Set the OpenGL context version (OpenGL 3.2)
-    gl_attr.set_context_version(4, 0);
-
-    // Enable anti-aliasing
-    gl_attr.set_multisample_buffers(1);
-    gl_attr.set_multisample_samples(4);
-
-    let r1 = sdl2::video::gl_attr::GLAttr::multisample_samples(&gl_attr);
-    println!("multisample_samples: {:?}", r1);
-}
-
 pub fn get_proc_address(video_subsystem: &VideoSubsystem, name: &str) -> *const std::ffi::c_void {
     video_subsystem.gl_get_proc_address(name) as _
 }
@@ -208,4 +167,25 @@ fn set_gl_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter)
 
     gl_attr.set_context_profile(parameter.profile.into());
     gl_attr.set_context_version(parameter.version.major, parameter.version.minor);
+}
+
+pub fn set_multisample(video_subsystem: &VideoSubsystem) {
+    let gl_attr = video_subsystem.gl_attr();
+
+    gl_attr.set_red_size(8);
+    gl_attr.set_green_size(8);
+    gl_attr.set_blue_size(8);
+    gl_attr.set_alpha_size(8);
+
+    // gl_attr.set_buffer_size(32);
+    // gl_attr.set_depth_size(32);
+
+    gl_attr.set_double_buffer(true);
+    gl_attr.set_multisample_buffers(1);
+    gl_attr.set_multisample_samples(4);
+    gl_attr.set_accelerated_visual(true);
+}
+pub fn get_multisample(video_subsystem: &VideoSubsystem) {
+    let gl_attr = video_subsystem.gl_attr();
+    println!("multisample_samples: {:?}", gl_attr.multisample_samples());
 }
