@@ -177,9 +177,6 @@ pub fn set_multisample(video_subsystem: &VideoSubsystem) {
     gl_attr.set_blue_size(8);
     gl_attr.set_alpha_size(8);
 
-    // gl_attr.set_buffer_size(32);
-    // gl_attr.set_depth_size(32);
-
     gl_attr.set_double_buffer(true);
     gl_attr.set_multisample_buffers(1);
     gl_attr.set_multisample_samples(4);
