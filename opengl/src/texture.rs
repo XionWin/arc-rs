@@ -1,10 +1,7 @@
-use std::{ffi::c_uint, rc::Rc};
-
-use crate::GLRenderer;
+use std::ffi::c_uint;
 
 #[derive(Debug)]
 pub struct Texture {
-    renderer: Rc<dyn GLRenderer>,
     id: c_uint,
     size: core::Size<i32>,
     color_type: core::ColorType,
@@ -13,13 +10,11 @@ pub struct Texture {
 
 impl Texture {
     pub fn new(
-        renderer: Rc<dyn GLRenderer>,
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
     ) -> Self {
         Self {
-            renderer,
             id: crate::gl::gen_texture(),
             size,
             color_type,
@@ -94,7 +89,7 @@ impl graphic::Texture for Texture {
 
 impl Drop for Texture {
     fn drop(&mut self) {
-        self.renderer.drop_texture(self);
+        crate::gl::delete_texture(self.id);
         util::print_debug!("texture {} droped", self.id);
     }
 }

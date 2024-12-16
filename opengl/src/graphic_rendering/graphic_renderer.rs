@@ -6,7 +6,7 @@ use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer};
 
 #[derive(Debug)]
 pub struct GraphicRenderer {
-    _mode: crate::TextureRenderingMode,
+    _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
     _vfo: c_uint,
@@ -19,7 +19,7 @@ pub struct GraphicRenderer {
 impl GraphicRenderer {
     pub fn new() -> Self {
         Self {
-            _mode: crate::TextureRenderingMode::Rgba,
+            _color_type: core::ColorType::Rgba,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),
             _vfo: crate::gl::gen_frame_buffer(),
@@ -45,20 +45,20 @@ impl GLRenderer for GraphicRenderer {
         &self._attribute_locations
     }
     fn get_color_type(&self) -> core::ColorType {
-        match self._mode {
-            crate::TextureRenderingMode::Alpha => core::ColorType::Alpha,
-            crate::TextureRenderingMode::Rgba => core::ColorType::Rgba,
-        }
+        self._color_type
     }
-    fn init(&self) {
+}
+
+impl GraphicRenderer {
+    pub fn init(&self) {
         self._program.use_program();
         crate::gl::enable_multisample();
         renderer_utility::bind_vertex_array(self._vao);
     }
-    fn begin_render(&self) {
+    pub fn begin_render(&self) {
         self._frame_data.borrow_mut().reset();
     }
-    fn render(&self) {
+    pub fn render(&self) {
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
 
@@ -99,47 +99,39 @@ impl GLRenderer for GraphicRenderer {
         }
     }
 
-    fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
+    pub fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
         crate::gl::viewport(x, y, width, height);
     }
-    fn clear_color(&self, color: core::Color) {
+    pub fn clear_color(&self, color: core::Color) {
         let rgba: core::Rgba = color.into();
         let (r, g, b, a) = rgba.into();
         crate::gl::clear_color(r, g, b, a);
     }
-    fn clear(&self) {
+    pub fn clear(&self) {
         crate::gl::clear(
             crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
         );
     }
 
-    fn create_texture(
-        self: Rc<Self>,
+    pub fn create_texture(
+        &self,
         size: core::Size<i32>,
+        color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
-        let texture = Rc::new(crate::Texture::new(
-            self.clone(),
-            size,
-            self.get_color_type(),
-            texture_filter,
-        ));
+        let texture = Rc::new(crate::Texture::new(size, color_type, texture_filter));
         self._textures.borrow_mut().push(texture.clone());
         texture
     }
 
-    fn create_texture_from_file(
-        self: Rc<Self>,
+    pub fn create_texture_from_file(
+        &self,
         path: &str,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
         use core::ImageData;
         let image_data = image::ImageData::new_from_file(path);
-        if image_data.get_color_type() != self.get_color_type() {
-            util::print_panic!("graphic_renderer create_texture_from_file color_type not matched")
-        }
         let texture = Rc::new(crate::Texture::new(
-            self.clone(),
             image_data.get_size(),
             image_data.get_color_type(),
             texture_filter,
@@ -149,11 +141,7 @@ impl GLRenderer for GraphicRenderer {
         texture
     }
 
-    fn drop_texture(&self, texture: &dyn graphic::Texture) {
-        crate::gl::delete_texture(texture.get_id());
-    }
-
-    fn add_primitive(&self, primitive: vector::Primitive) {
+    pub fn add_primitive(&self, primitive: vector::Primitive) {
         let state = primitive.get_state();
         let texture_id = match state.get_paint().get_paint_image() {
             Some(paint_image) => Some(paint_image.get_image().get_id()),
@@ -167,31 +155,6 @@ impl GLRenderer for GraphicRenderer {
         );
     }
 }
-
-// fn bind_vertex_array(vao: c_uint) {
-//     crate::gl::bind_vertex_array(vao);
-// }
-// fn bind_buffer<T>(renderer: &GraphicRenderer, vertices: &[T]) {
-//     crate::gl::bind_buffer(crate::def::BufferTarget::ArrayBuffer, renderer._vbo);
-//     crate::gl::buffer_data(
-//         crate::def::BufferTarget::ArrayBuffer,
-//         vertices,
-//         crate::def::BufferUsageHint::StaticDraw,
-//     );
-
-//     for attribute_location in Borrow::<[AttributeLocation]>::borrow(&renderer._attribute_locations)
-//     {
-//         let index = crate::gl::get_attrib_location(renderer._program.id, &attribute_location.name);
-//         crate::gl::enable_vertex_attrib_array(index);
-//         crate::gl::vertex_attrib_pointer_f32(
-//             index,
-//             attribute_location.len as _,
-//             false,
-//             std::mem::size_of::<T>() as _,
-//             (std::mem::size_of::<f32>() * attribute_location.offset) as _,
-//         );
-//     }
-// }
 
 impl Drop for GraphicRenderer {
     fn drop(&mut self) {

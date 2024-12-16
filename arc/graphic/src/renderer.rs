@@ -14,6 +14,7 @@ pub trait Renderer: Debug {
     fn create_texture(
         &self,
         size: core::Size<i32>,
+        color_type: core::ColorType,
         texture_filter: TextureFilter,
     ) -> Rc<dyn crate::Texture>;
     fn create_texture_from_file(
@@ -21,6 +22,5 @@ pub trait Renderer: Debug {
         path: &str,
         texture_filter: TextureFilter,
     ) -> Rc<dyn crate::Texture>;
-    fn drop_texture(&self, texture: &dyn Texture);
     fn draw_primitive(&self, primitive: vector::Primitive);
 }

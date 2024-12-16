@@ -14,7 +14,10 @@ mod gl_program;
 mod gl_renderer;
 mod graphic_rendering;
 mod matrix4x3;
+mod program_utility;
+mod renderer;
 mod renderer_utility;
+mod shader;
 mod texture;
 mod texture_rendering;
 
@@ -28,8 +31,6 @@ pub use matrix4x3::*;
 pub use renderer::*;
 pub use texture::*;
 
-mod renderer;
-mod shader;
 pub(crate) use gl_program::*;
 pub(crate) use gl_renderer::*;
 pub(crate) use graphic_rendering::*;

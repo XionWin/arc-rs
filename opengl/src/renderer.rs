@@ -2,8 +2,8 @@ use std::rc::Rc;
 
 #[derive(Debug)]
 pub struct Renderer {
-    _cache_renderer: Rc<crate::TextureRenderer>,
-    _graphic_renderer: Rc<crate::GraphicRenderer>,
+    _cache_renderer: crate::TextureRenderer,
+    _graphic_renderer: crate::GraphicRenderer,
 }
 
 impl Renderer {
@@ -13,48 +13,41 @@ impl Renderer {
     {
         crate::load_with(loadfn);
         Self {
-            _cache_renderer: Rc::new(crate::TextureRenderer::new()),
-            _graphic_renderer: Rc::new(crate::GraphicRenderer::new()),
+            _cache_renderer: crate::TextureRenderer::new(),
+            _graphic_renderer: crate::GraphicRenderer::new(),
         }
     }
 }
 
 impl graphic::Renderer for Renderer {
     fn init(&self) {
-        use crate::GLRenderer;
         self._graphic_renderer.init();
     }
     fn begin_render(&self) {
-        use crate::GLRenderer;
         self._graphic_renderer.begin_render();
     }
     fn render(&self) {
-        use crate::GLRenderer;
         self._graphic_renderer.render();
     }
 
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
-        use crate::GLRenderer;
         self._graphic_renderer.viewport(x, y, width, height);
     }
     fn clear_color(&self, color: core::Color) {
-        use crate::GLRenderer;
         self._graphic_renderer.clear_color(color);
     }
     fn clear(&self) {
-        use crate::GLRenderer;
         self._graphic_renderer.clear();
     }
 
     fn create_texture(
         &self,
         size: core::Size<i32>,
+        color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
-        use crate::GLRenderer;
         self._graphic_renderer
-            .clone()
-            .create_texture(size, texture_filter)
+            .create_texture(size, color_type, texture_filter)
     }
 
     fn create_texture_from_file(
@@ -62,19 +55,11 @@ impl graphic::Renderer for Renderer {
         path: &str,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
-        use crate::GLRenderer;
         self._graphic_renderer
-            .clone()
             .create_texture_from_file(path, texture_filter)
     }
 
-    fn drop_texture(&self, texture: &dyn graphic::Texture) {
-        use crate::GLRenderer;
-        self._graphic_renderer.drop_texture(texture);
-    }
-
     fn draw_primitive(&self, primitive: vector::Primitive) {
-        use crate::GLRenderer;
         self._graphic_renderer.add_primitive(primitive);
     }
 }
