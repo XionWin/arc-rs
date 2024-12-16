@@ -41,7 +41,7 @@ impl GLRenderer for TextureRenderer {
 }
 
 impl TextureRenderer {
-    pub fn draw_primitive_texture(&self, primitive: vector::Primitive) -> graphic::TextureCache {
+    pub fn draw_primitive_texture(&self, primitive: &vector::Primitive) -> graphic::TextureCache {
         self._program.use_program();
         // binding vertices
         let vertices = primitive.get_vertices();

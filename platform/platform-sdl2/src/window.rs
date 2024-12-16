@@ -72,7 +72,6 @@ impl core::Window for Window {
 
     fn init(&self) {
         set_multisample(&self.video_subsystem);
-        get_multisample(&self.video_subsystem);
         self.graphic.init();
     }
 

@@ -30,7 +30,7 @@ impl core::Graphic for Graphic {
             match fill_primitive {
                 Some(fill_primitive) => {
                     // util::print_debug!("fill_primitive: {}", fill_primitive);
-                    self.renderer.draw_primitive(fill_primitive);
+                    self.renderer.add_primitive(fill_primitive);
                 }
                 None => {}
             }

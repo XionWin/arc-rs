@@ -28,9 +28,8 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.begin_render();
     }
     fn render(&self) {
-        self._graphic_renderer.render();
         self._cache_renderer
-            .draw_primitive_texture(vector::Primitive::new(
+            .draw_primitive_texture(&vector::Primitive::new(
                 Box::new([
                     core::Vertex2::new(200f32, 200f32, 1f32, 0.5f32),
                     core::Vertex2::new(200f32, 300f32, 1f32, 0.5f32),
@@ -39,6 +38,7 @@ impl graphic::Renderer for Renderer {
                 ]),
                 Box::new(vector::FillState::default()),
             ));
+        self._graphic_renderer.render();
     }
 
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
@@ -68,7 +68,7 @@ impl graphic::Renderer for Renderer {
         Rc::new(crate::Texture::load(path, texture_filter))
     }
 
-    fn draw_primitive(&self, primitive: vector::Primitive) {
+    fn add_primitive(&self, primitive: vector::Primitive) {
         self._graphic_renderer.add_primitive(primitive);
     }
 }
