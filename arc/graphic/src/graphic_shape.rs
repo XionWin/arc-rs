@@ -2,7 +2,7 @@ use std::borrow::Borrow;
 
 pub struct GraphicShape {
     _shape: Box<dyn core::Shape>,
-    _cache: Option<Box<dyn crate::Texture>>,
+    _cache: Option<crate::ShapeCache>,
 }
 
 // impl<T: core::Shape + Sized> From<T> for GraphicShape {

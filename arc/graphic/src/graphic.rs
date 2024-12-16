@@ -1,6 +1,6 @@
 use std::{borrow::Borrow, cell::RefCell, rc::Rc};
 
-use crate::{graphic_shape, Image, RenderingComponent};
+use crate::{Image, RenderingComponent};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
@@ -20,7 +20,6 @@ impl core::Graphic for Graphic {
     fn init(&self) {
         self.renderer.init();
     }
-
     fn begin_render(&self) {
         self.renderer.begin_render();
 
@@ -37,7 +36,6 @@ impl core::Graphic for Graphic {
             }
         }
     }
-
     fn render(&self) {
         self.renderer.render();
     }
