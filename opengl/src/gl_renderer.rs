@@ -1,9 +1,13 @@
-use std::fmt::Debug;
 use std::rc::Rc;
+use std::{ffi::c_uint, fmt::Debug};
 
 use graphic::{Texture, TextureFilter};
 
 pub trait GLRenderer: Debug {
+    fn get_program(&self) -> &dyn crate::GLProgram;
+    fn get_vbo(&self) -> c_uint;
+    fn get_attribute_locations(&self) -> &[crate::AttributeLocation];
+    fn get_color_type(&self) -> core::ColorType;
     fn init(&self);
     fn begin_render(&self);
     fn render(&self);
@@ -14,7 +18,6 @@ pub trait GLRenderer: Debug {
     fn create_texture(
         self: Rc<Self>,
         size: core::Size<i32>,
-        color_type: core::ColorType,
         texture_filter: TextureFilter,
     ) -> Rc<dyn Texture>;
     fn create_texture_from_file(

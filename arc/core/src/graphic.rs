@@ -1,4 +1,4 @@
-use crate::{Color, ColorType, Image, ImageFilter, Shape, Size};
+use crate::{Color, Image, ImageFilter, Shape, Size};
 
 pub trait Graphic {
     fn init(&self);
@@ -8,12 +8,7 @@ pub trait Graphic {
     fn clear_color(&self, color: Color);
     fn clear(&self);
 
-    fn create_image(
-        &self,
-        size: Size<i32>,
-        color_type: ColorType,
-        image_filter: ImageFilter,
-    ) -> Box<dyn Image>;
+    fn create_image(&self, size: Size<i32>, image_filter: ImageFilter) -> Box<dyn Image>;
     fn load_image_from_file(&self, path: &str, image_filter: ImageFilter) -> Box<dyn Image>;
     fn draw_shape(&self, shape: &dyn Shape);
 }

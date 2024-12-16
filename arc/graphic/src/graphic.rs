@@ -37,12 +37,9 @@ impl core::Graphic for Graphic {
     fn create_image(
         &self,
         size: core::Size<i32>,
-        color_type: core::ColorType,
         image_filter: core::ImageFilter,
     ) -> Box<dyn core::Image> {
-        let texture = self
-            .renderer
-            .create_texture(size, color_type, image_filter.into());
+        let texture = self.renderer.create_texture(size, image_filter.into());
         Box::new(Image::new(texture))
     }
     fn load_image_from_file(

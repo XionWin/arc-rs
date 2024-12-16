@@ -95,6 +95,12 @@ fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_int> {
     result
 }
 
+impl crate::GLProgram for TextureRenderingProgram {
+    fn get_id(&self) -> c_uint {
+        self.id
+    }
+}
+
 impl Drop for TextureRenderingProgram {
     fn drop(&mut self) {
         crate::gl::delete_program(self.id);

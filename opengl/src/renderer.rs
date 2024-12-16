@@ -49,13 +49,12 @@ impl graphic::Renderer for Renderer {
     fn create_texture(
         &self,
         size: core::Size<i32>,
-        color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
         use crate::GLRenderer;
         self._graphic_renderer
             .clone()
-            .create_texture(size, color_type, texture_filter)
+            .create_texture(size, texture_filter)
     }
 
     fn create_texture_from_file(
