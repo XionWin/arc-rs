@@ -23,16 +23,7 @@ fn main() {
             )));
 
             canvas.borrow().load();
-        },
-        |window| {
-            let g = window.get_graphic();
 
-            match image.borrow().as_ref() {
-                Some(_v) => {}
-                None => util::print_panic!("image is null"),
-            }
-
-            canvas.borrow().render();
             let rectangle = vector::Rectangle::new(
                 0,
                 0,
@@ -47,7 +38,17 @@ fn main() {
                     stroke_width: Some(1i32),
                 },
             );
-            g.draw_shape(&rectangle);
+            g.draw_shape(Box::new(rectangle));
+        },
+        |window| {
+            let _g = window.get_graphic();
+
+            match image.borrow().as_ref() {
+                Some(_v) => {}
+                None => util::print_panic!("image is null"),
+            }
+
+            canvas.borrow().render();
         },
     );
 }

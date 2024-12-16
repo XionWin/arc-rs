@@ -28,3 +28,7 @@ pub trait GLRenderer: Debug {
     fn drop_texture(&self, texture: &dyn Texture);
     fn add_primitive(&self, primitive: vector::Primitive);
 }
+
+pub trait GLTextureRenderer: GLRenderer {
+    fn bind_texture(&self, texture: &dyn graphic::Texture);
+}

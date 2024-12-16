@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, cell::RefCell, ffi::c_uint, rc::Rc};
+use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
 use graphic::Texture;
 

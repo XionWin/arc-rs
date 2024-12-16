@@ -10,5 +10,5 @@ pub trait Graphic {
 
     fn create_image(&self, size: Size<i32>, image_filter: ImageFilter) -> Box<dyn Image>;
     fn load_image_from_file(&self, path: &str, image_filter: ImageFilter) -> Box<dyn Image>;
-    fn draw_shape(&self, shape: &dyn Shape);
+    fn draw_shape(&self, shape: Box<dyn Shape>);
 }

@@ -33,7 +33,6 @@ mod shader;
 pub(crate) use gl_program::*;
 pub(crate) use gl_renderer::*;
 pub(crate) use graphic_rendering::*;
-pub(crate) use renderer_utility::*;
 pub(crate) use shader::*;
 pub(crate) use texture_rendering::*;
 

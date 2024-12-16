@@ -1,14 +1,18 @@
-use std::borrow::Borrow;
+use std::{borrow::Borrow, cell::RefCell, rc::Rc};
 
-use crate::{Image, RenderingComponent};
+use crate::{graphic_shape, Image, RenderingComponent};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
+    _shapes: RefCell<Vec<Rc<crate::GraphicShape>>>,
 }
 
 impl Graphic {
     pub fn new(renderer: Box<dyn crate::Renderer>) -> Self {
-        Self { renderer }
+        Self {
+            renderer,
+            _shapes: RefCell::new(Vec::new()),
+        }
     }
 }
 
@@ -19,6 +23,19 @@ impl core::Graphic for Graphic {
 
     fn begin_render(&self) {
         self.renderer.begin_render();
+
+        let shapes: &Vec<Rc<crate::GraphicShape>> = &self._shapes.borrow();
+        for graphic_shape in shapes {
+            use vector::VectorShape;
+            let fill_primitive = graphic_shape.get_shape().get_fill_primitive();
+            match fill_primitive {
+                Some(fill_primitive) => {
+                    // util::print_debug!("fill_primitive: {}", fill_primitive);
+                    self.renderer.add_primitive(fill_primitive);
+                }
+                None => {}
+            }
+        }
     }
 
     fn render(&self) {
@@ -52,16 +69,9 @@ impl core::Graphic for Graphic {
             .create_texture_from_file(path, image_filter.into());
         Box::new(Image::new(texture))
     }
-    fn draw_shape(&self, shape: &dyn core::Shape) {
-        use vector::VectorShape;
-        let fill_primitive = shape.get_fill_primitive();
-        match fill_primitive {
-            Some(fill_primitive) => {
-                // util::print_debug!("fill_primitive: {}", fill_primitive);
-                self.renderer.add_primitive(fill_primitive);
-            }
-            None => {}
-        }
+    fn draw_shape(&self, shape: Box<dyn core::Shape>) {
+        let graphic_shape = Rc::new(shape.into());
+        self._shapes.borrow_mut().push(graphic_shape);
     }
 }
 

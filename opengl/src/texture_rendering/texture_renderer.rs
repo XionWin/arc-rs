@@ -1,8 +1,8 @@
-use std::{borrow::Borrow, cell::RefCell, ffi::c_uint, rc::Rc};
+use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
 use graphic::Texture;
 
-use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer};
+use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer, GLTextureRenderer};
 
 #[derive(Debug)]
 pub struct TextureRenderer {
@@ -162,6 +162,12 @@ impl GLRenderer for TextureRenderer {
             state.into(),
             texture_id,
         );
+    }
+}
+
+impl GLTextureRenderer for TextureRenderer {
+    fn bind_texture(&self, texture: &dyn graphic::Texture) {
+        texture.get_id();
     }
 }
 
