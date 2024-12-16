@@ -42,7 +42,7 @@ impl Drop for Shader {
     }
 }
 
-fn check_compile(shader: crate::Shader) -> crate::Shader {
+fn check_compile(shader: Shader) -> Shader {
     let mut is_compiled = 0;
     unsafe {
         gl::GetShaderiv(shader.id, gl::COMPILE_STATUS, &mut is_compiled);

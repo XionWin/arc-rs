@@ -26,17 +26,17 @@ uniform vec4 aFrag[UNIFORMARRAY_SIZE];
 #define innerCol aFrag[9]
 #define outerCol aFrag[10]
 
-float scissorMask(vec2 p) {
-  vec2 sc = (abs((scissorMat * vec3(p, 1.0)).xy) - scissorExt);
+float scissorMask(vec2 pos) {
+  vec2 sc = (abs((scissorMat * vec3(pos, 1.0)).xy) - scissorExt);
   sc = vec2(0.5, 0.5) - sc * scissorScale;
   return clamp(sc.x, 0.0, 1.0) * clamp(sc.y, 0.0, 1.0);
 }
 
-float strokeMask() {
+float strokeMask(void) {
   return min(1.0, (1.0 - abs(coord.x * 2.0 - 1.0)) * strokeMult) * min(1.0, coord.y);
 }
 
-void main()
+void main(void)
 {
   float strokeAlpha = strokeMask();
   float scissor = scissorMask(pos);

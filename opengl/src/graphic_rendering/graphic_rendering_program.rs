@@ -6,20 +6,23 @@ use std::{
 use crate::{FragUniform, Shader};
 
 #[derive(Debug)]
-pub struct Program {
+pub struct GraphicRenderingProgram {
     pub(crate) id: c_uint,
     _vertex_shader: Shader,
     _fragment_shader: Shader,
     _attribute_locations: HashMap<String, c_int>,
 }
 
-impl Program {
-    pub fn new(vertex_shader_path: &str, fragment_shader_path: &str) -> Self {
+const VERTEX_SHADER_PATH: &str = "resource/shader/graphic.vert";
+const FRAGMENT_SHADER_PATH: &str = "resource/shader/graphic.frag";
+
+impl GraphicRenderingProgram {
+    pub fn new() -> Self {
         let program_id = crate::gl::create_program();
         let vertex_shader =
-            Shader::new(crate::def::ShaderType::VertexShader, vertex_shader_path).load();
+            Shader::new(crate::def::ShaderType::VertexShader, VERTEX_SHADER_PATH).load();
         let fragment_shader =
-            Shader::new(crate::def::ShaderType::FragmentShader, fragment_shader_path).load();
+            Shader::new(crate::def::ShaderType::FragmentShader, FRAGMENT_SHADER_PATH).load();
         link_program(program_id, vertex_shader.id, fragment_shader.id);
 
         let attribute_locations = get_attribute_locations(program_id);
@@ -92,9 +95,9 @@ fn get_attribute_locations(program_id: c_uint) -> HashMap<String, c_int> {
     result
 }
 
-impl Drop for Program {
+impl Drop for GraphicRenderingProgram {
     fn drop(&mut self) {
         crate::gl::delete_program(self.id);
-        util::print_debug!("program {} droped", self.id)
+        util::print_debug!("primitive_program {} droped", self.id)
     }
 }

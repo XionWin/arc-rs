@@ -1,13 +1,13 @@
-use std::{borrow::Borrow, rc::Rc};
+use std::borrow::Borrow;
 
 use crate::{Image, RenderingComponent};
 
 pub struct Graphic {
-    renderer: Rc<dyn crate::Renderer>,
+    renderer: Box<dyn crate::Renderer>,
 }
 
 impl Graphic {
-    pub fn new(renderer: Rc<dyn crate::Renderer>) -> Self {
+    pub fn new(renderer: Box<dyn crate::Renderer>) -> Self {
         Self { renderer }
     }
 }
@@ -42,7 +42,6 @@ impl core::Graphic for Graphic {
     ) -> Box<dyn core::Image> {
         let texture = self
             .renderer
-            .clone()
             .create_texture(size, color_type, image_filter.into());
         Box::new(Image::new(texture))
     }
@@ -53,7 +52,6 @@ impl core::Graphic for Graphic {
     ) -> Box<dyn core::Image> {
         let texture = self
             .renderer
-            .clone()
             .create_texture_from_file(path, image_filter.into());
         Box::new(Image::new(texture))
     }

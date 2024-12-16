@@ -1,8 +1,10 @@
 use std::{ffi::c_uint, rc::Rc};
 
+use crate::GLRenderer;
+
 #[derive(Debug)]
 pub struct Texture {
-    renderer: Rc<dyn graphic::Renderer>,
+    renderer: Rc<dyn GLRenderer>,
     id: c_uint,
     size: core::Size<i32>,
     color_type: core::ColorType,
@@ -11,7 +13,7 @@ pub struct Texture {
 
 impl Texture {
     pub fn new(
-        renderer: Rc<dyn graphic::Renderer>,
+        renderer: Rc<dyn GLRenderer>,
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,

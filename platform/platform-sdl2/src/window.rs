@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, cell::RefCell, rc::Rc};
+use std::{borrow::Borrow, cell::RefCell};
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
@@ -141,8 +141,8 @@ impl Window {
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
-        let renderer = opengl::GLRenderer::new(|name| get_proc_address(&video_subsystem, name));
-        let graphic = graphic::Graphic::new(Rc::new(renderer));
+        let renderer = opengl::Renderer::new(|name| get_proc_address(&video_subsystem, name));
+        let graphic = graphic::Graphic::new(Box::new(renderer));
         Ok(Window {
             parameter,
             sdl_context,
