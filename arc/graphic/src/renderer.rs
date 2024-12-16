@@ -22,5 +22,5 @@ pub trait Renderer: Debug {
         texture_filter: TextureFilter,
     ) -> Rc<dyn crate::Texture>;
     fn drop_texture(&self, texture: &dyn Texture);
-    fn add_primitive(&self, primitive: vector::Primitive);
+    fn draw_primitive(&self, primitive: vector::Primitive);
 }

@@ -73,7 +73,7 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.drop_texture(texture);
     }
 
-    fn add_primitive(&self, primitive: vector::Primitive) {
+    fn draw_primitive(&self, primitive: vector::Primitive) {
         use crate::GLRenderer;
         self._graphic_renderer.add_primitive(primitive);
     }

@@ -25,8 +25,8 @@ fn main() {
             canvas.borrow().load();
 
             let rectangle = vector::Rectangle::new(
-                0,
-                0,
+                100,
+                100,
                 100,
                 100,
                 Style {
