@@ -2,17 +2,9 @@ use std::borrow::Borrow;
 
 pub struct GraphicShape {
     _shape: Box<dyn core::Shape>,
-    _cache: Option<crate::ShapeCache>,
+    _stroke_cache: Option<crate::TextureCache>,
+    _fill_cache: Option<crate::TextureCache>,
 }
-
-// impl<T: core::Shape + Sized> From<T> for GraphicShape {
-//     fn from(value: T) -> Self {
-//         Self {
-//             shape: Box::new(value),
-//             cache: None,
-//         }
-//     }
-// }
 
 impl GraphicShape {
     pub fn get_shape(&self) -> &dyn core::Shape {
@@ -24,7 +16,8 @@ impl From<Box<dyn core::Shape>> for GraphicShape {
     fn from(value: Box<dyn core::Shape>) -> Self {
         Self {
             _shape: value,
-            _cache: None,
+            _stroke_cache: None,
+            _fill_cache: None,
         }
     }
 }
