@@ -3,7 +3,7 @@ use std::{
     ffi::{c_int, c_uint},
 };
 
-use crate::{program_utility, FragUniform, Shader};
+use crate::{program_utility, Shader};
 
 #[derive(Debug)]
 pub struct TextureRenderingProgram {

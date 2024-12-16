@@ -1,8 +1,6 @@
-use std::{cell::RefCell, ffi::c_uint, rc::Rc};
+use std::ffi::c_uint;
 
-use graphic::Texture;
-
-use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer};
+use crate::{renderer_utility, AttributeLocation, GLRenderer};
 
 #[derive(Debug)]
 pub struct TextureRenderer {

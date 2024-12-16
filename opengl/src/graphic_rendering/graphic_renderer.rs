@@ -1,7 +1,5 @@
 use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
-use graphic::Texture;
-
 use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer};
 
 #[derive(Debug)]
@@ -111,34 +109,6 @@ impl GraphicRenderer {
         crate::gl::clear(
             crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
         );
-    }
-
-    pub fn create_texture(
-        &self,
-        size: core::Size<i32>,
-        color_type: core::ColorType,
-        texture_filter: graphic::TextureFilter,
-    ) -> Rc<dyn graphic::Texture> {
-        let texture = Rc::new(crate::Texture::new(size, color_type, texture_filter));
-        self._textures.borrow_mut().push(texture.clone());
-        texture
-    }
-
-    pub fn create_texture_from_file(
-        &self,
-        path: &str,
-        texture_filter: graphic::TextureFilter,
-    ) -> Rc<dyn graphic::Texture> {
-        use core::ImageData;
-        let image_data = image::ImageData::new_from_file(path);
-        let texture = Rc::new(crate::Texture::new(
-            image_data.get_size(),
-            image_data.get_color_type(),
-            texture_filter,
-        ));
-        texture.load(&image_data);
-        self._textures.borrow_mut().push(texture.clone());
-        texture
     }
 
     pub fn add_primitive(&self, primitive: vector::Primitive) {

@@ -16,11 +16,11 @@ pub trait Renderer: Debug {
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: TextureFilter,
-    ) -> Rc<dyn crate::Texture>;
+    ) -> Rc<dyn Texture>;
     fn create_texture_from_file(
         &self,
         path: &str,
         texture_filter: TextureFilter,
-    ) -> Rc<dyn crate::Texture>;
+    ) -> Rc<dyn Texture>;
     fn draw_primitive(&self, primitive: vector::Primitive);
 }

@@ -57,8 +57,7 @@ impl graphic::Renderer for Renderer {
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
-        self._graphic_renderer
-            .create_texture(size, color_type, texture_filter)
+        Rc::new(crate::Texture::new(size, color_type, texture_filter))
     }
 
     fn create_texture_from_file(
@@ -66,8 +65,7 @@ impl graphic::Renderer for Renderer {
         path: &str,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
-        self._graphic_renderer
-            .create_texture_from_file(path, texture_filter)
+        Rc::new(crate::Texture::load(path, texture_filter))
     }
 
     fn draw_primitive(&self, primitive: vector::Primitive) {
