@@ -21,6 +21,7 @@ impl Renderer {
 
 impl graphic::Renderer for Renderer {
     fn init(&self) {
+        crate::gl::enable_multisample();
         self._graphic_renderer.init();
     }
     fn begin_render(&self) {
@@ -28,6 +29,16 @@ impl graphic::Renderer for Renderer {
     }
     fn render(&self) {
         self._graphic_renderer.render();
+        self._cache_renderer
+            .draw_primitive_texture(vector::Primitive::new(
+                Box::new([
+                    core::Vertex2::new(200f32, 200f32, 1f32, 0.5f32),
+                    core::Vertex2::new(200f32, 300f32, 1f32, 0.5f32),
+                    core::Vertex2::new(300f32, 300f32, 1f32, 0.5f32),
+                    core::Vertex2::new(300f32, 200f32, 1f32, 0.5f32),
+                ]),
+                Box::new(vector::FillState::default()),
+            ));
     }
 
     fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {

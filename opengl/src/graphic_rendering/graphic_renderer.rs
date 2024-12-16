@@ -52,13 +52,13 @@ impl GLRenderer for GraphicRenderer {
 impl GraphicRenderer {
     pub fn init(&self) {
         self._program.use_program();
-        crate::gl::enable_multisample();
         renderer_utility::bind_vertex_array(self._vao);
     }
     pub fn begin_render(&self) {
         self._frame_data.borrow_mut().reset();
     }
     pub fn render(&self) {
+        self._program.use_program();
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
 
