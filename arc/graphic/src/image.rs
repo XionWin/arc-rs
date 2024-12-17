@@ -1,7 +1,7 @@
 use core::{AsAny, Size};
 use std::{borrow::Borrow, rc::Rc};
 
-use crate::Texture;
+use crate::{Texture, TextureComponent};
 
 #[derive(Debug)]
 pub struct Image {
@@ -12,16 +12,6 @@ impl Image {
     pub fn new(texture: Rc<dyn Texture>) -> Self {
         Self { texture }
     }
-
-    // pub fn new_from_file<T>(path: &str, get_texture_func: T) -> Self
-    // where
-    //     T: Fn(core::Size<i32>, core::ColorType) -> Box<dyn Texture>,
-    // {
-    //     use core::ImageData;
-    //     let image = image::ImageData::new_from_file(path);
-    //     let texture = get_texture_func(image.get_size(), image.get_color_type());
-    //     Self { texture }
-    // }
 }
 
 impl AsAny for Image {
@@ -30,11 +20,13 @@ impl AsAny for Image {
     }
 }
 
-impl core::Image for Image {
-    fn get_id(&self) -> std::ffi::c_uint {
-        self.texture.get_id()
+impl TextureComponent for Image {
+    fn get_texture(&self) -> &dyn Texture {
+        self.texture.borrow()
     }
+}
 
+impl core::Image for Image {
     fn get_size(&self) -> Size<i32> {
         self.texture.get_size()
     }
@@ -47,8 +39,15 @@ impl core::Image for Image {
     }
 }
 
-impl crate::TextureComponent for Image {
-    fn get_texture(&self) -> &dyn Texture {
-        self.texture.borrow()
+pub trait TextureImage {
+    fn get_texture(&self) -> &dyn crate::Texture;
+}
+
+impl<T: core::Image + ?Sized> TextureImage for T {
+    fn get_texture(&self) -> &dyn crate::Texture {
+        match self.as_any().downcast_ref::<crate::Image>() {
+            Some(image) => TextureComponent::get_texture(image),
+            None => util::print_panic!("get texture from _texture_image failed"),
+        }
     }
 }

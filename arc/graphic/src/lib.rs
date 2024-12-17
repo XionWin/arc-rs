@@ -7,7 +7,6 @@ mod texture;
 mod texture_cache;
 mod texture_compontent;
 mod texture_filter;
-mod texture_image;
 
 pub use graphic::*;
 pub use graphic_shape::*;
@@ -18,4 +17,3 @@ pub use texture::*;
 pub use texture_cache::*;
 pub use texture_compontent::*;
 pub use texture_filter::*;
-pub use texture_image::*;
