@@ -28,16 +28,15 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.begin_render();
     }
     fn render(&self) {
-        self._cache_renderer
-            .draw_primitive_texture(&vector::Primitive::new(
-                Box::new([
-                    core::Vertex2::new(200f32, 200f32, 1f32, 0.5f32),
-                    core::Vertex2::new(200f32, 300f32, 1f32, 0.5f32),
-                    core::Vertex2::new(300f32, 300f32, 1f32, 0.5f32),
-                    core::Vertex2::new(300f32, 200f32, 1f32, 0.5f32),
-                ]),
-                Box::new(vector::FillState::default()),
-            ));
+        let _ = self.darw_primitive(vector::Primitive::new(
+            Box::new([
+                core::Vertex2::new(200f32, 200f32, 1f32, 0.5f32),
+                core::Vertex2::new(200f32, 300f32, 1f32, 0.5f32),
+                core::Vertex2::new(300f32, 300f32, 1f32, 0.5f32),
+                core::Vertex2::new(300f32, 200f32, 1f32, 0.5f32),
+            ]),
+            Box::new(vector::FillState::default()),
+        ));
         self._graphic_renderer.render();
     }
 
@@ -66,6 +65,10 @@ impl graphic::Renderer for Renderer {
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
         Rc::new(crate::Texture::load(path, texture_filter))
+    }
+
+    fn darw_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {
+        self._cache_renderer.draw_primitive_texture(&primitive)
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {

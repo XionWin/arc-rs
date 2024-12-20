@@ -25,8 +25,7 @@ impl core::Graphic for Graphic {
 
         let shapes: &Vec<Rc<crate::GraphicShape>> = &self._shapes.borrow();
         for graphic_shape in shapes {
-            use vector::VectorShape;
-            let fill_primitive = graphic_shape.get_shape().get_fill_primitive();
+            let fill_primitive = vector::VectorShape::get_fill_primitive(graphic_shape.get_shape());
             match fill_primitive {
                 Some(fill_primitive) => {
                     // util::print_debug!("fill_primitive: {}", fill_primitive);

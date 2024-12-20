@@ -24,11 +24,12 @@ fn main() {
 
             canvas.borrow().load();
 
-            let rectangle = vector::Rectangle::new(
+            let rectangle = vector::RoundRectangle::new(
                 100,
                 100,
                 100,
                 100,
+                10,
                 Style {
                     background: Box::new(core::ColorBackground::new(
                         core::Color::Red,
