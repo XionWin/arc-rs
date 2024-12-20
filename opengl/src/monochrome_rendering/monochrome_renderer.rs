@@ -1,8 +1,6 @@
 use std::{cell::RefCell, ffi::c_uint};
 
-use graphic::TextureImage;
-
-use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer, GLTextureRenderer};
+use crate::{AttributeLocation, FrameData, GLRenderer};
 
 #[derive(Debug)]
 pub struct MonochromeRenderer {
@@ -43,41 +41,13 @@ impl GLRenderer for MonochromeRenderer {
         self._color_type
     }
     fn add_primitive(&self, primitive: vector::Primitive) {
-        let state = primitive.get_state();
-        let texture_id = match state.get_paint().try_get_paint_image() {
-            Some(paint_image) => Some(paint_image.get_image().get_texture().get_id()),
-            None => None,
-        };
         self._frame_data.borrow_mut().add_call(
             crate::CallType::Fill,
             primitive.get_vertices(),
-            state.into(),
-            texture_id,
+            crate::DEFAULT_MONOCHROME_FRAG_UNIFORM,
+            None,
         );
     }
-}
-
-impl GLTextureRenderer for MonochromeRenderer {
-    // fn draw_primitive_texture(&self, primitive: &vector::Primitive) -> graphic::TextureCache {
-    //     self._program.use_program();
-    //     // binding vertices
-    //     let vertices = primitive.get_vertices();
-    //     renderer_utility::bind_buffer(self, vertices);
-
-    //     self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
-
-    //     crate::gl::disable(crate::def::EnableCap::Blend);
-    //     crate::gl::draw_arrays(crate::PrimitiveType::TriangleFan, 0, vertices.len() as _);
-
-    //     graphic::TextureCache::new(
-    //         core::Rect::new(0, 0, 100, 100),
-    //         Box::new(crate::Texture::new(
-    //             core::Size::new(100, 100),
-    //             core::ColorType::Alpha,
-    //             graphic::TextureFilter::Linear,
-    //         )),
-    //     )
-    // }
 }
 
 impl Drop for MonochromeRenderer {

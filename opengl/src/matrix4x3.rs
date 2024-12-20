@@ -54,6 +54,27 @@ pub struct Matrix4x3 {
     _row_2: Vector4,
 }
 
+pub const DEFAULT_MATRIX4X3: Matrix4x3 = Matrix4x3 {
+    _row_0: Vector4 {
+        _x: 1f32,
+        _y: 0f32,
+        _z: 0f32,
+        _w: 0f32,
+    },
+    _row_1: Vector4 {
+        _x: 0f32,
+        _y: 1f32,
+        _z: 0f32,
+        _w: 0f32,
+    },
+    _row_2: Vector4 {
+        _x: 0f32,
+        _y: 0f32,
+        _z: 1f32,
+        _w: 0f32,
+    },
+};
+
 impl Matrix4x3 {
     pub(crate) fn new(
         m11: f32,
@@ -79,11 +100,7 @@ impl Matrix4x3 {
 
 impl Default for Matrix4x3 {
     fn default() -> Self {
-        Self {
-            _row_0: Vector4::new(1f32, 0f32, 0f32, 0f32),
-            _row_1: Vector4::new(0f32, 1f32, 0f32, 0f32),
-            _row_2: Vector4::new(0f32, 0f32, 1f32, 0f32),
-        }
+        crate::DEFAULT_MATRIX4X3
     }
 }
 

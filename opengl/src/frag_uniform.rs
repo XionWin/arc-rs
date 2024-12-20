@@ -37,6 +37,22 @@ pub struct FragUniform {
     _outer_color: core::Color,
 }
 
+pub const DEFAULT_MONOCHROME_FRAG_UNIFORM: FragUniform = FragUniform {
+    _type: 0f32,
+    _font_type: 0f32, // DEFAULT
+    _radius: 0f32,
+    _feather: 0f32,
+    _stroke_multiple: 0f32,
+    _stroke_threshold: 0f32, // DEFAULT
+    _extent: core::Extent { x: 0i32, y: 0i32 },
+    _scissor_matrix: crate::DEFAULT_MATRIX4X3,
+    _scissor_extent: core::Extent { x: 0i32, y: 0i32 },
+    _scissor_scale: core::Scale { x: 1f32, y: 1f32 },
+    _paint_matrix: crate::DEFAULT_MATRIX4X3,
+    _inner_color: core::Color::White,
+    _outer_color: core::Color::White,
+};
+
 impl From<&dyn vector::State> for FragUniform {
     fn from(state: &dyn vector::State) -> Self {
         match state.downcast_ref::<vector::StrokeState>() {
