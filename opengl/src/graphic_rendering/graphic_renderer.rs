@@ -1,4 +1,4 @@
-use std::{cell::RefCell, ffi::c_uint, rc::Rc};
+use std::{cell::RefCell, ffi::c_uint};
 
 use graphic::TextureImage;
 
@@ -42,6 +42,19 @@ impl GLRenderer for GraphicRenderer {
     }
     fn get_color_type(&self) -> core::ColorType {
         self._color_type
+    }
+    fn add_primitive(&self, primitive: vector::Primitive) {
+        let state = primitive.get_state();
+        let texture_id = match state.get_paint().try_get_paint_image() {
+            Some(paint_image) => Some(paint_image.get_image().get_texture().get_id()),
+            None => None,
+        };
+        self._frame_data.borrow_mut().add_call(
+            crate::CallType::Fill,
+            primitive.get_vertices(),
+            state.into(),
+            texture_id,
+        );
     }
 }
 
@@ -106,20 +119,6 @@ impl GraphicRenderer {
     pub fn clear(&self) {
         crate::gl::clear(
             crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
-        );
-    }
-
-    pub fn add_primitive(&self, primitive: vector::Primitive) {
-        let state = primitive.get_state();
-        let texture_id = match state.get_paint().try_get_paint_image() {
-            Some(paint_image) => Some(paint_image.get_image().get_texture().get_id()),
-            None => None,
-        };
-        self._frame_data.borrow_mut().add_call(
-            crate::CallType::Fill,
-            primitive.get_vertices(),
-            state.into(),
-            texture_id,
         );
     }
 }

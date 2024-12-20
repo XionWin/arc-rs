@@ -1,7 +1,7 @@
 use std::fmt::Debug;
 use std::rc::Rc;
 
-use crate::{Texture, TextureCache, TextureFilter};
+use crate::{Texture, TextureFilter};
 
 pub trait Renderer: Debug {
     fn init(&self);
@@ -22,6 +22,5 @@ pub trait Renderer: Debug {
         path: &str,
         texture_filter: TextureFilter,
     ) -> Rc<dyn Texture>;
-    fn darw_primitive(&self, primitive: vector::Primitive) -> TextureCache;
     fn add_primitive(&self, primitive: vector::Primitive);
 }

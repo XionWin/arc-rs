@@ -30,15 +30,15 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.begin_render();
     }
     fn render(&self) {
-        let _ = self.darw_primitive(vector::Primitive::new(
-            Box::new([
-                core::Vertex2::new(200f32, 200f32, 1f32, 0.5f32),
-                core::Vertex2::new(200f32, 300f32, 1f32, 0.5f32),
-                core::Vertex2::new(300f32, 300f32, 1f32, 0.5f32),
-                core::Vertex2::new(300f32, 200f32, 1f32, 0.5f32),
-            ]),
-            Box::new(vector::FillState::default()),
-        ));
+        // let _ = self.darw_primitive(vector::Primitive::new(
+        //     Box::new([
+        //         core::Vertex2::new(200f32, 200f32, 1f32, 0.5f32),
+        //         core::Vertex2::new(200f32, 300f32, 1f32, 0.5f32),
+        //         core::Vertex2::new(300f32, 300f32, 1f32, 0.5f32),
+        //         core::Vertex2::new(300f32, 200f32, 1f32, 0.5f32),
+        //     ]),
+        //     Box::new(vector::FillState::default()),
+        // ));
         self._graphic_renderer.render();
     }
 
@@ -73,12 +73,8 @@ impl graphic::Renderer for Renderer {
         texture
     }
 
-    fn darw_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {
-        use crate::GLTextureRenderer;
-        self._cache_renderer.draw_primitive_texture(&primitive)
-    }
-
     fn add_primitive(&self, primitive: vector::Primitive) {
+        use crate::GLRenderer;
         self._graphic_renderer.add_primitive(primitive);
     }
 }
