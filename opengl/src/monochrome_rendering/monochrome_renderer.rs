@@ -1,6 +1,6 @@
-use std::ffi::c_uint;
+use std::{cell::RefCell, ffi::c_uint};
 
-use crate::{renderer_utility, AttributeLocation, GLRenderer};
+use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer, GLTextureRenderer};
 
 #[derive(Debug)]
 pub struct MonochromeRenderer {
@@ -10,6 +10,7 @@ pub struct MonochromeRenderer {
     _vfo: c_uint,
     _program: crate::MonochromeRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
+    _frame_data: RefCell<FrameData>,
 }
 
 impl MonochromeRenderer {
@@ -21,6 +22,7 @@ impl MonochromeRenderer {
             _vfo: crate::gl::gen_frame_buffer(),
             _program: crate::MonochromeRenderingProgram::new(),
             _attribute_locations: Box::new([AttributeLocation::new("aPos", 0, 2)]),
+            _frame_data: RefCell::new(FrameData::new()),
         }
     }
 }
@@ -40,8 +42,8 @@ impl GLRenderer for MonochromeRenderer {
     }
 }
 
-impl MonochromeRenderer {
-    pub fn draw_primitive_texture(&self, primitive: &vector::Primitive) -> graphic::TextureCache {
+impl GLTextureRenderer for MonochromeRenderer {
+    fn draw_primitive_texture(&self, primitive: &vector::Primitive) -> graphic::TextureCache {
         self._program.use_program();
         // binding vertices
         let vertices = primitive.get_vertices();
@@ -50,7 +52,6 @@ impl MonochromeRenderer {
         self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
 
         crate::gl::disable(crate::def::EnableCap::Blend);
-
         crate::gl::draw_arrays(crate::PrimitiveType::TriangleFan, 0, vertices.len() as _);
 
         graphic::TextureCache::new(

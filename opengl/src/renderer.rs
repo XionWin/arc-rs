@@ -1,9 +1,10 @@
-use std::rc::Rc;
+use std::{cell::RefCell, rc::Rc};
 
 #[derive(Debug)]
 pub struct Renderer {
     _cache_renderer: crate::MonochromeRenderer,
     _graphic_renderer: crate::GraphicRenderer,
+    _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
 
 impl Renderer {
@@ -15,6 +16,7 @@ impl Renderer {
         Self {
             _cache_renderer: crate::MonochromeRenderer::new(),
             _graphic_renderer: crate::GraphicRenderer::new(),
+            _textures: RefCell::new(Vec::new()),
         }
     }
 }
@@ -56,7 +58,9 @@ impl graphic::Renderer for Renderer {
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
-        Rc::new(crate::Texture::new(size, color_type, texture_filter))
+        let texture = Rc::new(crate::Texture::new(size, color_type, texture_filter));
+        self._textures.borrow_mut().push(texture.clone());
+        texture
     }
 
     fn create_texture_from_file(
@@ -64,10 +68,13 @@ impl graphic::Renderer for Renderer {
         path: &str,
         texture_filter: graphic::TextureFilter,
     ) -> Rc<dyn graphic::Texture> {
-        Rc::new(crate::Texture::load(path, texture_filter))
+        let texture = Rc::new(crate::Texture::load(path, texture_filter));
+        self._textures.borrow_mut().push(texture.clone());
+        texture
     }
 
     fn darw_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {
+        use crate::GLTextureRenderer;
         self._cache_renderer.draw_primitive_texture(&primitive)
     }
 

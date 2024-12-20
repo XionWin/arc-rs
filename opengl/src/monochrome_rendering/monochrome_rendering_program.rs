@@ -13,8 +13,8 @@ pub struct MonochromeRenderingProgram {
     _attribute_locations: HashMap<String, c_int>,
 }
 
-const VERTEX_SHADER_PATH: &str = "resource/shader/texture.vert";
-const FRAGMENT_SHADER_PATH: &str = "resource/shader/texture.frag";
+const VERTEX_SHADER_PATH: &str = "resource/shader/monochrome.vert";
+const FRAGMENT_SHADER_PATH: &str = "resource/shader/monochrome.frag";
 
 impl MonochromeRenderingProgram {
     pub fn new() -> Self {

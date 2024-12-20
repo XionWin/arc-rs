@@ -9,11 +9,9 @@ pub struct GraphicRenderer {
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
-    _vfo: c_uint,
     _program: crate::GraphicRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
-    _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
 
 impl GraphicRenderer {
@@ -22,14 +20,12 @@ impl GraphicRenderer {
             _color_type: core::ColorType::Rgba,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),
-            _vfo: crate::gl::gen_frame_buffer(),
             _program: crate::GraphicRenderingProgram::new(),
             _attribute_locations: Box::new([
                 AttributeLocation::new("aPos", 0, 2),
                 AttributeLocation::new("aCoord", 2, 2),
             ]),
             _frame_data: RefCell::new(FrameData::new()),
-            _textures: RefCell::new(Vec::new()),
         }
     }
 }
