@@ -6,7 +6,7 @@ use std::{
 use crate::{program_utility, Shader};
 
 #[derive(Debug)]
-pub struct TextureRenderingProgram {
+pub struct MonochromeRenderingProgram {
     pub(crate) id: c_uint,
     _vertex_shader: Shader,
     _fragment_shader: Shader,
@@ -16,7 +16,7 @@ pub struct TextureRenderingProgram {
 const VERTEX_SHADER_PATH: &str = "resource/shader/texture.vert";
 const FRAGMENT_SHADER_PATH: &str = "resource/shader/texture.frag";
 
-impl TextureRenderingProgram {
+impl MonochromeRenderingProgram {
     pub fn new() -> Self {
         let program_id = crate::gl::create_program();
         let vertex_shader =
@@ -53,13 +53,13 @@ impl TextureRenderingProgram {
     }
 }
 
-impl crate::GLProgram for TextureRenderingProgram {
+impl crate::GLProgram for MonochromeRenderingProgram {
     fn get_id(&self) -> c_uint {
         self.id
     }
 }
 
-impl Drop for TextureRenderingProgram {
+impl Drop for MonochromeRenderingProgram {
     fn drop(&mut self) {
         crate::gl::delete_program(self.id);
         util::print_debug!("primitive_program {} droped", self.id)

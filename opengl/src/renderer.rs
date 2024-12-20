@@ -2,7 +2,7 @@ use std::rc::Rc;
 
 #[derive(Debug)]
 pub struct Renderer {
-    _cache_renderer: crate::TextureRenderer,
+    _cache_renderer: crate::MonochromeRenderer,
     _graphic_renderer: crate::GraphicRenderer,
 }
 
@@ -13,7 +13,7 @@ impl Renderer {
     {
         crate::load_with(loadfn);
         Self {
-            _cache_renderer: crate::TextureRenderer::new(),
+            _cache_renderer: crate::MonochromeRenderer::new(),
             _graphic_renderer: crate::GraphicRenderer::new(),
         }
     }
