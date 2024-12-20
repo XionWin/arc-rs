@@ -1,7 +1,3 @@
-mod sketch;
-
-use sketch::*;
-
 use core::{Style, Window};
 use std::cell::RefCell;
 
@@ -12,8 +8,6 @@ fn main() {
 
     let image: RefCell<Option<Box<dyn core::Image>>> = RefCell::new(None);
 
-    let canvas = RefCell::new(TestCanvas::new());
-
     window.run(
         |window| {
             let g = window.get_graphic();
@@ -21,8 +15,6 @@ fn main() {
                 "resource/image/icon96.png",
                 core::ImageFilter::Linear,
             )));
-
-            canvas.borrow().load();
 
             let rectangle = vector::RoundRectangle::new(
                 100,
@@ -48,8 +40,6 @@ fn main() {
                 Some(_v) => {}
                 None => util::print_panic!("image is null"),
             }
-
-            canvas.borrow().render();
         },
     );
 }
