@@ -16,12 +16,11 @@ fn main() {
                 core::ImageFilter::Linear,
             )));
 
-            let rectangle = vector::RoundRectangle::new(
+            let rectangle = vector::Rectangle::new(
                 100,
                 100,
                 100,
                 100,
-                10,
                 Style {
                     background: Box::new(core::ColorBackground::new(
                         core::Color::Red,
