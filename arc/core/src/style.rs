@@ -78,6 +78,21 @@ pub struct ImageBackground {
 impl Background for ImageBackground {}
 
 impl ImageBackground {
+    pub fn new(image: Rc<PaintImage>) -> Self {
+        Self {
+            image,
+            _paint_color: crate::PaintColor::new(
+                crate::Color::TrueColor {
+                    r: 255,
+                    g: 255,
+                    b: 255,
+                    a: 255,
+                },
+                crate::Color::Transparent,
+            ),
+            transform: Matrix2D::default(),
+        }
+    }
     pub fn get_paint_image_rc(&self) -> Rc<PaintImage> {
         self.image.clone()
     }

@@ -11,5 +11,8 @@
 				"excludedCode": "#4D4D4D",
 			}
 		}
+	},
+	"[glsl]": {
+		"editor.defaultFormatter": "circledev.glsl-canvas"
 	}
 }

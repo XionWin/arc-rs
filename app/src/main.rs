@@ -1,5 +1,5 @@
 use core::{Style, Window};
-use std::cell::RefCell;
+use std::{cell::RefCell, rc};
 
 fn main() {
     util::print_hight_light!("====================[Arc Demo]====================");
@@ -16,16 +16,18 @@ fn main() {
                 core::ImageFilter::Linear,
             )));
 
+            let img = g
+                .load_image_from_file("resource/image/icon96.png", core::ImageFilter::Linear)
+                .into();
             let rectangle = vector::Rectangle::new(
                 100,
                 100,
-                100,
-                100,
+                96,
+                96,
                 Style {
-                    background: Box::new(core::ColorBackground::new(
-                        core::Color::Red,
-                        core::Color::Blue,
-                    )),
+                    background: Box::new(core::ImageBackground::new(rc::Rc::new(
+                        core::PaintImage::new(img, core::Rect::new(100, 100, 96, 96)),
+                    ))),
                     stroke: core::ColorBackground::new(core::Color::Red, core::Color::Blue),
                     stroke_width: Some(1i32),
                 },

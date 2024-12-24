@@ -2,10 +2,10 @@ use vector::State;
 
 #[repr(u32)]
 pub enum FragUniformType {
-    FillGradient,
-    FillTexture,
-    FillStencil,
-    FillAlpha,
+    FillGradient = 0,
+    FillTexture = 1,
+    FillStencil = 2,
+    FillAlpha = 3,
 }
 
 impl Into<u32> for FragUniformType {
@@ -164,7 +164,7 @@ fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
 
 fn from_fill_state(state: &vector::FillState) -> FragUniform {
     FragUniform {
-        _type: FragUniformType::FillGradient.into(),
+        _type: FragUniformType::FillTexture.into(),
         _font_type: 0f32, // DEFAULT
         _radius: state.get_paint().get_radius(),
         _feather: state.get_paint().get_feather(),
@@ -176,7 +176,7 @@ fn from_fill_state(state: &vector::FillState) -> FragUniform {
         },
         _scissor_matrix: match state.get_scissor() {
             Some(x) => x.get_transform().into(),
-            None => crate::Matrix4x3::default(),
+            None => crate::Matrix4x3::zero(),
         },
         _scissor_extent: match state.get_scissor() {
             Some(x) => x.get_extent(),
