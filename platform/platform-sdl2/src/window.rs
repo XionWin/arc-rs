@@ -131,7 +131,7 @@ impl Window {
             .build());
 
         let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file(
-            "resource/image/icon96.png",
+            "resource/image/icon/icon96.png",
         )?;
         sdl_window.set_icon(window_icon);
         sdl_window.set_resizable(false);

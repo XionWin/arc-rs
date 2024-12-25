@@ -25,7 +25,12 @@ impl Into<(f32, f32, f32, f32)> for Rgba {
 
 impl Into<[f32; 4]> for &Rgba {
     fn into(self) -> [f32; 4] {
-        [self.r as _, self.g as _, self.b as _, self.a as _]
+        [
+            self.r as f32 / 255f32,
+            self.g as f32 / 255f32,
+            self.b as f32 / 255f32,
+            self.a as f32 / 255f32,
+        ]
     }
 }
 
@@ -189,11 +194,6 @@ impl Into<Rgba> for Color {
 impl Into<[f32; 4]> for &Color {
     fn into(self) -> [f32; 4] {
         let rgba = Into::<Rgba>::into(self);
-        [
-            rgba.r as f32 / 255f32,
-            rgba.g as f32 / 255f32,
-            rgba.b as f32 / 255f32,
-            rgba.a as f32 / 255f32,
-        ]
+        Into::<[f32; 4]>::into(&rgba)
     }
 }

@@ -81,15 +81,20 @@ impl ImageBackground {
     pub fn new(image: Rc<PaintImage>) -> Self {
         Self {
             image,
-            _paint_color: crate::PaintColor::new(
-                crate::Color::TrueColor {
-                    r: 255,
-                    g: 255,
-                    b: 255,
-                    a: 255,
-                },
-                crate::Color::Transparent,
-            ),
+            _paint_color: crate::PaintColor::new_with_inner_color(crate::Color::TrueColor {
+                r: 255,
+                g: 255,
+                b: 255,
+                a: 255,
+            }),
+            transform: Matrix2D::default(),
+        }
+    }
+
+    pub fn new_with_paint_color(image: Rc<PaintImage>, paint_color: crate::PaintColor) -> Self {
+        Self {
+            image,
+            _paint_color: paint_color,
             transform: Matrix2D::default(),
         }
     }

@@ -53,7 +53,7 @@ void main(void)
     // Apply color tint and alpha.
     color*=innerCol;
     // Combine alpha
-    //color*=strokeAlpha*scissor;
+    color*=strokeAlpha*scissor;
     gl_FragColor=color;
   }
   else if(type==2){

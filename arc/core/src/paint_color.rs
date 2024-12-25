@@ -11,6 +11,12 @@ impl PaintColor {
             _outer_color: outer_color,
         }
     }
+    pub fn new_with_inner_color(inner_color: crate::Color) -> Self {
+        Self {
+            _inner_color: inner_color,
+            _outer_color: crate::Color::Transparent,
+        }
+    }
 
     pub fn get_inner_color(&self) -> crate::Color {
         self._inner_color
