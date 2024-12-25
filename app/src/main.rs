@@ -51,10 +51,7 @@ fn test(g: &dyn core::Graphic) {
         let img: Rc<dyn Image> = g
             .load_image_from_file(path, core::ImageFilter::Nearest)
             .into();
-        let size = core::Size::new(
-            img.get_size().width * zoom_factor,
-            img.get_size().height * zoom_factor,
-        );
+        let size = img.get_size().mul(zoom_factor);
 
         if x + size.width > 800 {
             x = 0i32;
