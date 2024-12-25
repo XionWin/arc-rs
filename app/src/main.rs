@@ -3,6 +3,7 @@ use std::{
     borrow::Borrow,
     cell::RefCell,
     fs::DirBuilder,
+    path,
     rc::{self, Rc},
 };
 
@@ -24,21 +25,21 @@ fn main() {
             let mut x = 0i32;
             let mut y = 0i32;
             let mut max_y = 0i32;
-            let zoom_factor = 2i32;
+            let zoom_factor = 4i32;
 
-            let names = match std::fs::read_dir("resource/image/item") {
-                Ok(dir) => dir
-                    .map(|d| String::from(d.unwrap().file_name().to_str().unwrap()))
-                    .collect::<Vec<String>>(),
-                Err(_) => Vec::new(),
-            };
+            let paths = std::fs::read_dir(
+                "/home/win/Downloads/Sunnyside_World_ASSET_PACK_V2.1/Sunnyside_World_Assets/UI/",
+            )
+            .unwrap()
+            .filter(|item| item.as_ref().unwrap().file_type().unwrap().is_file())
+            .map(|item| String::from(item.as_ref().unwrap().path().to_str().unwrap()))
+            .collect::<Vec<String>>();
 
-            for name in names {
+            println!("{:?}", paths);
+
+            for path in &paths {
                 let img: Rc<dyn Image> = g
-                    .load_image_from_file(
-                        &format!("resource/image/item/{}", name),
-                        core::ImageFilter::Nearest,
-                    )
+                    .load_image_from_file(path, core::ImageFilter::Nearest)
                     .into();
                 let size = core::Size::new(
                     img.get_size().width * zoom_factor,
