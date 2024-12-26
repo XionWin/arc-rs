@@ -73,7 +73,7 @@ fn test(g: &dyn core::Graphic) {
                 stroke_width: Some(1i32),
             },
         );
-        g.draw_shape(Box::new(rectangle));
+        g.add_shape(Box::new(rectangle));
 
         x += size.width;
     }

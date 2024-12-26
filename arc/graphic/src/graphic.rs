@@ -69,7 +69,7 @@ impl core::Graphic for Graphic {
             .create_texture_from_file(path, image_filter.into());
         Box::new(Image::new(texture))
     }
-    fn draw_shape(&self, shape: Box<dyn core::Shape>) {
+    fn add_shape(&self, shape: Box<dyn core::Shape>) {
         let graphic_shape = Rc::new(shape.into());
         self._shapes.borrow_mut().push(graphic_shape);
     }

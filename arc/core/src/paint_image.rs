@@ -32,3 +32,10 @@ impl PaintImage {
         self._extent
     }
 }
+
+impl From<Rc<dyn crate::Image>> for PaintImage {
+    fn from(value: Rc<dyn crate::Image>) -> Self {
+        let size = value.get_size();
+        Self::new(value, crate::Rect::new(0i32, 0i32, size.width, size.height))
+    }
+}
