@@ -11,11 +11,13 @@ pub struct PaintImage {
 
 impl PaintImage {
     pub fn new(image: Rc<dyn crate::Image>, view_port: crate::Rect<i32>) -> Self {
-        let mat = Matrix2D::default();
-        mat.translate(-view_port.location.x as _, -view_port.location.y as _);
         Self {
             _image: image,
-            _transform: mat,
+            _transform: {
+                let mat = Matrix2D::default();
+                mat.translate(-view_port.location.x as _, -view_port.location.y as _);
+                mat
+            },
             _extent: crate::Extent::new(view_port.size.width, view_port.size.height),
         }
     }

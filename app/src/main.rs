@@ -67,7 +67,10 @@ fn test(g: &dyn core::Graphic) {
             size.height,
             Style::new(
                 Box::new(core::ImageBackground::new(rc::Rc::new(
-                    core::PaintImage::new(img, core::Rect::new(x, y, size.width, size.height)),
+                    core::PaintImage::new(
+                        img,
+                        core::Rect::new(x, y, size.width / 2i32, size.height / 2i32),
+                    ),
                 ))),
                 core::ColorBackground::new(core::Color::Red, core::Color::Blue),
                 Some(1i32),

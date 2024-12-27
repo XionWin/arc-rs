@@ -95,7 +95,6 @@ impl crate::AsAny for ColorBackground {
 pub struct ImageBackground {
     image: Rc<PaintImage>,
     _paint_color: crate::PaintColor,
-    transform: Matrix2D,
 }
 
 impl Background for ImageBackground {}
@@ -110,7 +109,6 @@ impl ImageBackground {
                 b: 255,
                 a: 255,
             }),
-            transform: Matrix2D::default(),
         }
     }
 
@@ -118,7 +116,6 @@ impl ImageBackground {
         Self {
             image,
             _paint_color: paint_color,
-            transform: Matrix2D::default(),
         }
     }
     pub fn get_paint_image_rc(&self) -> Rc<PaintImage> {
@@ -126,9 +123,6 @@ impl ImageBackground {
     }
     pub fn get_paint_color(&self) -> crate::PaintColor {
         self._paint_color.clone()
-    }
-    pub fn get_transform(&self) -> &Matrix2D {
-        &self.transform
     }
 }
 
