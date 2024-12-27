@@ -68,4 +68,7 @@ impl Shape for RoundRectangle {
     fn get_style(&self) -> &Style {
         &self.style
     }
+    fn get_rect(&self) -> &Rect<i32> {
+        &self.rect
+    }
 }
