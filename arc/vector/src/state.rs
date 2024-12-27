@@ -71,9 +71,9 @@ impl State for StrokeState {
 
 impl From<&core::Style> for StrokeState {
     fn from(value: &core::Style) -> Self {
-        let stroke_width = value.stroke_width.unwrap_or_default() as _;
+        let stroke_width = value.get_stroke_width().unwrap_or_default() as _;
         Self {
-            _paint: Into::<core::Paint>::into(value.background.borrow()),
+            _paint: Into::<core::Paint>::into(value.get_background()),
             _stroke_width: stroke_width,
             _stroke_multiple: (stroke_width / 2f32 + crate::parameter::FRINGE_WIDTH / 2f32)
                 / crate::parameter::FRINGE_WIDTH,
@@ -125,12 +125,22 @@ impl State for FillState {
     }
 }
 
-impl From<&core::Style> for FillState {
-    fn from(value: &core::Style) -> Self {
+impl FillState {
+    pub fn new(paint: core::Paint, transform: core::Matrix2D) -> Self {
         Self {
-            _paint: Into::<core::Paint>::into(value.background.borrow()),
-            _transform: core::Matrix2D::default(),
+            _paint: paint,
+            _transform: transform,
             _scissor: None,
         }
     }
 }
+
+// impl From<&core::Style> for FillState {
+//     fn from(value: &core::Style) -> Self {
+//         Self {
+//             _paint: Into::<core::Paint>::into(value.background.borrow()),
+//             _transform: core::Matrix2D::default(),
+//             _scissor: None,
+//         }
+//     }
+// }

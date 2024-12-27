@@ -17,7 +17,7 @@ impl<T: core::Shape + ?Sized> VectorShape for T {
     }
 
     fn get_fill_primitive(&self) -> Option<Primitive> {
-        get_fill_primitive(self.get_commands(), self.get_style())
+        get_fill_primitive(self, self.get_style())
     }
 }
 
@@ -28,7 +28,11 @@ fn get_stroke_primitive(_commands: &[core::Command], style: &core::Style) -> Opt
     ))
 }
 
-fn get_fill_primitive(commands: &[core::Command], style: &core::Style) -> Option<Primitive> {
+fn get_fill_primitive<T>(shape: &T, style: &core::Style) -> Option<Primitive>
+where
+    T: core::Shape + ?Sized,
+{
+    let commands = shape.get_commands();
     let _is_closed = commands.iter().any(|x| x == &core::Command::Close);
     // util::print_debug!("is_closed: {}", is_closed);
     let points = get_points(commands);
@@ -43,6 +47,12 @@ fn get_fill_primitive(commands: &[core::Command], style: &core::Style) -> Option
         ),
         None => None,
     };
+
+    let style = FillState::new(
+        Into::<core::Paint>::into(shape.get_style().get_background()),
+        core::Matrix2D::default(),
+    );
+
     match vertices {
         Some(vertices) => Some(Primitive::new(
             Box::<[core::Vertex2]>::from(vertices),

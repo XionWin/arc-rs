@@ -65,13 +65,13 @@ fn test(g: &dyn core::Graphic) {
             y,
             size.width,
             size.height,
-            Style {
-                background: Box::new(core::ImageBackground::new(rc::Rc::new(
+            Style::new(
+                Box::new(core::ImageBackground::new(rc::Rc::new(
                     core::PaintImage::new(img, core::Rect::new(x, y, size.width, size.height)),
                 ))),
-                stroke: core::ColorBackground::new(core::Color::Red, core::Color::Blue),
-                stroke_width: Some(1i32),
-            },
+                core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+                Some(1i32),
+            ),
         );
         g.add_shape(Box::new(rectangle));
 

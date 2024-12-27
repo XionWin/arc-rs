@@ -1,12 +1,35 @@
-use std::{fmt::Debug, rc::Rc};
+use std::{borrow::Borrow, fmt::Debug, rc::Rc};
 
 use crate::{Color, Matrix2D, PaintImage};
 
 #[derive(Debug)]
 pub struct Style {
-    pub background: Box<dyn Background>,
-    pub stroke: ColorBackground,
-    pub stroke_width: Option<i32>,
+    background: Box<dyn Background>,
+    stroke: ColorBackground,
+    stroke_width: Option<i32>,
+}
+
+impl Style {
+    pub fn new(
+        background: Box<dyn Background>,
+        stroke: ColorBackground,
+        stroke_width: Option<i32>,
+    ) -> Self {
+        Self {
+            background,
+            stroke,
+            stroke_width,
+        }
+    }
+    pub fn get_background(&self) -> &dyn Background {
+        self.background.borrow()
+    }
+    pub fn get_stroke(&self) -> &ColorBackground {
+        &self.stroke
+    }
+    pub fn get_stroke_width(&self) -> Option<i32> {
+        self.stroke_width
+    }
 }
 
 impl Default for Style {
