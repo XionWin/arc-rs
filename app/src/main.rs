@@ -35,15 +35,13 @@ fn test(g: &dyn core::Graphic) {
     let mut x = 0i32;
     let mut y = 0i32;
     let mut max_y = 0i32;
-    let zoom_factor = 4i32;
+    let zoom_factor = 2i32;
 
-    let paths = std::fs::read_dir(
-        "/home/win/Downloads/Sunnyside_World_ASSET_PACK_V2.1/Sunnyside_World_Assets/UI/",
-    )
-    .unwrap()
-    .filter(|item| item.as_ref().unwrap().file_type().unwrap().is_file())
-    .map(|item| String::from(item.as_ref().unwrap().path().to_str().unwrap()))
-    .collect::<Vec<String>>();
+    let paths = std::fs::read_dir("/home/win/Downloads/Cute_Fantasy_Free/Outdoor decoration/")
+        .unwrap()
+        .filter(|item| item.as_ref().unwrap().file_type().unwrap().is_file())
+        .map(|item| String::from(item.as_ref().unwrap().path().to_str().unwrap()))
+        .collect::<Vec<String>>();
 
     println!("{:?}", paths);
 
@@ -67,10 +65,7 @@ fn test(g: &dyn core::Graphic) {
             size.height,
             Style::new(
                 Box::new(core::ImageBackground::new(rc::Rc::new(
-                    core::PaintImage::new(
-                        img,
-                        core::Rect::new(x, y, size.width / 2i32, size.height / 2i32),
-                    ),
+                    core::PaintImage::new(img, core::Rect::new(x, y, size.width, size.height)),
                 ))),
                 core::ColorBackground::new(core::Color::Red, core::Color::Blue),
                 Some(1i32),

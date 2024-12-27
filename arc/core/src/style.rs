@@ -1,6 +1,6 @@
 use std::{borrow::Borrow, fmt::Debug, rc::Rc};
 
-use crate::{Color, Matrix2D, PaintImage};
+use crate::{Color, PaintImage};
 
 #[derive(Debug)]
 pub struct Style {
