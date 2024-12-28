@@ -94,13 +94,13 @@ impl GraphicRenderer {
         );
 
         for call in frame_data.get_calls() {
-            let frag_uniform = frag_uniforms.get(call.uniform_offset).unwrap();
+            let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);
-            if let Some(texture_id) = call.texture_id {
+            if let Some(texture_id) = call.get_texture_id() {
                 self._program.set_texture_id(texture_id);
             }
 
-            let primitive_type = match call.call_type {
+            let primitive_type = match call.get_call_type() {
                 crate::CallType::Fill => crate::def::PrimitiveType::TriangleFan,
                 crate::CallType::ConvexFill => crate::def::PrimitiveType::TriangleFan,
                 crate::CallType::Stroke => crate::def::PrimitiveType::TriangleStrip,
@@ -109,8 +109,8 @@ impl GraphicRenderer {
 
             crate::gl::draw_arrays(
                 primitive_type,
-                call.vertex_offset as _,
-                call.vertex_len as _,
+                call.get_vertex_offset() as _,
+                call.get_vertex_len() as _,
             );
         }
     }

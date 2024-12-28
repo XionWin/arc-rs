@@ -4,11 +4,11 @@ use crate::CallType;
 
 #[derive(Debug)]
 pub struct Call {
-    pub call_type: CallType,
-    pub vertex_offset: usize,
-    pub vertex_len: usize,
-    pub uniform_offset: usize,
-    pub texture_id: Option<c_uint>,
+    call_type: CallType,
+    vertex_offset: usize,
+    vertex_len: usize,
+    uniform_offset: usize,
+    texture_id: Option<c_uint>,
 }
 
 impl Call {
@@ -26,5 +26,21 @@ impl Call {
             uniform_offset,
             texture_id,
         }
+    }
+
+    pub fn get_call_type(&self) -> &CallType {
+        &self.call_type
+    }
+    pub fn get_vertex_offset(&self) -> usize {
+        self.vertex_offset
+    }
+    pub fn get_vertex_len(&self) -> usize {
+        self.vertex_len
+    }
+    pub fn get_uniform_offset(&self) -> usize {
+        self.uniform_offset
+    }
+    pub fn get_texture_id(&self) -> Option<c_uint> {
+        self.texture_id
     }
 }
