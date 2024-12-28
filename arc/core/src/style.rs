@@ -55,7 +55,7 @@ impl dyn Background {
 
 #[derive(Debug)]
 pub struct ColorBackground {
-    _paint_color: crate::PaintColor,
+    paint_color: crate::PaintColor,
 }
 
 impl Background for ColorBackground {}
@@ -63,7 +63,7 @@ impl Background for ColorBackground {}
 impl Default for ColorBackground {
     fn default() -> Self {
         Self {
-            _paint_color: crate::PaintColor::default(),
+            paint_color: crate::PaintColor::default(),
         }
     }
 }
@@ -71,17 +71,17 @@ impl Default for ColorBackground {
 impl ColorBackground {
     pub fn new(inner_color: crate::Color, outer_color: crate::Color) -> Self {
         Self {
-            _paint_color: crate::PaintColor::new(inner_color, outer_color),
+            paint_color: crate::PaintColor::new(inner_color, outer_color),
         }
     }
     pub fn get_inner_color(&self) -> Color {
-        self._paint_color.get_inner_color()
+        self.paint_color.get_inner_color()
     }
     pub fn get_outer_color(&self) -> Color {
-        self._paint_color.get_outer_color()
+        self.paint_color.get_outer_color()
     }
     pub fn get_paint_color(&self) -> crate::PaintColor {
-        self._paint_color.clone()
+        self.paint_color.clone()
     }
 }
 
@@ -94,7 +94,7 @@ impl crate::AsAny for ColorBackground {
 #[derive(Debug)]
 pub struct ImageBackground {
     image: Rc<PaintImage>,
-    _paint_color: crate::PaintColor,
+    paint_color: crate::PaintColor,
 }
 
 impl Background for ImageBackground {}
@@ -103,7 +103,7 @@ impl ImageBackground {
     pub fn new(image: Rc<PaintImage>) -> Self {
         Self {
             image,
-            _paint_color: crate::PaintColor::new_with_inner_color(crate::Color::TrueColor {
+            paint_color: crate::PaintColor::new_with_inner_color(crate::Color::TrueColor {
                 r: 255,
                 g: 255,
                 b: 255,
@@ -113,16 +113,13 @@ impl ImageBackground {
     }
 
     pub fn new_with_paint_color(image: Rc<PaintImage>, paint_color: crate::PaintColor) -> Self {
-        Self {
-            image,
-            _paint_color: paint_color,
-        }
+        Self { image, paint_color }
     }
     pub fn get_paint_image_rc(&self) -> Rc<PaintImage> {
         self.image.clone()
     }
     pub fn get_paint_color(&self) -> crate::PaintColor {
-        self._paint_color.clone()
+        self.paint_color.clone()
     }
 }
 
