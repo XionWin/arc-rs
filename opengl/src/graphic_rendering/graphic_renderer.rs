@@ -6,6 +6,7 @@ use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer};
 
 #[derive(Debug)]
 pub struct GraphicRenderer {
+    _size: core::Size<i32>,
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
@@ -15,8 +16,9 @@ pub struct GraphicRenderer {
 }
 
 impl GraphicRenderer {
-    pub fn new() -> Self {
+    pub fn new(size: core::Size<i32>) -> Self {
         Self {
+            _size: size,
             _color_type: core::ColorType::Rgba,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),

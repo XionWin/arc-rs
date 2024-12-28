@@ -2,20 +2,22 @@ use std::{cell::RefCell, rc::Rc};
 
 #[derive(Debug)]
 pub struct Renderer {
+    _size: core::Size<i32>,
     _cache_renderer: crate::MonochromeRenderer,
     _graphic_renderer: crate::GraphicRenderer,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
 
 impl Renderer {
-    pub fn new<T>(loadfn: T) -> Self
+    pub fn new<T>(size: core::Size<i32>, loadfn: T) -> Self
     where
         T: Fn(&str) -> *const std::ffi::c_void,
     {
         crate::load_with(loadfn);
         Self {
+            _size: size,
             _cache_renderer: crate::MonochromeRenderer::new(),
-            _graphic_renderer: crate::GraphicRenderer::new(),
+            _graphic_renderer: crate::GraphicRenderer::new(size),
             _textures: RefCell::new(Vec::new()),
         }
     }

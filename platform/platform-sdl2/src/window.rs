@@ -140,7 +140,9 @@ impl Window {
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
-        let renderer = opengl::Renderer::new(|name| get_proc_address(&video_subsystem, name));
+        let renderer = opengl::Renderer::new(core::Size::new(width as _, height as _), |name| {
+            get_proc_address(&video_subsystem, name)
+        });
         let graphic = graphic::Graphic::new(Box::new(renderer));
         Ok(Window {
             parameter,
