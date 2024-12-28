@@ -39,7 +39,16 @@ fn test(g: &dyn core::Graphic) {
 
     let paths = std::fs::read_dir("/home/win/Downloads/Cute_Fantasy_Free/Outdoor decoration/")
         .unwrap()
-        .filter(|item| item.as_ref().unwrap().file_type().unwrap().is_file())
+        .filter(|item| {
+            item.as_ref().unwrap().file_type().unwrap().is_file()
+                && item
+                    .as_ref()
+                    .unwrap()
+                    .file_name()
+                    .to_str()
+                    .unwrap()
+                    .contains("png")
+        })
         .map(|item| String::from(item.as_ref().unwrap().path().to_str().unwrap()))
         .collect::<Vec<String>>();
 
