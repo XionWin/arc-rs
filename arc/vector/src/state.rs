@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, fmt::Debug};
+use std::fmt::Debug;
 
 pub trait State: core::AsAny + Debug {
     fn get_paint(&self) -> &core::Paint;

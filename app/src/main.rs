@@ -84,4 +84,21 @@ fn test(g: &dyn core::Graphic) {
 
         x += size.width;
     }
+
+    let rectangle = vector::RoundRectangle::new(
+        400,
+        100,
+        64,
+        64,
+        10,
+        Style::new(
+            Box::new(core::ColorBackground::new(
+                core::Color::White,
+                core::Color::Blue,
+            )),
+            core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+            Some(1i32),
+        ),
+    );
+    g.add_shape(Box::new(rectangle));
 }

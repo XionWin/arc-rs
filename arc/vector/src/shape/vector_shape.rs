@@ -17,7 +17,7 @@ impl<T: core::Shape + ?Sized> VectorShape for T {
     }
 
     fn get_fill_primitive(&self) -> Option<Primitive> {
-        get_fill_primitive(self, self.get_style())
+        get_fill_primitive(self)
     }
 }
 
@@ -28,7 +28,7 @@ fn get_stroke_primitive(_commands: &[core::Command], style: &core::Style) -> Opt
     ))
 }
 
-fn get_fill_primitive<T>(shape: &T, style: &core::Style) -> Option<Primitive>
+fn get_fill_primitive<T>(shape: &T) -> Option<Primitive>
 where
     T: core::Shape + ?Sized,
 {

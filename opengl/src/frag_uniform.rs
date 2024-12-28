@@ -163,31 +163,48 @@ fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
 }
 
 fn from_fill_state(state: &vector::FillState) -> FragUniform {
-    FragUniform {
-        _type: FragUniformType::FillTexture.into(),
-        _font_type: 0f32, // DEFAULT
-        _radius: state.get_paint().get_radius(),
-        _feather: state.get_paint().get_feather(),
-        _stroke_multiple: f32::MAX,
-        _stroke_threshold: 0f32, // DEFAULT
-        _extent: match state.get_paint().try_get_paint_image() {
-            Some(x) => x.get_extent(),
-            None => core::Extent::default(),
+    match state.get_paint().try_get_paint_image() {
+        Some(paint_image) => FragUniform {
+            _type: FragUniformType::FillTexture.into(),
+            _font_type: 0f32, // DEFAULT
+            _radius: state.get_paint().get_radius(),
+            _feather: state.get_paint().get_feather(),
+            _stroke_multiple: f32::MAX,
+            _stroke_threshold: 0f32, // DEFAULT
+            _extent: paint_image.get_extent(),
+            _scissor_matrix: match state.get_scissor() {
+                Some(x) => x.get_transform().into(),
+                None => crate::Matrix4x3::zero(),
+            },
+            _scissor_extent: match state.get_scissor() {
+                Some(x) => x.get_extent(),
+                None => core::Extent::default(),
+            },
+            _scissor_scale: core::Scale::default(), // DEFAULT
+            _paint_matrix: paint_image.get_transform().into(),
+            _inner_color: state.get_paint().get_color().get_inner_color(),
+            _outer_color: state.get_paint().get_color().get_outer_color(),
         },
-        _scissor_matrix: match state.get_scissor() {
-            Some(x) => x.get_transform().into(),
-            None => crate::Matrix4x3::zero(),
+        None => FragUniform {
+            _type: FragUniformType::FillGradient.into(),
+            _font_type: 0f32, // DEFAULT
+            _radius: state.get_paint().get_radius(),
+            _feather: state.get_paint().get_feather(),
+            _stroke_multiple: f32::MAX,
+            _stroke_threshold: 0f32, // DEFAULT
+            _extent: core::Extent::default(),
+            _scissor_matrix: match state.get_scissor() {
+                Some(x) => x.get_transform().into(),
+                None => crate::Matrix4x3::zero(),
+            },
+            _scissor_extent: match state.get_scissor() {
+                Some(x) => x.get_extent(),
+                None => core::Extent::default(),
+            },
+            _scissor_scale: core::Scale::default(), // DEFAULT
+            _paint_matrix: crate::Matrix4x3::default(),
+            _inner_color: state.get_paint().get_color().get_inner_color(),
+            _outer_color: state.get_paint().get_color().get_outer_color(),
         },
-        _scissor_extent: match state.get_scissor() {
-            Some(x) => x.get_extent(),
-            None => core::Extent::default(),
-        },
-        _scissor_scale: core::Scale::default(), // DEFAULT
-        _paint_matrix: match state.get_paint().try_get_paint_image() {
-            Some(x) => x.get_transform().into(),
-            None => crate::Matrix4x3::default(),
-        },
-        _inner_color: state.get_paint().get_color().get_inner_color(),
-        _outer_color: state.get_paint().get_color().get_outer_color(),
     }
 }
