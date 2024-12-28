@@ -76,7 +76,7 @@ impl graphic::Renderer for Renderer {
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {
-        use crate::GLRenderer;
+        use crate::GLGraphicRenderer;
         self._graphic_renderer.add_primitive(primitive);
     }
 }

@@ -2,7 +2,9 @@ use std::{cell::RefCell, ffi::c_uint};
 
 use graphic::TextureImage;
 
-use crate::{renderer_utility, AttributeLocation, FrameData, GLRenderer};
+use crate::{renderer_utility, AttributeLocation, GLGraphicRenderer, GLRenderer};
+
+use super::FrameData;
 
 #[derive(Debug)]
 pub struct GraphicRenderer {
@@ -45,6 +47,9 @@ impl GLRenderer for GraphicRenderer {
     fn get_color_type(&self) -> core::ColorType {
         self._color_type
     }
+}
+
+impl GLGraphicRenderer for GraphicRenderer {
     fn add_primitive(&self, primitive: vector::Primitive) {
         let state = primitive.get_state();
         let texture_id = match state.get_paint().try_get_paint_image() {

@@ -1,6 +1,8 @@
 use std::ffi::c_uint;
 
-use crate::{Call, CallType, FragUniform};
+use crate::{CallType, FragUniform};
+
+use super::Call;
 
 #[derive(Debug)]
 pub struct FrameData {
@@ -20,6 +22,7 @@ impl FrameData {
 
     pub fn add_call(
         &mut self,
+        target_texture: &dyn graphic::Texture,
         call_type: CallType,
         vertices: &[core::Vertex2],
         frag_uniforms: FragUniform,
@@ -36,6 +39,7 @@ impl FrameData {
         self._frag_uniforms.push(frag_uniforms);
 
         self._calls.push(Call::new(
+            target_texture.get_id(),
             call_type,
             vertex_offset,
             vertex_len,

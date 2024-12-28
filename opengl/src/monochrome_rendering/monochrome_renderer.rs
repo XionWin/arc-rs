@@ -1,6 +1,7 @@
 use std::{cell::RefCell, ffi::c_uint};
 
-use crate::{AttributeLocation, FrameData, GLRenderer};
+use super::FrameData;
+use crate::{AttributeLocation, GLRenderer, GLTextureRenderer};
 
 #[derive(Debug)]
 pub struct MonochromeRenderer {
@@ -40,8 +41,12 @@ impl GLRenderer for MonochromeRenderer {
     fn get_color_type(&self) -> core::ColorType {
         self._color_type
     }
-    fn add_primitive(&self, primitive: vector::Primitive) {
+}
+
+impl GLTextureRenderer for MonochromeRenderer {
+    fn add_primitive(&self, texture: &dyn graphic::Texture, primitive: vector::Primitive) {
         self._frame_data.borrow_mut().add_call(
+            texture,
             crate::CallType::Fill,
             primitive.get_vertices(),
             crate::DEFAULT_MONOCHROME_FRAG_UNIFORM,
