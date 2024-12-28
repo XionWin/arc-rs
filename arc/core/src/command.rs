@@ -50,10 +50,14 @@ impl Command {
             let point23 = point2.get_center_point(point3);
             let point012 = point01.get_center_point(&point12);
 
-            let dx = point3.x - point0.x;
-            let dy = point3.y - point0.y;
-            let d2 = ((point1.x - point3.x) * dy - (point1.y - point3.y) * dx).abs();
-            let d3 = ((point2.x - point3.x) * dy - (point2.y - point3.y) * dx).abs();
+            let dx = point3.get_x() - point0.get_x();
+            let dy = point3.get_y() - point0.get_y();
+            let d2 = ((point1.get_x() - point3.get_x()) * dy
+                - (point1.get_y() - point3.get_y()) * dx)
+                .abs();
+            let d3 = ((point2.get_x() - point3.get_x()) * dy
+                - (point2.get_y() - point3.get_y()) * dx)
+                .abs();
 
             if (d2 + d3) * (d2 + d3) < tess_tol * (dx * dx + dy * dy) {
                 result.push(point3.clone());

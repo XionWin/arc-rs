@@ -1,5 +1,7 @@
 use crate::Number;
 
+pub const DEFAULT_SCALE: Scale<f32> = Scale { x: 1f32, y: 1f32 };
+
 #[derive(Debug, Clone, Copy)]
 pub struct Scale<T>
 where

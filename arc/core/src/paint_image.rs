@@ -15,10 +15,10 @@ impl PaintImage {
             _image: image,
             _transform: {
                 let mat = Matrix2D::default();
-                mat.translate(-view_port.location.x as _, -view_port.location.y as _);
+                mat.translate(-view_port.get_x() as _, -view_port.get_y() as _);
                 mat
             },
-            _extent: crate::Extent::new(view_port.size.width, view_port.size.height),
+            _extent: crate::Extent::new(view_port.get_width(), view_port.get_height()),
         }
     }
 
@@ -38,6 +38,9 @@ impl PaintImage {
 impl From<Rc<dyn crate::Image>> for PaintImage {
     fn from(value: Rc<dyn crate::Image>) -> Self {
         let size = value.get_size();
-        Self::new(value, crate::Rect::new(0i32, 0i32, size.width, size.height))
+        Self::new(
+            value,
+            crate::Rect::new(0i32, 0i32, size.get_width(), size.get_height()),
+        )
     }
 }

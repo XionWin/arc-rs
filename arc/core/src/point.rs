@@ -14,8 +14,8 @@ pub struct Point<T>
 where
     T: Number,
 {
-    pub x: T,
-    pub y: T,
+    x: T,
+    y: T,
 }
 
 impl<T> Pt<T> for Point<T>
@@ -42,5 +42,13 @@ where
 {
     pub fn new(x: T, y: T) -> Self {
         Self { x, y }
+    }
+
+    pub fn get_x(&self) -> T {
+        self.x
+    }
+
+    pub fn get_y(&self) -> T {
+        self.y
     }
 }

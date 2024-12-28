@@ -40,15 +40,15 @@ impl GraphicRenderingProgram {
 
     pub fn set_viewport(&self, value: core::Rect<i32>) {
         crate::gl::viewport(
-            value.location.x,
-            value.location.y,
-            value.size.width,
-            value.size.height,
+            value.get_x(),
+            value.get_y(),
+            value.get_width(),
+            value.get_height(),
         );
         crate::gl::uniform_2f(
             self._attribute_locations["aViewport"],
-            value.size.width as _,
-            value.size.height as _,
+            value.get_width() as _,
+            value.get_height() as _,
         );
         crate::gl::uniform_2f(self._attribute_locations["aOffset"], 0f32, 0f32);
     }

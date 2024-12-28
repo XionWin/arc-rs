@@ -1,24 +1,27 @@
 #[derive(Debug)]
 pub struct Scissor {
-    _transform: crate::Matrix2D,
-    _extent: crate::Extent<i32>,
+    transform: crate::Matrix2D,
+    extent: crate::Extent<i32>,
 }
 
 impl Default for Scissor {
     fn default() -> Self {
         Self {
-            _transform: crate::Matrix2D::default(),
-            _extent: crate::Extent::default(),
+            transform: crate::Matrix2D::default(),
+            extent: crate::Extent::default(),
         }
     }
 }
 
 impl Scissor {
+    pub fn new(transform: crate::Matrix2D, extent: crate::Extent<i32>) -> Self {
+        Self { transform, extent }
+    }
     pub fn get_transform(&self) -> &crate::Matrix2D {
-        &self._transform
+        &self.transform
     }
 
     pub fn get_extent(&self) -> crate::Extent<i32> {
-        self._extent
+        self.extent
     }
 }

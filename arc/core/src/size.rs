@@ -5,8 +5,8 @@ pub struct Size<T>
 where
     T: Number,
 {
-    pub width: T,
-    pub height: T,
+    width: T,
+    height: T,
 }
 
 impl<T> Size<T>
@@ -15,6 +15,14 @@ where
 {
     pub fn new(width: T, height: T) -> Self {
         Self { width, height }
+    }
+
+    pub fn get_width(&self) -> T {
+        self.width
+    }
+
+    pub fn get_height(&self) -> T {
+        self.height
     }
 
     pub fn mul(&self, factor: T) -> Self {

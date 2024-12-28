@@ -1,12 +1,14 @@
 use crate::Number;
 
+pub const DEFAULT_EXTENT: Extent<i32> = Extent { x: 0i32, y: 0i32 };
+
 #[derive(Copy, Clone, Debug)]
 pub struct Extent<T>
 where
     T: Number,
 {
-    pub x: T,
-    pub y: T,
+    x: T,
+    y: T,
 }
 
 impl<T> Extent<T>
@@ -15,6 +17,14 @@ where
 {
     pub fn new(x: T, y: T) -> Self {
         Extent { x, y }
+    }
+
+    pub fn get_x(&self) -> T {
+        self.x
+    }
+
+    pub fn get_y(&self) -> T {
+        self.y
     }
 }
 

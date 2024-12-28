@@ -15,10 +15,10 @@ where
     T: Number,
 {
     fn get_center_point(&self, rhs: &Self) -> Point<f32> {
-        Point {
-            x: (self.x + rhs.x).into_f32() / 2f32,
-            y: (self.y + rhs.y).into_f32() / 2f32,
-        }
+        Point::new(
+            (self.x + rhs.x).into_f32() / 2f32,
+            (self.y + rhs.y).into_f32() / 2f32,
+        )
     }
 
     fn get_distance(&self, rhs: &Self) -> f32 {
@@ -34,8 +34,8 @@ where
 {
     pub fn new_from_point(point: &Point<T>, is_corner: bool) -> Self {
         Self {
-            x: point.x,
-            y: point.y,
+            x: point.get_x(),
+            y: point.get_y(),
             is_corner,
         }
     }

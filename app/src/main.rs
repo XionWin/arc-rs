@@ -60,21 +60,24 @@ fn test(g: &dyn core::Graphic) {
             .into();
         let size = img.get_size().mul(zoom_factor);
 
-        if x + size.width > 800 {
+        if x + size.get_width() > 800 {
             x = 0i32;
             y += max_y;
         }
 
-        max_y = max_y.max(size.height);
+        max_y = max_y.max(size.get_height());
 
         let rectangle = vector::Rectangle::new(
             x,
             y,
-            size.width,
-            size.height,
+            size.get_width(),
+            size.get_height(),
             Style::new(
                 Box::new(core::ImageBackground::new(rc::Rc::new(
-                    core::PaintImage::new(img, core::Rect::new(x, y, size.width, size.height)),
+                    core::PaintImage::new(
+                        img,
+                        core::Rect::new(x, y, size.get_width(), size.get_height()),
+                    ),
                 ))),
                 core::ColorBackground::new(core::Color::Red, core::Color::Blue),
                 Some(1i32),
@@ -82,7 +85,7 @@ fn test(g: &dyn core::Graphic) {
         );
         g.add_shape(Box::new(rectangle));
 
-        x += size.width;
+        x += size.get_width();
     }
 
     let rectangle = vector::RoundRectangle::new(
