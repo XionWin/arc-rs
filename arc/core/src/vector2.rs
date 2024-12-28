@@ -6,8 +6,8 @@ pub struct Vector2<T>
 where
     T: Number,
 {
-    pub x: T,
-    pub y: T,
+    x: T,
+    y: T,
 }
 
 impl<T> Vector2<T>
@@ -16,5 +16,13 @@ where
 {
     pub fn new(x: T, y: T) -> Self {
         Self { x, y }
+    }
+
+    pub fn get_x(&self) -> T {
+        self.x
+    }
+
+    pub fn get_y(&self) -> T {
+        self.y
     }
 }

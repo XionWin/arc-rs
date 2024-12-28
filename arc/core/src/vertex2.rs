@@ -5,8 +5,8 @@ use crate::Vector2;
 #[repr(C)]
 #[derive(Debug, Clone, Copy)]
 pub struct Vertex2 {
-    pub position: Vector2<f32>,
-    pub coorinate: Vector2<f32>,
+    position: Vector2<f32>,
+    coorinate: Vector2<f32>,
 }
 
 impl Vertex2 {
@@ -16,6 +16,22 @@ impl Vertex2 {
             coorinate: Vector2::new(u.into(), v.into()),
         }
     }
+
+    pub fn get_x(&self) -> f32 {
+        self.position.get_x()
+    }
+
+    pub fn get_y(&self) -> f32 {
+        self.position.get_y()
+    }
+
+    pub fn get_u(&self) -> f32 {
+        self.coorinate.get_x()
+    }
+
+    pub fn get_v(&self) -> f32 {
+        self.coorinate.get_y()
+    }
 }
 
 impl Display for Vertex2 {
@@ -23,7 +39,10 @@ impl Display for Vertex2 {
         write!(
             f,
             "{}, {}, {}, {}",
-            self.position.x, self.position.y, self.coorinate.x, self.coorinate.y
+            self.get_x(),
+            self.get_y(),
+            self.get_u(),
+            self.get_v()
         )
     }
 }
