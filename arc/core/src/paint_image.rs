@@ -13,11 +13,10 @@ impl PaintImage {
     pub fn new(image: Rc<dyn crate::Image>, view_port: crate::Rect<i32>) -> Self {
         Self {
             _image: image,
-            _transform: {
-                let mat = Matrix2D::default();
-                mat.translate(-view_port.get_x() as _, -view_port.get_y() as _);
-                mat
-            },
+            _transform: Matrix2D::new_from_translate(
+                -view_port.get_x() as _,
+                -view_port.get_y() as _,
+            ),
             _extent: crate::Extent::new(view_port.get_width(), view_port.get_height()),
         }
     }
