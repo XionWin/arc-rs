@@ -3,7 +3,7 @@ use std::{cell::RefCell, rc::Rc};
 #[derive(Debug)]
 pub struct Renderer {
     _size: core::Size<i32>,
-    _cache_renderer: crate::MonochromeRenderer,
+    _cache_renderer: crate::TextureRenderer,
     _graphic_renderer: crate::GraphicRenderer,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
@@ -16,7 +16,7 @@ impl Renderer {
         crate::load_with(loadfn);
         Self {
             _size: size,
-            _cache_renderer: crate::MonochromeRenderer::new(),
+            _cache_renderer: crate::TextureRenderer::new(core::ColorType::Rgba),
             _graphic_renderer: crate::GraphicRenderer::new(size),
             _textures: RefCell::new(Vec::new()),
         }

@@ -12,12 +12,12 @@ mod gl_program;
 mod gl_renderer;
 mod graphic_rendering;
 mod matrix4x3;
-mod monochrome_rendering;
 mod program_utility;
 mod renderer;
 mod renderer_utility;
 mod shader;
 mod texture;
+mod texture_rendering;
 
 pub use attribute_location::*;
 pub use call_type::*;
@@ -30,8 +30,8 @@ pub use texture::*;
 pub(crate) use gl_program::*;
 pub(crate) use gl_renderer::*;
 pub(crate) use graphic_rendering::*;
-pub(crate) use monochrome_rendering::*;
 pub(crate) use shader::*;
+pub(crate) use texture_rendering::*;
 
 pub fn load() {
     crate::gl::load();
