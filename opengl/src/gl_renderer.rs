@@ -13,5 +13,9 @@ pub trait GLGraphicRenderer: GLRenderer {
 }
 
 pub trait GLTextureRenderer: GLRenderer {
-    fn add_primitive(&self, texture: &dyn graphic::Texture, primitive: vector::Primitive);
+    fn add_primitive_to_texture(
+        &self,
+        texture: &dyn graphic::Texture,
+        primitive: vector::Primitive,
+    );
 }

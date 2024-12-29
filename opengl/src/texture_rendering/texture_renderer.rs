@@ -44,7 +44,11 @@ impl GLRenderer for TextureRenderer {
 }
 
 impl GLTextureRenderer for TextureRenderer {
-    fn add_primitive(&self, texture: &dyn graphic::Texture, primitive: vector::Primitive) {
+    fn add_primitive_to_texture(
+        &self,
+        texture: &dyn graphic::Texture,
+        primitive: vector::Primitive,
+    ) {
         self._frame_data.borrow_mut().add_call(
             texture,
             crate::CallType::Fill,
