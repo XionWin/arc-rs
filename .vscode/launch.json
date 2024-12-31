@@ -5,9 +5,9 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Debug",
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'app'",
             "cargo": {
                 "args": [
                     "build",
@@ -24,42 +24,54 @@
             "preLaunchTask": "copy"
         },
         {
-            "type": "lldb",
+            "name": "Remote Debug",
+            "type": "cppdbg",
             "request": "launch",
-            "name": "Debug unit tests in executable 'app'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--bin=app",
-                    "--package=app"
-                ],
-                "filter": {
-                    "name": "app",
-                    "kind": "bin"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
+            "program": "${workspaceRoot}/target/aarch64-unknown-linux-gnu/debug/app",
+            "args": [""],
+            "preLaunchTask": "rust: remote ARM debug setup",
+            "cwd": "${workspaceRoot}/target/aarch64-unknown-linux-gnu/debug/",
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb-multiarch",
+            "miDebuggerServerAddress": "192.168.0.209:17777",
         },
-        {
-            "type": "lldb",
-            "request": "launch",
-            "name": "Debug unit tests in library 'arc'",
-            "cargo": {
-                "args": [
-                    "test",
-                    "--no-run",
-                    "--lib",
-                    "--package=arc"
-                ],
-                "filter": {
-                    "name": "arc",
-                    "kind": "lib"
-                }
-            },
-            "args": [],
-            "cwd": "${workspaceFolder}"
-        }
+        // {
+        //     "type": "lldb",
+        //     "request": "launch",
+        //     "name": "Debug unit tests in executable 'app'",
+        //     "cargo": {
+        //         "args": [
+        //             "test",
+        //             "--no-run",
+        //             "--bin=app",
+        //             "--package=app"
+        //         ],
+        //         "filter": {
+        //             "name": "app",
+        //             "kind": "bin"
+        //         }
+        //     },
+        //     "args": [],
+        //     "cwd": "${workspaceFolder}"
+        // },
+        // {
+        //     "type": "lldb",
+        //     "request": "launch",
+        //     "name": "Debug unit tests in library 'arc'",
+        //     "cargo": {
+        //         "args": [
+        //             "test",
+        //             "--no-run",
+        //             "--lib",
+        //             "--package=arc"
+        //         ],
+        //         "filter": {
+        //             "name": "arc",
+        //             "kind": "lib"
+        //         }
+        //     },
+        //     "args": [],
+        //     "cwd": "${workspaceFolder}"
+        // }
     ]
 }

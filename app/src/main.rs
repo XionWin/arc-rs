@@ -37,7 +37,7 @@ fn test(g: &dyn core::Graphic) {
     let mut max_y = 0i32;
     let zoom_factor = 2i32;
 
-    let paths = std::fs::read_dir("/home/win/Downloads/Cute_Fantasy_Free/Outdoor decoration/")
+    let paths = std::fs::read_dir("resource/image/png/")
         .unwrap()
         .filter(|item| {
             item.as_ref().unwrap().file_type().unwrap().is_file()
@@ -54,54 +54,56 @@ fn test(g: &dyn core::Graphic) {
 
     println!("{:?}", paths);
 
-    for path in &paths {
-        let img: Rc<dyn Image> = g
-            .load_image_from_file(path, core::ImageFilter::Nearest)
-            .into();
-        let size = img.get_size().mul(zoom_factor);
+    for _ in 0..5 {
+        for path in &paths {
+            let img: Rc<dyn Image> = g
+                .load_image_from_file(path, core::ImageFilter::Nearest)
+                .into();
+            let size = img.get_size().mul(zoom_factor);
 
-        if x + size.get_width() > 800 {
-            x = 0i32;
-            y += max_y;
+            if x + size.get_width() > 800 {
+                x = 0i32;
+                y += 24; //max_y;
+            }
+
+            max_y = max_y.max(size.get_height());
+
+            let rectangle = vector::Rectangle::new(
+                x,
+                y,
+                size.get_width(),
+                size.get_height(),
+                Style::new(
+                    Box::new(core::ImageBackground::new(rc::Rc::new(
+                        core::PaintImage::new(
+                            img,
+                            core::Rect::new(x, y, size.get_width(), size.get_height()),
+                        ),
+                    ))),
+                    core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+                    Some(1i32),
+                ),
+            );
+            g.add_shape(Box::new(rectangle));
+
+            x += 24; //size.get_width();
         }
-
-        max_y = max_y.max(size.get_height());
-
-        let rectangle = vector::Rectangle::new(
-            x,
-            y,
-            size.get_width(),
-            size.get_height(),
-            Style::new(
-                Box::new(core::ImageBackground::new(rc::Rc::new(
-                    core::PaintImage::new(
-                        img,
-                        core::Rect::new(x, y, size.get_width(), size.get_height()),
-                    ),
-                ))),
-                core::ColorBackground::new(core::Color::Red, core::Color::Blue),
-                Some(1i32),
-            ),
-        );
-        g.add_shape(Box::new(rectangle));
-
-        x += size.get_width();
     }
 
-    let rectangle = vector::RoundRectangle::new(
-        400,
-        100,
-        64,
-        64,
-        10,
-        Style::new(
-            Box::new(core::ColorBackground::new(
-                core::Color::White,
-                core::Color::Blue,
-            )),
-            core::ColorBackground::new(core::Color::Red, core::Color::Blue),
-            Some(1i32),
-        ),
-    );
-    g.add_shape(Box::new(rectangle));
+    // let rectangle = vector::RoundRectangle::new(
+    //     400,
+    //     100,
+    //     64,
+    //     64,
+    //     10,
+    //     Style::new(
+    //         Box::new(core::ColorBackground::new(
+    //             core::Color::White,
+    //             core::Color::Blue,
+    //         )),
+    //         core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+    //         Some(1i32),
+    //     ),
+    // );
+    // g.add_shape(Box::new(rectangle));
 }
