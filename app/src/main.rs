@@ -60,7 +60,7 @@ fn test(g: &dyn core::Graphic) {
 
             if x + size.get_width() > 800 {
                 x = 0i32;
-                y += 24; //max_y;
+                y += max_y;
             }
 
             max_y = max_y.max(size.get_height());
@@ -81,24 +81,7 @@ fn test(g: &dyn core::Graphic) {
             );
             g.add_shape(Box::new(rectangle));
 
-            x += 24; //size.get_width();
+            x += size.get_width();
         }
     }
-
-    // let rectangle = vector::RoundRectangle::new(
-    //     400,
-    //     100,
-    //     64,
-    //     64,
-    //     10,
-    //     Style::new(
-    //         Box::new(core::ColorBackground::new(
-    //             core::Color::White,
-    //             core::Color::Blue,
-    //         )),
-    //         core::ColorBackground::new(core::Color::Red, core::Color::Blue),
-    //         Some(1i32),
-    //     ),
-    // );
-    // g.add_shape(Box::new(rectangle));
 }
