@@ -62,6 +62,6 @@ impl crate::GLProgram for TextureRenderingProgram {
 impl Drop for TextureRenderingProgram {
     fn drop(&mut self) {
         crate::gl::delete_program(self.id);
-        util::print_debug!("primitive_program {} droped", self.id)
+        util::print_debug!("texture_rendering_program {} droped", self.id)
     }
 }

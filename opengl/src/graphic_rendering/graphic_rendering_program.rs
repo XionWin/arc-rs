@@ -77,6 +77,6 @@ impl crate::GLProgram for GraphicRenderingProgram {
 impl Drop for GraphicRenderingProgram {
     fn drop(&mut self) {
         crate::gl::delete_program(self.id);
-        util::print_debug!("primitive_program {} droped", self.id)
+        util::print_debug!("graphic_rendering_program {} droped", self.id)
     }
 }

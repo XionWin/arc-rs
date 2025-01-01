@@ -49,6 +49,7 @@ impl GLTextureRenderer for TextureRenderer {
         texture: &dyn graphic::Texture,
         primitive: vector::Primitive,
     ) {
+        self._program.use_program();
         self._frame_data.borrow_mut().add_call(
             texture,
             crate::CallType::Fill,
@@ -61,6 +62,6 @@ impl GLTextureRenderer for TextureRenderer {
 
 impl Drop for TextureRenderer {
     fn drop(&mut self) {
-        util::print_debug!("primitive_renderer droped")
+        util::print_debug!("texture_renderer droped")
     }
 }

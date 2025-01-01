@@ -135,6 +135,7 @@ impl Window {
         )?;
         sdl_window.set_icon(window_icon);
         sdl_window.set_resizable(false);
+        // let _ = sdl_window.set_fullscreen(sdl2::video::FullscreenType::True);
         // sdl_context.mouse().show_cursor(false);
 
         // Unlike the other example above, nobody created a context for your window,

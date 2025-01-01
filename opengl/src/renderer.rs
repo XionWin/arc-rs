@@ -83,6 +83,6 @@ impl graphic::Renderer for Renderer {
 
 impl Drop for Renderer {
     fn drop(&mut self) {
-        util::print_debug!("gl_renderer droped")
+        util::print_debug!("renderer droped")
     }
 }
