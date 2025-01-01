@@ -1,12 +1,9 @@
 use core::{Image, Style, Window};
-use std::{
-    cell::RefCell,
-    rc::{self, Rc},
-};
+use std::{cell::RefCell, rc::Rc};
 
 fn main() {
     util::print_hight_light!("====================[Arc Demo]====================");
-    let mut window = util::expect!(platform_sdl2::Window::new(1280, 1024));
+    let mut window = util::expect!(platform_sdl2::Window::new(800, 480));
     window.set_vsync(true);
 
     let image: RefCell<Option<Box<dyn core::Image>>> = RefCell::new(None);
@@ -74,12 +71,10 @@ fn test(g: &dyn core::Graphic) {
                 size.get_width(),
                 size.get_height(),
                 Style::new(
-                    Box::new(core::ImageBackground::new(rc::Rc::new(
-                        core::PaintImage::new(
-                            img,
-                            core::Rect::new(x, y, size.get_width(), size.get_height()),
-                        ),
-                    ))),
+                    Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
+                        img,
+                        core::Rect::new(x, y, size.get_width(), size.get_height()),
+                    )))),
                     core::ColorBackground::new(core::Color::Red, core::Color::Blue),
                     Some(1i32),
                 ),
