@@ -1,34 +1,34 @@
 use std::{cell::RefCell, ffi::c_uint};
 
 use super::FrameData;
-use crate::{AttributeLocation, GLRenderer, GLTextureRenderer};
+use crate::{AttributeLocation, GLPrimitiveRenderer, GLRenderer};
 
 #[derive(Debug)]
-pub struct TextureRenderer {
+pub struct PrimitiveRenderer {
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
     _vfo: c_uint,
-    _program: crate::TextureRenderingProgram,
+    _program: crate::PrimitiveRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
 }
 
-impl TextureRenderer {
+impl PrimitiveRenderer {
     pub fn new(color_type: core::ColorType) -> Self {
         Self {
             _color_type: color_type,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),
             _vfo: crate::gl::gen_frame_buffer(),
-            _program: crate::TextureRenderingProgram::new(),
+            _program: crate::PrimitiveRenderingProgram::new(),
             _attribute_locations: Box::new([AttributeLocation::new("aPos", 0, 2)]),
             _frame_data: RefCell::new(FrameData::new()),
         }
     }
 }
 
-impl GLRenderer for TextureRenderer {
+impl GLRenderer for PrimitiveRenderer {
     fn get_vbo(&self) -> c_uint {
         self._vbo
     }
@@ -43,11 +43,11 @@ impl GLRenderer for TextureRenderer {
     }
 }
 
-impl GLTextureRenderer for TextureRenderer {
-    fn add_primitive_to_texture(
+impl GLPrimitiveRenderer for PrimitiveRenderer {
+    fn draw_primitive_on_texture(
         &self,
-        texture: &dyn graphic::Texture,
         primitive: vector::Primitive,
+        texture: &dyn graphic::Texture,
     ) {
         self._program.use_program();
         self._frame_data.borrow_mut().add_call(
@@ -60,7 +60,7 @@ impl GLTextureRenderer for TextureRenderer {
     }
 }
 
-impl Drop for TextureRenderer {
+impl Drop for PrimitiveRenderer {
     fn drop(&mut self) {
         util::print_debug!("texture_renderer droped")
     }

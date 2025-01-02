@@ -3,7 +3,7 @@ use std::{cell::RefCell, rc::Rc};
 #[derive(Debug)]
 pub struct Renderer {
     _size: core::Size<i32>,
-    _cache_renderer: crate::TextureRenderer,
+    _cache_renderer: crate::PrimitiveRenderer,
     _graphic_renderer: crate::GraphicRenderer,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
@@ -16,7 +16,7 @@ impl Renderer {
         crate::load_with(loadfn);
         Self {
             _size: size,
-            _cache_renderer: crate::TextureRenderer::new(core::ColorType::Rgba),
+            _cache_renderer: crate::PrimitiveRenderer::new(core::ColorType::Rgba),
             _graphic_renderer: crate::GraphicRenderer::new(size),
             _textures: RefCell::new(Vec::new()),
         }
@@ -73,6 +73,12 @@ impl graphic::Renderer for Renderer {
         let texture = Rc::new(crate::Texture::load(path, texture_filter));
         self._textures.borrow_mut().push(texture.clone());
         texture
+    }
+
+    fn draw_primitive_cache(&self, primitive: vector::Primitive, cache: &graphic::TextureCache) {
+        use crate::GLPrimitiveRenderer;
+        self._cache_renderer
+            .draw_primitive_on_texture(primitive, cache.get_texture());
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {
