@@ -123,6 +123,8 @@ impl Window {
         let mut sdl_window = util::expect!(video_subsystem
             .window(&title_function(&parameter), width.into(), height.into())
             .opengl()
+            .input_grabbed()
+            .allow_highdpi()
             .build());
 
         let window_icon = <sdl2::surface::Surface as sdl2::image::LoadSurface>::from_file(

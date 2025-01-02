@@ -51,7 +51,7 @@ fn test(g: &dyn core::Graphic) {
 
     println!("{:?}", paths);
 
-    for _ in 0..5 {
+    for _ in 0..25 {
         for path in &paths {
             let img: Rc<dyn Image> = g
                 .load_image_from_file(path, core::ImageFilter::Nearest)
@@ -81,7 +81,7 @@ fn test(g: &dyn core::Graphic) {
             );
             g.add_shape(Box::new(rectangle));
 
-            x += size.get_width();
+            x += 50; //size.get_width();
         }
     }
 }
