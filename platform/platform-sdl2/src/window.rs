@@ -79,11 +79,6 @@ impl core::Window for Window {
         self.get_graphic().begin_render();
         self.fps_counter.borrow_mut().update(|fps| {
             util::print_debug!("fps: {fps:.0}");
-            // util::expect!(self.sdl_window.set_title(&format!(
-            //     "{} fps: {:#.0}",
-            //     &(self.title_function)("Core", &self.version),
-            //     fps
-            // )))
         });
         self.get_graphic().clear_color(self.background_color);
         self.get_graphic().clear();
@@ -135,8 +130,8 @@ impl Window {
         )?;
         sdl_window.set_icon(window_icon);
         sdl_window.set_resizable(false);
+        sdl_context.mouse().show_cursor(false);
         // let _ = sdl_window.set_fullscreen(sdl2::video::FullscreenType::True);
-        // sdl_context.mouse().show_cursor(false);
 
         // Unlike the other example above, nobody created a context for your window,
         // so you need to create one.
