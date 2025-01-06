@@ -38,6 +38,11 @@ impl core::Window for Window {
                         keycode: Some(Keycode::Escape),
                         ..
                     } => break 'running,
+
+                    Event::Window {
+                        win_event: sdl2::event::WindowEvent::Resized(w, h),
+                        ..
+                    } => println!("{}, {}", w, h),
                     _ => {}
                 }
             }
@@ -123,7 +128,7 @@ impl Window {
         let mut sdl_window = util::expect!(video_subsystem
             .window(&title_function(&parameter), width.into(), height.into())
             .opengl()
-            .input_grabbed()
+            // .input_grabbed()
             .allow_highdpi()
             .build());
 

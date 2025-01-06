@@ -51,37 +51,33 @@ fn test(g: &dyn core::Graphic) {
 
     println!("{:?}", paths);
 
-    for _ in 0..25 {
-        for path in &paths {
-            let img: Rc<dyn Image> = g
-                .load_image_from_file(path, core::ImageFilter::Nearest)
-                .into();
-            let size = img.get_size().mul(zoom_factor);
-
-            if x + size.get_width() > 800 {
-                x = 0i32;
-                y += max_y;
-            }
-
-            max_y = max_y.max(size.get_height());
-
-            let rectangle = vector::Rectangle::new(
-                x,
-                y,
-                size.get_width(),
-                size.get_height(),
-                Style::new(
-                    Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
-                        img,
-                        core::Rect::new(x, y, size.get_width(), size.get_height()),
-                    )))),
-                    core::ColorBackground::new(core::Color::Red, core::Color::Blue),
-                    Some(1i32),
-                ),
-            );
-            g.add_shape(Box::new(rectangle));
-
-            x += 50; //size.get_width();
+    for path in &paths {
+        let img: Rc<dyn Image> = g
+            .load_image_from_file(path, core::ImageFilter::Nearest)
+            .into();
+        let size = img.get_size().mul(zoom_factor);
+        if x + size.get_width() > 800 {
+            x = 0i32;
+            y += max_y;
         }
+        max_y = max_y.max(size.get_height());
+
+        let rectangle = vector::Rectangle::new(
+            x,
+            y,
+            size.get_width(),
+            size.get_height(),
+            Style::new(
+                Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
+                    img.clone(),
+                    core::Rect::new(x, y, size.get_width(), size.get_height()),
+                )))),
+                core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+                Some(1i32),
+            ),
+        );
+        g.add_shape(Box::new(rectangle));
+
+        x += size.get_width();
     }
 }
