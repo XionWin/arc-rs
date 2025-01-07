@@ -3,7 +3,7 @@ use std::{cell::RefCell, rc::Rc};
 
 fn main() {
     util::print_hight_light!("====================[Arc Demo]====================");
-    let mut window = util::expect!(platform_sdl2::Window::new(800, 480));
+    let mut window = util::expect!(platform_sdl2::Window::new(800 * 2, 480 * 2));
     window.set_vsync(true);
 
     let image: RefCell<Option<Box<dyn core::Image>>> = RefCell::new(None);
