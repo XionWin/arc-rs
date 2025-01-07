@@ -29,6 +29,7 @@ fn main() {
 }
 
 fn test(g: &dyn core::Graphic) {
+    let rendering_size = g.get_rendering_size();
     let mut x = 0i32;
     let mut y = 0i32;
     let mut max_y = 0i32;
@@ -56,7 +57,7 @@ fn test(g: &dyn core::Graphic) {
             .load_image_from_file(path, core::ImageFilter::Nearest)
             .into();
         let size = img.get_size().mul(zoom_factor);
-        if x + size.get_width() > 800 {
+        if x + size.get_width() > rendering_size.get_width() {
             x = 0i32;
             y += max_y;
         }

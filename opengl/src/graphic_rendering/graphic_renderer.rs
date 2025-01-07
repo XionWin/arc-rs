@@ -8,7 +8,6 @@ use super::FrameData;
 
 #[derive(Debug)]
 pub struct GraphicRenderer {
-    _size: core::Size<i32>,
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
@@ -18,9 +17,8 @@ pub struct GraphicRenderer {
 }
 
 impl GraphicRenderer {
-    pub fn new(size: core::Size<i32>) -> Self {
+    pub fn new() -> Self {
         Self {
-            _size: size,
             _color_type: core::ColorType::Rgba,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),
@@ -85,7 +83,7 @@ impl GraphicRenderer {
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
-        self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
+        // self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
 
         crate::gl::enable(crate::def::EnableCap::Blend);
         crate::gl::blend_func(
@@ -114,9 +112,10 @@ impl GraphicRenderer {
             );
         }
     }
-
-    pub fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
-        crate::gl::viewport(x, y, width, height);
+    pub fn set_rendering_size(&self, width: i32, height: i32) {
+        crate::gl::viewport(0, 0, width as _, height as _);
+        self._program
+            .set_viewport(core::Rect::new(0, 0, width as _, height as _));
     }
     pub fn clear_color(&self, color: core::Color) {
         let rgba: core::Rgba = color.into();

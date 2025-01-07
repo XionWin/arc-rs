@@ -40,9 +40,12 @@ impl core::Window for Window {
                     } => break 'running,
 
                     Event::Window {
-                        win_event: sdl2::event::WindowEvent::Resized(w, h),
+                        win_event: sdl2::event::WindowEvent::Resized(width, height),
                         ..
-                    } => println!("{}, {}", w, h),
+                    } => {
+                        self.graphic.set_rendering_size(width, height);
+                        println!("{}, {}", width, height);
+                    }
                     _ => {}
                 }
             }
@@ -99,7 +102,7 @@ impl core::Window for Window {
 }
 
 impl Window {
-    pub fn new(width: u16, height: u16) -> Result<Self, String> {
+    pub fn new(width: i32, height: i32) -> Result<Self, String> {
         Window::new_with_title_function(
             |parameter| {
                 String::from(format!(
@@ -114,8 +117,8 @@ impl Window {
 
     pub fn new_with_title_function(
         title_function: TitleCallback,
-        width: u16,
-        height: u16,
+        width: i32,
+        height: i32,
     ) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
@@ -126,7 +129,7 @@ impl Window {
         };
         set_gl_version(&video_subsystem, &parameter);
         let mut sdl_window = util::expect!(video_subsystem
-            .window(&title_function(&parameter), width.into(), height.into())
+            .window(&title_function(&parameter), width as _, height as _)
             .opengl()
             // .input_grabbed()
             .allow_highdpi()
@@ -144,10 +147,8 @@ impl Window {
         // so you need to create one.
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
-        let renderer = opengl::Renderer::new(core::Size::new(width as _, height as _), |name| {
-            get_proc_address(&video_subsystem, name)
-        });
-        let graphic = graphic::Graphic::new(Box::new(renderer));
+        let renderer = opengl::Renderer::new(|name| get_proc_address(&video_subsystem, name));
+        let graphic = graphic::Graphic::new(Box::new(renderer), width, height);
         Ok(Window {
             parameter,
             sdl_context,

@@ -3,13 +3,15 @@ use std::{borrow::Borrow, cell::RefCell, rc::Rc};
 use crate::{Image, RenderingComponent};
 
 pub struct Graphic {
+    size: core::Size<i32>,
     renderer: Box<dyn crate::Renderer>,
     _shapes: RefCell<Vec<Rc<crate::GraphicShape>>>,
 }
 
 impl Graphic {
-    pub fn new(renderer: Box<dyn crate::Renderer>) -> Self {
+    pub fn new(renderer: Box<dyn crate::Renderer>, width: i32, height: i32) -> Self {
         Self {
+            size: core::Size::new(width, height),
             renderer,
             _shapes: RefCell::new(Vec::new()),
         }
@@ -17,8 +19,12 @@ impl Graphic {
 }
 
 impl core::Graphic for Graphic {
+    fn get_rendering_size(&self) -> core::Size<i32> {
+        self.size
+    }
     fn init(&self) {
-        self.renderer.init();
+        self.renderer
+            .init(self.size.get_width(), self.size.get_height());
     }
     fn begin_render(&self) {
         self.renderer.begin_render();
@@ -39,8 +45,9 @@ impl core::Graphic for Graphic {
         self.renderer.render();
     }
 
-    fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
-        self.renderer.viewport(x, y, width, height);
+    fn set_rendering_size(&mut self, width: i32, height: i32) {
+        self.size = core::Size::new(width, height);
+        self.renderer.set_rendering_size(width, height);
     }
     fn clear_color(&self, color: core::Color) {
         self.renderer.clear_color(color);

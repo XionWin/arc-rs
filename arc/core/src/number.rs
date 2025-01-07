@@ -29,9 +29,22 @@ impl Number for i32 {
         *self as _
     }
 }
+impl Number for u32 {
+    fn from_value(value: i32) -> Self {
+        value as _
+    }
+
+    fn pow_i8(&self, i: i8) -> Self {
+        self.pow(i as _)
+    }
+
+    fn into_f32(&self) -> f32 {
+        *self as _
+    }
+}
 impl Number for f32 {
     fn from_value(value: i32) -> Self {
-        value as f32
+        value as _
     }
 
     fn pow_i8(&self, i: i8) -> Self {

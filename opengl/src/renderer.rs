@@ -2,31 +2,30 @@ use std::{cell::RefCell, rc::Rc};
 
 #[derive(Debug)]
 pub struct Renderer {
-    _size: core::Size<i32>,
     _cache_renderer: crate::PrimitiveRenderer,
     _graphic_renderer: crate::GraphicRenderer,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
 
 impl Renderer {
-    pub fn new<T>(size: core::Size<i32>, loadfn: T) -> Self
+    pub fn new<T>(loadfn: T) -> Self
     where
         T: Fn(&str) -> *const std::ffi::c_void,
     {
         crate::load_with(loadfn);
         Self {
-            _size: size,
             _cache_renderer: crate::PrimitiveRenderer::new(core::ColorType::Rgba),
-            _graphic_renderer: crate::GraphicRenderer::new(size),
+            _graphic_renderer: crate::GraphicRenderer::new(),
             _textures: RefCell::new(Vec::new()),
         }
     }
 }
 
 impl graphic::Renderer for Renderer {
-    fn init(&self) {
+    fn init(&self, width: i32, height: i32) {
         crate::gl::enable_multisample();
         self._graphic_renderer.init();
+        self._graphic_renderer.set_rendering_size(width, height);
     }
     fn begin_render(&self) {
         self._graphic_renderer.begin_render();
@@ -44,8 +43,8 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.render();
     }
 
-    fn viewport(&self, x: i32, y: i32, width: i32, height: i32) {
-        self._graphic_renderer.viewport(x, y, width, height);
+    fn set_rendering_size(&self, width: i32, height: i32) {
+        self._graphic_renderer.set_rendering_size(width, height);
     }
     fn clear_color(&self, color: core::Color) {
         self._graphic_renderer.clear_color(color);

@@ -1,10 +1,11 @@
 use crate::{Color, Image, ImageFilter, Shape, Size};
 
 pub trait Graphic {
+    fn get_rendering_size(&self) -> crate::Size<i32>;
     fn init(&self);
     fn begin_render(&self);
     fn render(&self);
-    fn viewport(&self, x: i32, y: i32, width: i32, height: i32);
+    fn set_rendering_size(&mut self, width: i32, height: i32);
     fn clear_color(&self, color: Color);
     fn clear(&self);
 
