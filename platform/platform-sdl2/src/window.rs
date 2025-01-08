@@ -27,7 +27,6 @@ impl core::Window for Window {
         T1: Fn(&Self),
         T2: Fn(&Self),
     {
-        self.init();
         on_load(self);
         let mut event_pump = util::expect!(self.sdl_context.event_pump());
         'running: loop {
@@ -43,8 +42,9 @@ impl core::Window for Window {
                         win_event: sdl2::event::WindowEvent::Resized(width, height),
                         ..
                     } => {
-                        self.graphic.set_rendering_size(width, height);
-                        println!("{}, {}", width, height);
+                        self.graphic
+                            .set_rendering_size(core::Size::new(width, height));
+                        println!("on_size_changed: width: {}, height: {}", width, height);
                     }
                     _ => {}
                 }
@@ -76,11 +76,6 @@ impl core::Window for Window {
             util::print_debug!("set vsync successfully");
             None
         }
-    }
-
-    fn init(&self) {
-        set_multisample(&self.video_subsystem);
-        self.graphic.init();
     }
 
     fn begin_render(&self) {
@@ -148,8 +143,9 @@ impl Window {
         let _gl_context = util::expect!(sdl_window.gl_create_context());
 
         let renderer = opengl::Renderer::new(|name| get_proc_address(&video_subsystem, name));
-        let graphic = graphic::Graphic::new(Box::new(renderer), width, height);
-        Ok(Window {
+        let graphic = graphic::Graphic::new(Box::new(renderer));
+
+        let window = Window {
             parameter,
             sdl_context,
             video_subsystem,
@@ -158,9 +154,16 @@ impl Window {
             fps_counter: RefCell::new(FpsCounter::new(std::time::Duration::from_secs(2))),
             fps_limiter: None,
             title_function,
-            background_color: core::Color::MidnightBlue,
+            background_color: core::Color::MagicDeepGray,
             graphic: Box::new(graphic),
-        })
+        };
+        window.init(core::Size::new(width, height));
+        Ok(window)
+    }
+
+    fn init(&self, size: core::Size<i32>) {
+        set_multisample(&self.video_subsystem);
+        self.graphic.init(size);
     }
 }
 

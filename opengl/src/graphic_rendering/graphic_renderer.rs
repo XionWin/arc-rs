@@ -64,9 +64,10 @@ impl GLGraphicRenderer for GraphicRenderer {
 }
 
 impl GraphicRenderer {
-    pub fn init(&self) {
+    pub fn init(&self, size: core::Size<i32>) {
         self._program.use_program();
         renderer_utility::bind_vertex_array(self._vao);
+        self.set_rendering_size(size);
     }
     pub fn begin_render(&self) {
         self._frame_data.borrow_mut().reset();
@@ -112,7 +113,11 @@ impl GraphicRenderer {
             );
         }
     }
-    pub fn set_rendering_size(&self, width: i32, height: i32) {
+    pub fn get_rendering_size(&self) -> core::Size<i32> {
+        self._program.get_rendering_size()
+    }
+    pub fn set_rendering_size(&self, size: core::Size<i32>) {
+        let (width, height) = size.into();
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
             .set_viewport(core::Rect::new(0, 0, width as _, height as _));

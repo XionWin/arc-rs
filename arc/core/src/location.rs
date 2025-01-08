@@ -1,6 +1,6 @@
 use crate::Number;
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Default, Copy, Clone, Debug)]
 pub struct Location<T>
 where
     T: Number,

@@ -4,10 +4,8 @@ pub trait Window {
     where
         T1: Fn(&Self),
         T2: Fn(&Self);
-
     fn set_vsync(&mut self, is_vsync: bool);
 
-    fn init(&self);
     fn begin_render(&self);
     fn render(&self);
 

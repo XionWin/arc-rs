@@ -3,15 +3,13 @@ use std::{borrow::Borrow, cell::RefCell, rc::Rc};
 use crate::{Image, RenderingComponent};
 
 pub struct Graphic {
-    size: core::Size<i32>,
     renderer: Box<dyn crate::Renderer>,
     _shapes: RefCell<Vec<Rc<crate::GraphicShape>>>,
 }
 
 impl Graphic {
-    pub fn new(renderer: Box<dyn crate::Renderer>, width: i32, height: i32) -> Self {
+    pub fn new(renderer: Box<dyn crate::Renderer>) -> Self {
         Self {
-            size: core::Size::new(width, height),
             renderer,
             _shapes: RefCell::new(Vec::new()),
         }
@@ -19,12 +17,8 @@ impl Graphic {
 }
 
 impl core::Graphic for Graphic {
-    fn get_rendering_size(&self) -> core::Size<i32> {
-        self.size
-    }
-    fn init(&self) {
-        self.renderer
-            .init(self.size.get_width(), self.size.get_height());
+    fn init(&self, size: core::Size<i32>) {
+        self.renderer.init(size);
     }
     fn begin_render(&self) {
         self.renderer.begin_render();
@@ -44,10 +38,11 @@ impl core::Graphic for Graphic {
     fn render(&self) {
         self.renderer.render();
     }
-
-    fn set_rendering_size(&mut self, width: i32, height: i32) {
-        self.size = core::Size::new(width, height);
-        self.renderer.set_rendering_size(width, height);
+    fn get_rendering_size(&self) -> core::Size<i32> {
+        self.renderer.get_rendering_size()
+    }
+    fn set_rendering_size(&self, size: core::Size<i32>) {
+        self.renderer.set_rendering_size(size);
     }
     fn clear_color(&self, color: core::Color) {
         self.renderer.clear_color(color);

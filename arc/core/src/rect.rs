@@ -1,6 +1,6 @@
 use crate::{Location, Number, Size};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Default, Debug, Clone, Copy)]
 pub struct Rect<T>
 where
     T: Number,

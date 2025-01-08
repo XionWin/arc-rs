@@ -1,4 +1,6 @@
 use std::{
+    borrow::{Borrow, BorrowMut},
+    cell::Cell,
     collections::HashMap,
     ffi::{c_int, c_uint},
 };
@@ -7,6 +9,7 @@ use crate::{program_utility, FragUniform, Shader};
 
 #[derive(Debug)]
 pub struct GraphicRenderingProgram {
+    viewport: Cell<core::Rect<i32>>,
     pub(crate) id: c_uint,
     _vertex_shader: Shader,
     _fragment_shader: Shader,
@@ -27,6 +30,7 @@ impl GraphicRenderingProgram {
 
         let attribute_locations = program_utility::get_attribute_locations(program_id);
         Self {
+            viewport: Cell::new(core::Rect::default()),
             id: program_id,
             _vertex_shader: vertex_shader,
             _fragment_shader: fragment_shader,
@@ -38,6 +42,9 @@ impl GraphicRenderingProgram {
         crate::gl::use_program(self.id);
     }
 
+    pub fn get_rendering_size(&self) -> core::Size<i32> {
+        self.viewport.get().get_size().clone()
+    }
     pub fn set_viewport(&self, value: core::Rect<i32>) {
         crate::gl::viewport(
             value.get_x(),
@@ -51,6 +58,7 @@ impl GraphicRenderingProgram {
             value.get_height() as _,
         );
         crate::gl::uniform_2f(self._attribute_locations["aOffset"], 0f32, 0f32);
+        self.viewport.replace(value);
     }
 
     pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {

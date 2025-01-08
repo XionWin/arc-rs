@@ -42,6 +42,7 @@ pub enum Color {
     Green,
     Yellow,
     Blue,
+    MagicDeepGray,
     Magenta,
     Cyan,
     White,
@@ -95,6 +96,12 @@ impl Into<Rgba> for &Color {
                 r: 0u8,
                 g: 0u8,
                 b: 238u8,
+                a: 255u8,
+            },
+            Color::MagicDeepGray => Rgba {
+                r: 31u8,
+                g: 32u8,
+                b: 41u8,
                 a: 255u8,
             },
             Color::Magenta => Rgba {

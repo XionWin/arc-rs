@@ -1,6 +1,6 @@
 use crate::Number;
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Default, Debug, Clone, Copy)]
 pub struct Size<T>
 where
     T: Number,
@@ -52,5 +52,14 @@ where
 
     fn mul(self, rhs: Self) -> Self::Output {
         &self * &rhs
+    }
+}
+
+impl<T> Into<(T, T)> for Size<T>
+where
+    T: Number,
+{
+    fn into(self) -> (T, T) {
+        (self.width, self.height)
     }
 }

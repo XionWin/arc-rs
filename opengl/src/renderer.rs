@@ -22,10 +22,9 @@ impl Renderer {
 }
 
 impl graphic::Renderer for Renderer {
-    fn init(&self, width: i32, height: i32) {
+    fn init(&self, size: core::Size<i32>) {
         crate::gl::enable_multisample();
-        self._graphic_renderer.init();
-        self._graphic_renderer.set_rendering_size(width, height);
+        self._graphic_renderer.init(size);
     }
     fn begin_render(&self) {
         self._graphic_renderer.begin_render();
@@ -42,9 +41,11 @@ impl graphic::Renderer for Renderer {
         // ));
         self._graphic_renderer.render();
     }
-
-    fn set_rendering_size(&self, width: i32, height: i32) {
-        self._graphic_renderer.set_rendering_size(width, height);
+    fn get_rendering_size(&self) -> core::Size<i32> {
+        self._graphic_renderer.get_rendering_size()
+    }
+    fn set_rendering_size(&self, size: core::Size<i32>) {
+        self._graphic_renderer.set_rendering_size(size);
     }
     fn clear_color(&self, color: core::Color) {
         self._graphic_renderer.clear_color(color);

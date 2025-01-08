@@ -4,10 +4,11 @@ use std::rc::Rc;
 use crate::{Texture, TextureFilter};
 
 pub trait Renderer: Debug {
-    fn init(&self, width: i32, height: i32);
+    fn init(&self, size: core::Size<i32>);
     fn begin_render(&self);
     fn render(&self);
-    fn set_rendering_size(&self, width: i32, height: i32);
+    fn get_rendering_size(&self) -> core::Size<i32>;
+    fn set_rendering_size(&self, size: core::Size<i32>);
     fn clear_color(&self, color: core::Color);
     fn clear(&self);
 
