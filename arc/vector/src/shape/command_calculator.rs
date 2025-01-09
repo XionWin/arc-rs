@@ -9,24 +9,23 @@ impl CommandCalculator {
             util::print_warning!("command check error");
             None
         } else {
-            let is_closed = commands.last() == Some(&core::Command::Close);
+            let is_closed = matches!(commands.last(), Some(core::Command::Close));
 
-            let mut command_0 = Option::<&core::Command>::None;
+            let mut command_0 = None;
             let points = commands
                 .iter()
                 .flat_map(|command_1| {
                     let points = command_1.to_points(command_0, crate::parameter::TESS_TOL);
-                    let command_points = points
+                    command_0 = Some(command_1);
+                    points
                         .iter()
                         .enumerate()
                         .map(|(i, point)| {
                             CommandPoint::new_from_point(point, i + 1 == points.len())
                         })
-                        .collect::<Vec<CommandPoint<f32>>>();
-                    command_0 = Some(command_1);
-                    command_points
+                        .collect::<Vec<_>>()
                 })
-                .collect::<Vec<CommandPoint<f32>>>();
+                .collect::<Vec<_>>();
 
             Some(optimize_points(enforce_winding(points), is_closed))
         }
