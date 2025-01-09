@@ -38,14 +38,14 @@ impl core::Window for Window {
                         ..
                     } => break 'running,
 
+                    Event::KeyDown {
+                        keycode: Some(Keycode::F11),
+                        ..
+                    } => self.toggle_full_screen_state(),
                     Event::Window {
                         win_event: sdl2::event::WindowEvent::Resized(width, height),
                         ..
-                    } => {
-                        self.graphic
-                            .set_rendering_size(core::Size::new(width, height));
-                        println!("on_size_changed: width: {}, height: {}", width, height);
-                    }
+                    } => self.on_window_size_changed(core::Size::new(width, height)),
                     _ => {}
                 }
             }
@@ -98,7 +98,7 @@ impl core::Window for Window {
 
 impl Window {
     pub fn new(width: i32, height: i32) -> Result<Self, String> {
-        Window::new_with_title_function(
+        Window::new_window_with_title_function(
             |parameter| {
                 String::from(format!(
                     "Arc | {:?} {}.{}",
@@ -109,8 +109,10 @@ impl Window {
             height,
         )
     }
+}
 
-    pub fn new_with_title_function(
+impl Window {
+    fn new_window_with_title_function(
         title_function: TitleCallback,
         width: i32,
         height: i32,
@@ -160,10 +162,27 @@ impl Window {
         window.init(core::Size::new(width, height));
         Ok(window)
     }
-
     fn init(&self, size: core::Size<i32>) {
         set_multisample(&self.video_subsystem);
         self.graphic.init(size);
+    }
+    fn toggle_full_screen_state(&mut self) {
+        match self.sdl_window.fullscreen_state() {
+            sdl2::video::FullscreenType::Off => {
+                self.sdl_window
+                    .set_fullscreen(sdl2::video::FullscreenType::Desktop)
+                    .unwrap();
+            }
+            sdl2::video::FullscreenType::True | sdl2::video::FullscreenType::Desktop => {
+                self.sdl_window
+                    .set_fullscreen(sdl2::video::FullscreenType::Off)
+                    .unwrap();
+            }
+        }
+    }
+    fn on_window_size_changed(&self, size: core::Size<i32>) {
+        self.graphic.set_rendering_size(size);
+        println!("on_size_changed: size: {:?}", size);
     }
 }
 
