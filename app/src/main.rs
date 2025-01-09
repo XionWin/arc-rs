@@ -33,7 +33,7 @@ fn test(g: &dyn core::Graphic) {
     let mut x = 0i32;
     let mut y = 0i32;
     let mut max_y = 0i32;
-    let zoom_factor = 2i32;
+    let zoom_factor = 1i32;
 
     let paths = std::fs::read_dir("resource/image/png/")
         .unwrap()
@@ -81,4 +81,21 @@ fn test(g: &dyn core::Graphic) {
 
         x += size.get_width();
     }
+
+    let rectangle = vector::RoundRectangle::new(
+        250,
+        250,
+        100,
+        100,
+        16,
+        Style::new(
+            Box::new(core::ColorBackground::new(
+                core::Color::BrightWhite,
+                core::Color::Blue,
+            )),
+            core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+            Some(1i32),
+        ),
+    );
+    g.add_shape(Box::new(rectangle));
 }

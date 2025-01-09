@@ -119,6 +119,7 @@ impl Window {
     ) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
+        set_video_subsystem_attribute(&video_subsystem);
         let parameter = if cfg!(target_os = "macos") {
             WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
         } else {
@@ -147,6 +148,8 @@ impl Window {
         let renderer = opengl::Renderer::new(|name| get_proc_address(&video_subsystem, name));
         let graphic = graphic::Graphic::new(Box::new(renderer));
 
+        core::Graphic::init(&graphic, core::Size::new(width, height));
+
         let window = Window {
             parameter,
             sdl_context,
@@ -159,12 +162,7 @@ impl Window {
             background_color: core::Color::MagicDeepGray,
             graphic: Box::new(graphic),
         };
-        window.init(core::Size::new(width, height));
         Ok(window)
-    }
-    fn init(&self, size: core::Size<i32>) {
-        set_multisample(&self.video_subsystem);
-        self.graphic.init(size);
     }
     fn toggle_full_screen_state(&mut self) {
         match self.sdl_window.fullscreen_state() {
@@ -197,7 +195,7 @@ fn set_gl_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter)
     gl_attr.set_context_version(parameter.version.major, parameter.version.minor);
 }
 
-pub fn set_multisample(video_subsystem: &VideoSubsystem) {
+fn set_video_subsystem_attribute(video_subsystem: &VideoSubsystem) {
     let gl_attr = video_subsystem.gl_attr();
 
     gl_attr.set_red_size(8);
@@ -209,8 +207,4 @@ pub fn set_multisample(video_subsystem: &VideoSubsystem) {
     gl_attr.set_multisample_buffers(1);
     gl_attr.set_multisample_samples(4);
     gl_attr.set_accelerated_visual(true);
-}
-pub fn get_multisample(video_subsystem: &VideoSubsystem) {
-    let gl_attr = video_subsystem.gl_attr();
-    println!("multisample_samples: {:?}", gl_attr.multisample_samples());
 }
