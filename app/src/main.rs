@@ -3,7 +3,7 @@ use std::{cell::RefCell, rc::Rc};
 
 fn main() {
     util::print_hight_light!("====================[Arc Demo]====================");
-    let mut window = util::expect!(platform_sdl2::Window::new(800 * 2, 480 * 2));
+    let mut window = util::expect!(platform_sdl2::Window::new(800, 480));
     window.set_vsync(true);
 
     let image: RefCell<Option<Box<dyn core::Image>>> = RefCell::new(None);
@@ -33,7 +33,7 @@ fn test(g: &dyn core::Graphic) {
     let mut x = 0i32;
     let mut y = 0i32;
     let mut max_y = 0i32;
-    let zoom_factor = 2i32;
+    let zoom_factor = 1i32;
 
     let paths = std::fs::read_dir("resource/image/png/")
         .unwrap()
@@ -81,4 +81,20 @@ fn test(g: &dyn core::Graphic) {
 
         x += size.get_width();
     }
+
+    let rectangle = vector::Rectangle::new(
+        100,
+        100,
+        100,
+        100,
+        Style::new(
+            Box::new(core::ColorBackground::new(
+                core::Color::Red,
+                core::Color::Blue,
+            )),
+            core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+            Some(1i32),
+        ),
+    );
+    g.add_shape(Box::new(rectangle));
 }
