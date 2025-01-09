@@ -84,7 +84,6 @@ impl GraphicRenderer {
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
-        // self._program.set_viewport(core::Rect::new(0, 0, 800, 480));
 
         crate::gl::enable(crate::def::EnableCap::Blend);
         crate::gl::blend_func(
