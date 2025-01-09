@@ -1,5 +1,4 @@
 use std::{
-    borrow::{Borrow, BorrowMut},
     cell::Cell,
     collections::HashMap,
     ffi::{c_int, c_uint},
