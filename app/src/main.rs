@@ -82,14 +82,15 @@ fn test(g: &dyn core::Graphic) {
         x += size.get_width();
     }
 
-    let rectangle = vector::Rectangle::new(
+    let rectangle = vector::RoundRectangle::new(
         100,
         100,
-        100,
-        100,
+        50,
+        50,
+        2,
         Style::new(
             Box::new(core::ColorBackground::new(
-                core::Color::Red,
+                core::Color::BrightRed,
                 core::Color::Blue,
             )),
             core::ColorBackground::new(core::Color::Red, core::Color::Blue),
