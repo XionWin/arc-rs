@@ -1,9 +1,18 @@
 use core::{Image, Style, Window};
 use std::{cell::RefCell, rc::Rc};
 
+const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
+    1i32
+} else {
+    2i32
+};
+
 fn main() {
     util::print_hight_light!("====================[Arc Demo]====================");
-    let mut window = util::expect!(platform_sdl2::Window::new(800, 480));
+    let mut window = util::expect!(platform_sdl2::Window::new(
+        800 * ZOOM_FACTOR,
+        480 * ZOOM_FACTOR
+    ));
     window.set_vsync(true);
 
     let image: RefCell<Option<Box<dyn core::Image>>> = RefCell::new(None);
@@ -33,7 +42,6 @@ fn test(g: &dyn core::Graphic) {
     let mut x = 0i32;
     let mut y = 0i32;
     let mut max_y = 0i32;
-    let zoom_factor = 1i32;
 
     let paths = std::fs::read_dir("resource/image/png/")
         .unwrap()
@@ -56,7 +64,7 @@ fn test(g: &dyn core::Graphic) {
         let img: Rc<dyn Image> = g
             .load_image_from_file(path, core::ImageFilter::Nearest)
             .into();
-        let size = img.get_size().mul(zoom_factor);
+        let size = img.get_size().mul(ZOOM_FACTOR);
         if x + size.get_width() > rendering_size.get_width() {
             x = 0i32;
             y += max_y;
@@ -73,27 +81,26 @@ fn test(g: &dyn core::Graphic) {
                     img.clone(),
                     core::Rect::new(x, y, size.get_width(), size.get_height()),
                 )))),
-                core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+                core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),
             ),
         );
         g.add_shape(Box::new(rectangle));
-
         x += size.get_width();
     }
 
     let rectangle = vector::RoundRectangle::new(
-        250,
-        250,
-        100,
-        100,
-        16,
+        198 * ZOOM_FACTOR,
+        149 * ZOOM_FACTOR,
+        26 * ZOOM_FACTOR,
+        26 * ZOOM_FACTOR,
+        3 * ZOOM_FACTOR,
         Style::new(
             Box::new(core::ColorBackground::new(
-                core::Color::BrightWhite,
-                core::Color::Blue,
+                core::Color::MoselleGreen,
+                core::Color::MoselleGreen,
             )),
-            core::ColorBackground::new(core::Color::Red, core::Color::Blue),
+            core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
             Some(1i32),
         ),
     );
