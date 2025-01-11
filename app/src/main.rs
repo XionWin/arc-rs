@@ -2,7 +2,7 @@ use core::{Image, Style, Window};
 use std::{cell::RefCell, rc::Rc};
 
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
-    1i32
+    2i32
 } else {
     2i32
 };
