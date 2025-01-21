@@ -8,11 +8,11 @@ mod attribute_location;
 mod call_type;
 mod def;
 mod frag_uniform;
+mod framebuffer_rendering;
 mod gl_program;
 mod gl_renderer;
 mod graphic_rendering;
 mod matrix4x3;
-mod primitive_rendering;
 mod program_utility;
 mod renderer;
 mod renderer_utility;
@@ -27,10 +27,10 @@ pub use matrix4x3::*;
 pub use renderer::*;
 pub use texture::*;
 
+pub(crate) use framebuffer_rendering::*;
 pub(crate) use gl_program::*;
 pub(crate) use gl_renderer::*;
 pub(crate) use graphic_rendering::*;
-pub(crate) use primitive_rendering::*;
 pub(crate) use shader::*;
 
 pub fn load() {

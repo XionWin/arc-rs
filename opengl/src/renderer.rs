@@ -2,7 +2,7 @@ use std::{cell::RefCell, rc::Rc};
 
 #[derive(Debug)]
 pub struct Renderer {
-    _cache_renderer: crate::PrimitiveRenderer,
+    _cache_renderer: crate::FramebufferRenderer,
     _graphic_renderer: crate::GraphicRenderer,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
@@ -14,7 +14,7 @@ impl Renderer {
     {
         crate::load_with(loadfn);
         Self {
-            _cache_renderer: crate::PrimitiveRenderer::new(core::ColorType::Rgba),
+            _cache_renderer: crate::FramebufferRenderer::new(core::ColorType::Rgba),
             _graphic_renderer: crate::GraphicRenderer::new(),
             _textures: RefCell::new(Vec::new()),
         }
@@ -30,15 +30,6 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.begin_render();
     }
     fn render(&self) {
-        // let _ = self.darw_primitive(vector::Primitive::new(
-        //     Box::new([
-        //         core::Vertex2::new(200f32, 200f32, 1f32, 0.5f32),
-        //         core::Vertex2::new(200f32, 300f32, 1f32, 0.5f32),
-        //         core::Vertex2::new(300f32, 300f32, 1f32, 0.5f32),
-        //         core::Vertex2::new(300f32, 200f32, 1f32, 0.5f32),
-        //     ]),
-        //     Box::new(vector::FillState::default()),
-        // ));
         self._graphic_renderer.render();
     }
     fn get_rendering_size(&self) -> core::Size<i32> {

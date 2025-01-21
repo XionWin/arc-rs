@@ -4,31 +4,31 @@ use super::FrameData;
 use crate::{AttributeLocation, GLPrimitiveRenderer, GLRenderer};
 
 #[derive(Debug)]
-pub struct PrimitiveRenderer {
+pub struct FramebufferRenderer {
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
     _vfo: c_uint,
-    _program: crate::PrimitiveRenderingProgram,
+    _program: crate::FramebufferRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
 }
 
-impl PrimitiveRenderer {
+impl FramebufferRenderer {
     pub fn new(color_type: core::ColorType) -> Self {
         Self {
             _color_type: color_type,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),
             _vfo: crate::gl::gen_frame_buffer(),
-            _program: crate::PrimitiveRenderingProgram::new(),
+            _program: crate::FramebufferRenderingProgram::new(),
             _attribute_locations: Box::new([AttributeLocation::new("aPos", 0, 2)]),
             _frame_data: RefCell::new(FrameData::new()),
         }
     }
 }
 
-impl GLRenderer for PrimitiveRenderer {
+impl GLRenderer for FramebufferRenderer {
     fn get_vbo(&self) -> c_uint {
         self._vbo
     }
@@ -43,7 +43,7 @@ impl GLRenderer for PrimitiveRenderer {
     }
 }
 
-impl GLPrimitiveRenderer for PrimitiveRenderer {
+impl GLPrimitiveRenderer for FramebufferRenderer {
     fn draw_primitive_on_texture(
         &self,
         primitive: vector::Primitive,
@@ -60,7 +60,7 @@ impl GLPrimitiveRenderer for PrimitiveRenderer {
     }
 }
 
-impl Drop for PrimitiveRenderer {
+impl Drop for FramebufferRenderer {
     fn drop(&mut self) {
         util::print_debug!("texture_renderer droped")
     }
