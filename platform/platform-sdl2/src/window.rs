@@ -138,8 +138,8 @@ impl Window {
         )?;
         sdl_window.set_icon(window_icon);
         sdl_window.set_resizable(false);
-        sdl_context.mouse().show_cursor(false);
         if cfg!(target_arch = "aarch64") {
+            sdl_context.mouse().show_cursor(false);
             sdl_window
                 .set_fullscreen(sdl2::video::FullscreenType::Desktop)
                 .unwrap();

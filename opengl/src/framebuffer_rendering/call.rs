@@ -4,7 +4,7 @@ use crate::CallType;
 
 #[derive(Debug)]
 pub struct Call {
-    target_texture_id: c_uint,
+    fb_texture_id: c_uint,
     call_type: CallType,
     vertex_offset: usize,
     vertex_len: usize,
@@ -14,7 +14,7 @@ pub struct Call {
 
 impl Call {
     pub fn new(
-        target_texture_id: c_uint,
+        fb_texture_id: c_uint,
         call_type: CallType,
         vertex_offset: usize,
         vertex_len: usize,
@@ -22,7 +22,7 @@ impl Call {
         texture_id: Option<c_uint>,
     ) -> Self {
         Self {
-            target_texture_id,
+            fb_texture_id,
             call_type,
             vertex_offset,
             vertex_len,
@@ -31,8 +31,8 @@ impl Call {
         }
     }
 
-    pub fn get_target_texture_id(&self) -> c_uint {
-        self.target_texture_id
+    pub fn get_fb_texture_id(&self) -> c_uint {
+        self.fb_texture_id
     }
     pub fn get_call_type(&self) -> &CallType {
         &self.call_type
