@@ -2,7 +2,7 @@ use core::{Image, Style, Window};
 use std::{cell::RefCell, rc::Rc};
 
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
-    2i32
+    1i32
 } else {
     2i32
 };
@@ -102,7 +102,7 @@ fn test(g: &dyn core::Graphic) {
                 122 * ZOOM_FACTOR + row * (26 + 1) * ZOOM_FACTOR,
                 26 * ZOOM_FACTOR,
                 26 * ZOOM_FACTOR,
-                8 * ZOOM_FACTOR,
+                10 * ZOOM_FACTOR,
                 Style::new(
                     Box::new(core::ColorBackground::new(
                         colors[(row * 2 + column) as usize],
