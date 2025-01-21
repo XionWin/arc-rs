@@ -1,14 +1,14 @@
 use std::{cell::RefCell, ffi::c_uint};
 
 use super::FrameData;
-use crate::{AttributeLocation, GLPrimitiveRenderer, GLRenderer};
+use crate::{AttributeLocation, GLRenderer};
 
 #[derive(Debug)]
 pub struct FramebufferRenderer {
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
-    _vfo: c_uint,
+    _fbo: c_uint,
     _program: crate::FramebufferRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
@@ -20,11 +20,21 @@ impl FramebufferRenderer {
             _color_type: color_type,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),
-            _vfo: crate::gl::gen_frame_buffer(),
+            _fbo: crate::gl::gen_frame_buffer(),
             _program: crate::FramebufferRenderingProgram::new(),
             _attribute_locations: Box::new([AttributeLocation::new("aPos", 0, 2)]),
             _frame_data: RefCell::new(FrameData::new()),
         }
+    }
+    pub fn draw_primitive(&self, primitive: vector::Primitive, texture: &dyn graphic::Texture) {
+        self._program.use_program();
+        self._frame_data.borrow_mut().add_call(
+            texture,
+            crate::CallType::Fill,
+            primitive.get_vertices(),
+            crate::DEFAULT_MONOCHROME_FRAG_UNIFORM,
+            None,
+        );
     }
 }
 
@@ -41,22 +51,11 @@ impl GLRenderer for FramebufferRenderer {
     fn get_color_type(&self) -> core::ColorType {
         self._color_type
     }
-}
-
-impl GLPrimitiveRenderer for FramebufferRenderer {
-    fn draw_primitive_on_texture(
-        &self,
-        primitive: vector::Primitive,
-        texture: &dyn graphic::Texture,
-    ) {
-        self._program.use_program();
-        self._frame_data.borrow_mut().add_call(
-            texture,
-            crate::CallType::Fill,
-            primitive.get_vertices(),
-            crate::DEFAULT_MONOCHROME_FRAG_UNIFORM,
-            None,
-        );
+    fn begin_render(&self) {
+        self._frame_data.borrow_mut().reset();
+    }
+    fn render(&self) {
+        self._frame_data.borrow_mut().reset();
     }
 }
 

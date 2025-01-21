@@ -1,12 +1,12 @@
-use std::borrow::Borrow;
+use std::{borrow::Borrow, rc::Rc};
 
 pub struct TextureCache {
     rect: core::Rect<i32>,
-    texture: Box<dyn crate::Texture>,
+    texture: Rc<dyn crate::Texture>,
 }
 
 impl TextureCache {
-    pub fn new(rect: core::Rect<i32>, texture: Box<dyn crate::Texture>) -> Self {
+    pub fn new(rect: core::Rect<i32>, texture: Rc<dyn crate::Texture>) -> Self {
         Self { rect, texture }
     }
 

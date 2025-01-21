@@ -21,6 +21,9 @@ impl Primitive {
     pub fn get_state(&self) -> &dyn crate::State {
         self._state.borrow()
     }
+    pub fn get_rect(&self) -> core::Rect<i32> {
+        core::Rect::new(0, 0, 800, 480)
+    }
 }
 
 impl Display for Primitive {

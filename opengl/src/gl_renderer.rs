@@ -6,16 +6,6 @@ pub trait GLRenderer: Debug {
     fn get_attribute_locations(&self) -> &[crate::AttributeLocation];
     #[allow(dead_code)]
     fn get_color_type(&self) -> core::ColorType;
-}
-
-pub trait GLGraphicRenderer: GLRenderer {
-    fn add_primitive(&self, primitive: vector::Primitive);
-}
-
-pub trait GLPrimitiveRenderer: GLRenderer {
-    fn draw_primitive_on_texture(
-        &self,
-        primitive: vector::Primitive,
-        texture: &dyn graphic::Texture,
-    );
+    fn begin_render(&self);
+    fn render(&self);
 }

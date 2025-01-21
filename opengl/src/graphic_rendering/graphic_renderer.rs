@@ -2,7 +2,7 @@ use std::{cell::RefCell, ffi::c_uint};
 
 use graphic::TextureImage;
 
-use crate::{renderer_utility, AttributeLocation, GLGraphicRenderer, GLRenderer};
+use crate::{renderer_utility, AttributeLocation, GLRenderer};
 
 use super::FrameData;
 
@@ -45,34 +45,10 @@ impl GLRenderer for GraphicRenderer {
     fn get_color_type(&self) -> core::ColorType {
         self._color_type
     }
-}
-
-impl GLGraphicRenderer for GraphicRenderer {
-    fn add_primitive(&self, primitive: vector::Primitive) {
-        let state = primitive.get_state();
-        let texture_id = match state.get_paint().try_get_paint_image() {
-            Some(paint_image) => Some(paint_image.get_image().get_texture().get_id()),
-            None => None,
-        };
-        self._frame_data.borrow_mut().add_call(
-            crate::CallType::Fill,
-            primitive.get_vertices(),
-            state.into(),
-            texture_id,
-        );
-    }
-}
-
-impl GraphicRenderer {
-    pub fn init(&self, size: core::Size<i32>) {
-        self._program.use_program();
-        renderer_utility::bind_vertex_array(self._vao);
-        self.set_rendering_size(size);
-    }
-    pub fn begin_render(&self) {
+    fn begin_render(&self) {
         self._frame_data.borrow_mut().reset();
     }
-    pub fn render(&self) {
+    fn render(&self) {
         self._program.use_program();
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
@@ -111,6 +87,27 @@ impl GraphicRenderer {
                 call.get_vertex_len() as _,
             );
         }
+    }
+}
+
+impl GraphicRenderer {
+    pub fn init(&self, size: core::Size<i32>) {
+        self._program.use_program();
+        renderer_utility::bind_vertex_array(self._vao);
+        self.set_rendering_size(size);
+    }
+    pub fn add_primitive(&self, primitive: vector::Primitive) {
+        let state = primitive.get_state();
+        let texture_id = match state.get_paint().try_get_paint_image() {
+            Some(paint_image) => Some(paint_image.get_image().get_texture().get_id()),
+            None => None,
+        };
+        self._frame_data.borrow_mut().add_call(
+            crate::CallType::Fill,
+            primitive.get_vertices(),
+            state.into(),
+            texture_id,
+        );
     }
     pub fn get_rendering_size(&self) -> core::Size<i32> {
         self._program.get_rendering_size()

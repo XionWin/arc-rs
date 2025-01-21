@@ -20,12 +20,12 @@ where
         }
     }
 
-    pub fn get_location(&self) -> &Location<T> {
-        &self.location
+    pub fn get_location(&self) -> Location<T> {
+        self.location
     }
 
-    pub fn get_size(&self) -> &Size<T> {
-        &self.size
+    pub fn get_size(&self) -> Size<T> {
+        self.size
     }
 
     pub fn get_x(&self) -> T {
