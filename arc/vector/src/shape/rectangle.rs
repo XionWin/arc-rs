@@ -38,7 +38,7 @@ impl Shape for Rectangle {
     fn get_style(&self) -> &Style {
         &self.style
     }
-    fn get_rect(&self) -> &Rect<i32> {
-        &self.rect
+    fn get_rect(&self) -> Rect<i32> {
+        self.rect
     }
 }
