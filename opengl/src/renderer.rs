@@ -34,6 +34,9 @@ impl graphic::Renderer for Renderer {
     fn render(&self) {
         use crate::GLRenderer;
         self._cache_renderer.render();
+        for primitive in self._cache_renderer.get_rendered_primivitive() {
+            self._graphic_renderer.add_primitive(primitive);
+        }
         self._graphic_renderer.render();
     }
     fn get_rendering_size(&self) -> core::Size<i32> {

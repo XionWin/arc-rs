@@ -42,6 +42,9 @@ impl FramebufferRenderer {
             texture_id,
         );
     }
+    pub fn get_rendered_primivitive(&self) -> Vec<vector::Primitive> {
+        Vec::new()
+    }
 }
 
 impl GLRenderer for FramebufferRenderer {
