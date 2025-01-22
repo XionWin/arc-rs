@@ -33,6 +33,7 @@ impl graphic::Renderer for Renderer {
     }
     fn render(&self) {
         use crate::GLRenderer;
+        self._cache_renderer.render();
         self._graphic_renderer.render();
     }
     fn get_rendering_size(&self) -> core::Size<i32> {
@@ -80,11 +81,19 @@ impl graphic::Renderer for Renderer {
             ),
         );
         self._cache_renderer
-            .draw_primitive(primitive, cache.get_texture());
+            .draw_primitive(primitive, cache.get_texture_rc());
         cache
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {
+        // self._cache_renderer.draw_primitive(
+        //     primitive,
+        //     self.create_texture(
+        //         core::Size::new(800, 480),
+        //         core::ColorType::Rgba,
+        //         graphic::TextureFilter::Linear,
+        //     ),
+        // );
         self._graphic_renderer.add_primitive(primitive);
     }
 }

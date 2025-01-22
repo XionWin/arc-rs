@@ -559,6 +559,39 @@ pub fn stencil_op_separate(
     unsafe { gl::StencilOpSeparate(face as _, fail as _, zfail as _, zpass as _) }
 }
 
+pub fn bind_framebuffer(target: crate::def::FramebufferTarget, framebuffer: c_uint) {
+    unsafe {
+        gl::BindFramebuffer(target as _, framebuffer);
+    }
+}
+
+pub fn framebuffer_texture_2d(
+    target: crate::def::FramebufferTarget,
+    attachment: crate::def::FramebufferAttachment,
+    texture_target2d: crate::def::TextureTarget2d,
+    texture_id: c_uint,
+    level: c_int,
+) {
+    unsafe {
+        gl::FramebufferTexture2D(
+            target as _,
+            attachment as _,
+            texture_target2d as _,
+            texture_id,
+            level,
+        );
+    }
+}
+
+pub fn check_framebuffer_status(
+    target: crate::def::FramebufferTarget,
+) -> crate::def::FramebufferErrorCode {
+    unsafe {
+        let code = gl::CheckFramebufferStatus(target as _);
+        std::mem::transmute(code)
+    }
+}
+
 pub fn flush() {
     unsafe { gl::Flush() }
 }

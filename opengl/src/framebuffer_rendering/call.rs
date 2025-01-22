@@ -1,10 +1,10 @@
-use std::ffi::c_uint;
+use std::{borrow::Borrow, ffi::c_uint, rc::Rc};
 
 use crate::CallType;
 
 #[derive(Debug)]
 pub struct Call {
-    fb_texture_id: c_uint,
+    fb_texture: Rc<dyn graphic::Texture>,
     call_type: CallType,
     vertex_offset: usize,
     vertex_len: usize,
@@ -14,7 +14,7 @@ pub struct Call {
 
 impl Call {
     pub fn new(
-        fb_texture_id: c_uint,
+        fb_texture: Rc<dyn graphic::Texture>,
         call_type: CallType,
         vertex_offset: usize,
         vertex_len: usize,
@@ -22,7 +22,7 @@ impl Call {
         texture_id: Option<c_uint>,
     ) -> Self {
         Self {
-            fb_texture_id,
+            fb_texture,
             call_type,
             vertex_offset,
             vertex_len,
@@ -30,9 +30,12 @@ impl Call {
             texture_id,
         }
     }
+    pub fn get_fb_texture(&self) -> &dyn graphic::Texture {
+        self.fb_texture.borrow()
+    }
 
     pub fn get_fb_texture_id(&self) -> c_uint {
-        self.fb_texture_id
+        self.fb_texture.get_id()
     }
     pub fn get_call_type(&self) -> &CallType {
         &self.call_type
