@@ -420,6 +420,29 @@ pub fn bind_texture(texture_target: crate::def::TextureTarget, texture_id: c_uin
     }
 }
 
+pub fn read_pixels<T>(
+    x: c_int,
+    y: c_int,
+    width: c_int,
+    height: c_int,
+    pixel_format: crate::def::PixelFormat,
+    pixel_type: crate::def::PixelType,
+    buffer: &mut [T],
+) {
+    unsafe {
+        gl::ReadnPixels(
+            x,
+            y,
+            width,
+            height,
+            pixel_format as _,
+            pixel_type as _,
+            buffer.len() as _,
+            buffer.as_mut_ptr() as _,
+        );
+    }
+}
+
 pub fn pixel_storei(pname: crate::def::PixelStoreParameter, param: c_int) {
     unsafe {
         gl::PixelStorei(pname as _, param);
