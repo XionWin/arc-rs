@@ -77,6 +77,7 @@ impl graphic::Renderer for Renderer {
         let rect = primitive.get_rect();
         let cache = graphic::TextureCache::new(
             rect,
+            core::Margin::default(),
             self.create_texture(
                 rect.get_size(),
                 core::ColorType::Rgba,
