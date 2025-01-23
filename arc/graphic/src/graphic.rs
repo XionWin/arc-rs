@@ -4,7 +4,7 @@ use crate::{Image, RenderingComponent};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
-    _shapes: RefCell<Vec<Rc<crate::GraphicShape>>>,
+    _shapes: RefCell<Vec<RefCell<Rc<crate::GraphicShape>>>>,
 }
 
 impl Graphic {
@@ -22,10 +22,10 @@ impl core::Graphic for Graphic {
     }
     fn begin_render(&self) {
         self.renderer.begin_render();
-
-        let shapes: &Vec<Rc<crate::GraphicShape>> = &self._shapes.borrow();
+        let shapes: &Vec<RefCell<Rc<crate::GraphicShape>>> = &self._shapes.borrow();
         for graphic_shape in shapes {
-            let fill_primitive = vector::VectorShape::get_fill_primitive(graphic_shape.get_shape());
+            let shape = graphic_shape.borrow_mut();
+            let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());
             match fill_primitive {
                 Some(fill_primitive) => {
                     // util::print_debug!("fill_primitive: {}", fill_primitive);
@@ -74,7 +74,7 @@ impl core::Graphic for Graphic {
     }
     fn add_shape(&self, shape: Box<dyn core::Shape>) {
         let graphic_shape = Rc::new(shape.into());
-        self._shapes.borrow_mut().push(graphic_shape);
+        self._shapes.borrow_mut().push(RefCell::new(graphic_shape));
     }
 }
 
