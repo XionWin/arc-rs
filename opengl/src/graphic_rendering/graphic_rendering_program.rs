@@ -44,13 +44,7 @@ impl GraphicRenderingProgram {
     pub fn get_rendering_size(&self) -> core::Size<i32> {
         self.viewport.get().get_size().clone()
     }
-    pub fn set_viewport(&self, value: core::Rect<i32>) {
-        crate::gl::viewport(
-            value.get_x(),
-            value.get_y(),
-            value.get_width(),
-            value.get_height(),
-        );
+    pub fn set_uniform_a_viewport(&self, value: core::Rect<i32>) {
         crate::gl::uniform_2f(
             self._attribute_locations["aViewport"],
             value.get_width() as _,

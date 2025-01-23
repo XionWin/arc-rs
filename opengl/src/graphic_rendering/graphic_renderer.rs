@@ -1,4 +1,7 @@
-use std::{cell::RefCell, ffi::c_uint};
+use std::{
+    cell::{Cell, RefCell},
+    ffi::c_uint,
+};
 
 use graphic::TextureImage;
 
@@ -50,6 +53,15 @@ impl GLRenderer for GraphicRenderer {
     }
     fn render(&self) {
         self._program.use_program();
+        bind_screen_framebuffer();
+        // self.set_rendering_size(self.get_rendering_size());
+        let rendering_size = self.get_rendering_size();
+        crate::gl::viewport(
+            0,
+            0,
+            rendering_size.get_width(),
+            rendering_size.get_height(),
+        );
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
 
@@ -116,7 +128,7 @@ impl GraphicRenderer {
         let (width, height) = size.into();
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
-            .set_viewport(core::Rect::new(0, 0, width as _, height as _));
+            .set_uniform_a_viewport(core::Rect::new(0, 0, width as _, height as _));
     }
     pub fn clear_color(&self, color: core::Color) {
         let rgba: core::Rgba = color.into();
@@ -134,4 +146,8 @@ impl Drop for GraphicRenderer {
     fn drop(&mut self) {
         util::print_debug!("graphic_renderer droped")
     }
+}
+
+fn bind_screen_framebuffer() {
+    crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, 0);
 }

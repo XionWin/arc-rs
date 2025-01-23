@@ -16,6 +16,18 @@ impl GraphicShape {
     pub fn set_stroke_cache(&mut self, cache: Option<crate::TextureCache>) {
         self._stroke_cache = cache
     }
+    pub fn get_fill_cache(&self) -> Option<&crate::TextureCache> {
+        match &self._fill_cache {
+            Some(cache) => Some(cache),
+            None => None,
+        }
+    }
+    pub fn get_stroke_cache(&self) -> Option<&crate::TextureCache> {
+        match &self._stroke_cache {
+            Some(cache) => Some(cache),
+            None => None,
+        }
+    }
 }
 
 impl From<Box<dyn core::Shape>> for GraphicShape {
