@@ -10,12 +10,6 @@ impl GraphicShape {
     pub fn get_shape(&self) -> &dyn core::Shape {
         self._shape.borrow()
     }
-    pub fn set_fill_cache(&mut self, cache: Option<crate::TextureCache>) {
-        self._fill_cache = cache
-    }
-    pub fn set_stroke_cache(&mut self, cache: Option<crate::TextureCache>) {
-        self._stroke_cache = cache
-    }
     pub fn get_fill_cache(&self) -> Option<&crate::TextureCache> {
         match &self._fill_cache {
             Some(cache) => Some(cache),
@@ -27,6 +21,12 @@ impl GraphicShape {
             Some(cache) => Some(cache),
             None => None,
         }
+    }
+    pub fn set_fill_cache(&mut self, cache: Option<crate::TextureCache>) {
+        self._fill_cache = cache
+    }
+    pub fn set_stroke_cache(&mut self, cache: Option<crate::TextureCache>) {
+        self._stroke_cache = cache
     }
 }
 
