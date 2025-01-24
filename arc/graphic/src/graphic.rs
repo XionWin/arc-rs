@@ -30,7 +30,7 @@ impl core::Graphic for Graphic {
                 shape.set_fill_cache(match fill_primitive {
                     Some(fill_primitive) => {
                         // util::print_debug!("fill_primitive: {}", fill_primitive);
-                        Some(self.renderer.draw_primitive(fill_primitive))
+                        Some(self.renderer.cache_primitive(fill_primitive))
                     }
                     None => None,
                 });

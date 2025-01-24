@@ -75,7 +75,7 @@ impl graphic::Renderer for Renderer {
         texture
     }
 
-    fn draw_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {
+    fn cache_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {
         let rect = primitive.get_rect();
         let cache = graphic::TextureCache::new(
             rect,
@@ -87,7 +87,7 @@ impl graphic::Renderer for Renderer {
             ),
         );
         self._framebuffer_renderer
-            .draw_primitive(primitive, cache.get_texture_rc());
+            .add_primitive(primitive, cache.get_texture_rc());
         cache
     }
 
