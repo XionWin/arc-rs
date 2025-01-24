@@ -203,7 +203,7 @@ fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
         _ => util::print_panic!("unexpected"),
     }
 
-    crate::gl::clear_color(0f32, 0f32, 1f32, 1f32);
+    crate::gl::clear_color(0f32, 0f32, 0f32, 0f32);
     crate::gl::clear(
         crate::def::ClearBufferMasks::COLOR_BUFFER_BIT
             | crate::def::ClearBufferMasks::DEPTH_BUFFER_BIT,
