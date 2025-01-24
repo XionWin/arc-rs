@@ -1,11 +1,7 @@
 use std::{borrow::Borrow, cell::RefCell};
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
-use sdl2::{
-    event::Event,
-    keyboard::{Keycode, Mod},
-    VideoSubsystem,
-};
+use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
 
 type TitleCallback = fn(&WindowParameter) -> String;
 pub struct Window {
