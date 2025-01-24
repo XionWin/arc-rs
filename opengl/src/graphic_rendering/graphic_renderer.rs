@@ -114,17 +114,20 @@ impl GraphicRenderer {
         self._program.get_rendering_size()
     }
     pub fn set_rendering_size(&self, size: core::Size<i32>) {
+        self._program.use_program();
         let (width, height) = size.into();
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
             .set_uniform_a_viewport(core::Rect::new(0, 0, width as _, height as _));
     }
     pub fn clear_color(&self, color: core::Color) {
+        self._program.use_program();
         let rgba: core::Rgba = color.into();
         let (r, g, b, a) = rgba.into();
         crate::gl::clear_color(r, g, b, a);
     }
     pub fn clear(&self) {
+        self._program.use_program();
         crate::gl::clear(
             crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
         );

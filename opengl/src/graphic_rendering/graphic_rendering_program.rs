@@ -45,6 +45,7 @@ impl GraphicRenderingProgram {
         self.viewport.get().get_size().clone()
     }
     pub fn set_uniform_a_viewport(&self, value: core::Rect<i32>) {
+        crate::gl::use_program(self.id);
         crate::gl::uniform_2f(
             self._attribute_locations["aViewport"],
             value.get_width() as _,
@@ -55,15 +56,18 @@ impl GraphicRenderingProgram {
     }
 
     pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {
+        crate::gl::use_program(self.id);
         crate::gl::uniform_1i(self._attribute_locations["aPointSize"], value);
     }
     pub fn set_uniform_frag(&self, value: &FragUniform) {
+        crate::gl::use_program(self.id);
         crate::gl::uniform_4fv(
             self._attribute_locations["aFrag"],
             &Into::<[f32; 44]>::into(value),
         );
     }
     pub fn use_texture_id(&self, texture_id: c_uint) {
+        crate::gl::use_program(self.id);
         crate::gl::uniform_1i(self._attribute_locations["aTexture"], 0i32);
         crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
     }

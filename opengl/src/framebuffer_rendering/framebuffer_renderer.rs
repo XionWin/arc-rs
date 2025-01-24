@@ -24,7 +24,10 @@ impl FramebufferRenderer {
             _vbo: crate::gl::gen_buffer(),
             _fbo: crate::gl::gen_frame_buffer(),
             _program: crate::FramebufferRenderingProgram::new(),
-            _attribute_locations: Box::new([AttributeLocation::new("aPos", 0, 2)]),
+            _attribute_locations: Box::new([
+                AttributeLocation::new("aPos", 0, 2),
+                AttributeLocation::new("aCoord", 2, 2),
+            ]),
             _frame_data: RefCell::new(FrameData::new()),
         }
     }
@@ -48,7 +51,6 @@ impl GLRenderer for FramebufferRenderer {
     }
     fn render(&self) {
         self._program.use_program();
-        self.set_rendering_size(self.get_rendering_size());
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
 
@@ -67,8 +69,9 @@ impl GLRenderer for FramebufferRenderer {
         crate::gl::disable(crate::def::EnableCap::Blend);
 
         for call in frame_data.get_calls() {
-            bind_texture_to_framebuffer(self._fbo, call.get_fb_texture());
-
+            let fb_texture = call.get_fb_texture();
+            bind_texture_to_framebuffer(self._fbo, fb_texture);
+            self.set_rendering_size(fb_texture.get_size());
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);
             if let Some(texture_id) = call.get_texture_id() {
@@ -191,9 +194,7 @@ fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
         util::print_panic!("unexpected");
     }
 
-    let texture_size = texture.get_size();
-    crate::gl::viewport(0, 0, texture_size.get_width(), texture_size.get_height());
-    crate::gl::clear_color(1f32, 0f32, 0f32, 1f32);
+    crate::gl::clear_color(0f32, 0f32, 0f32, 0f32);
     crate::gl::clear(
         crate::def::ClearBufferMasks::COLOR_BUFFER_BIT
             | crate::def::ClearBufferMasks::DEPTH_BUFFER_BIT,
