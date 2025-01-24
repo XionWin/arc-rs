@@ -21,7 +21,6 @@ const FRAGMENT_SHADER_PATH: &str = "resource/shader/graphic.frag";
 impl FramebufferRenderingProgram {
     pub fn new() -> Self {
         let _program_id = crate::gl::create_program();
-        crate::gl::use_program(_program_id);
         let _vertex_shader =
             Shader::new(crate::def::ShaderType::VertexShader, VERTEX_SHADER_PATH).load();
         let _fragment_shader =
