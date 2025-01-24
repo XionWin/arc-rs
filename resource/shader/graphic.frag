@@ -58,7 +58,7 @@ void main(void)
   }
   else if(type==2){
     // FillStencil
-    gl_FragColor=vec4(1,1,1,1);
+    gl_FragColor=vec4(1.,1.,1.,1.);
   }
   else if(type==3){
     // FillAlpha

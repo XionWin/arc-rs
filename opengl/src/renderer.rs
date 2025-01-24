@@ -2,7 +2,7 @@ use std::{cell::RefCell, rc::Rc};
 
 #[derive(Debug)]
 pub struct Renderer {
-    _cache_renderer: crate::FramebufferRenderer,
+    _framebuffer_renderer: crate::FramebufferRenderer,
     _graphic_renderer: crate::GraphicRenderer,
     _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
@@ -14,7 +14,7 @@ impl Renderer {
     {
         crate::load_with(loadfn);
         Self {
-            _cache_renderer: crate::FramebufferRenderer::new(core::ColorType::Rgba),
+            _framebuffer_renderer: crate::FramebufferRenderer::new(core::ColorType::Rgba),
             _graphic_renderer: crate::GraphicRenderer::new(),
             _textures: RefCell::new(Vec::new()),
         }
@@ -24,17 +24,18 @@ impl Renderer {
 impl graphic::Renderer for Renderer {
     fn init(&self, size: core::Size<i32>) {
         crate::gl::enable_multisample();
+        self._framebuffer_renderer.init(size);
         self._graphic_renderer.init(size);
     }
     fn begin_render(&self) {
         use crate::GLRenderer;
-        self._cache_renderer.begin_render();
+        self._framebuffer_renderer.begin_render();
         self._graphic_renderer.begin_render();
     }
     fn render(&self) {
         use crate::GLRenderer;
-        self._cache_renderer.render();
-        for primitive in self._cache_renderer.get_rendered_primivitive() {
+        self._framebuffer_renderer.render();
+        for primitive in self._framebuffer_renderer.get_rendered_primivitive() {
             self._graphic_renderer.add_primitive(primitive);
         }
         self._graphic_renderer.render();
@@ -43,6 +44,7 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.get_rendering_size()
     }
     fn set_rendering_size(&self, size: core::Size<i32>) {
+        self._framebuffer_renderer.set_rendering_size(size);
         self._graphic_renderer.set_rendering_size(size);
     }
     fn clear_color(&self, color: core::Color) {
@@ -81,23 +83,21 @@ impl graphic::Renderer for Renderer {
             self.create_texture(
                 rect.get_size(),
                 core::ColorType::Rgba,
-                graphic::TextureFilter::Linear,
+                graphic::TextureFilter::Nearest,
             ),
         );
-        self._cache_renderer
+        self._framebuffer_renderer
             .draw_primitive(primitive, cache.get_texture_rc());
         cache
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {
-        // self._cache_renderer.draw_primitive(
-        //     primitive,
-        //     self.create_texture(
-        //         core::Size::new(800, 480),
-        //         core::ColorType::Rgba,
-        //         graphic::TextureFilter::Linear,
-        //     ),
+        // let texture = self.create_texture_from_file(
+        //     "resource/image/icon/icon96.png",
+        //     graphic::TextureFilter::Nearest,
         // );
+        // self._framebuffer_renderer
+        //     .draw_primitive(primitive, texture);
         self._graphic_renderer.add_primitive(primitive);
     }
 
@@ -107,7 +107,7 @@ impl graphic::Renderer for Renderer {
         path: &str,
         color_type: core::ColorType,
     ) {
-        self._cache_renderer
+        self._framebuffer_renderer
             .export_texture(texture, path, color_type);
     }
 }

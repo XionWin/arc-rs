@@ -5,7 +5,7 @@ use crate::GLRenderer;
 pub(crate) fn bind_vertex_array(vao: c_uint) {
     crate::gl::bind_vertex_array(vao);
 }
-pub(crate) fn bind_buffer<T>(renderer: &dyn GLRenderer, vertices: &[T]) {
+pub(crate) fn bind_data<T>(renderer: &dyn GLRenderer, vertices: &[T]) {
     crate::gl::bind_buffer(crate::def::BufferTarget::ArrayBuffer, renderer.get_vbo());
     crate::gl::buffer_data(
         crate::def::BufferTarget::ArrayBuffer,

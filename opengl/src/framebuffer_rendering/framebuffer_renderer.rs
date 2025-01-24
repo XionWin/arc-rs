@@ -1,13 +1,9 @@
-use std::{
-    cell::RefCell,
-    ffi::{c_uchar, c_uint},
-    rc::Rc,
-};
+use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
 use graphic::TextureImage;
 
 use super::FrameData;
-use crate::{AttributeLocation, GLRenderer};
+use crate::{renderer_utility, AttributeLocation, GLRenderer};
 
 #[derive(Debug)]
 pub struct FramebufferRenderer {
@@ -31,6 +27,78 @@ impl FramebufferRenderer {
             _attribute_locations: Box::new([AttributeLocation::new("aPos", 0, 2)]),
             _frame_data: RefCell::new(FrameData::new()),
         }
+    }
+}
+
+impl GLRenderer for FramebufferRenderer {
+    fn get_vbo(&self) -> c_uint {
+        self._vbo
+    }
+    fn get_program(&self) -> &dyn crate::GLProgram {
+        &self._program
+    }
+    fn get_attribute_locations(&self) -> &[crate::AttributeLocation] {
+        &self._attribute_locations
+    }
+    fn get_color_type(&self) -> core::ColorType {
+        self._color_type
+    }
+    fn begin_render(&self) {
+        self._frame_data.borrow_mut().reset();
+    }
+    fn render(&self) {
+        self._program.use_program();
+        self.set_rendering_size(self.get_rendering_size());
+        let frame_data = self._frame_data.borrow();
+        let frag_uniforms = frame_data.get_frag_uniforms();
+
+        renderer_utility::bind_vertex_array(self._vao);
+        let vertices = frame_data.get_vertices();
+        // binding vertices
+        renderer_utility::bind_data(self, vertices);
+
+        // [TEST]
+        self._program.set_uniform_point_size(5i32);
+
+        // crate::gl::enable(crate::def::EnableCap::Blend);
+        // crate::gl::blend_func(
+        //     crate::def::BlendingFactorSrc::SrcAlpha,
+        //     crate::def::BlendingFactorDest::OneMinusSrcAlpha,
+        // );
+        crate::gl::disable(crate::def::EnableCap::Blend);
+
+        for call in frame_data.get_calls() {
+            bind_texture_to_framebuffer(self._fbo, call.get_fb_texture());
+            self.clear_color(core::Color::Transparent);
+            self.clear();
+
+            let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
+            self._program.set_uniform_frag(frag_uniform);
+            if let Some(texture_id) = call.get_texture_id() {
+                self._program.set_texture_id(texture_id);
+            }
+
+            let primitive_type = match call.get_call_type() {
+                crate::CallType::Fill => crate::def::PrimitiveType::TriangleFan,
+                crate::CallType::ConvexFill => crate::def::PrimitiveType::TriangleFan,
+                crate::CallType::Stroke => crate::def::PrimitiveType::TriangleStrip,
+                crate::CallType::Image => crate::def::PrimitiveType::TriangleFan,
+            };
+
+            crate::gl::draw_arrays(
+                primitive_type,
+                call.get_vertex_offset() as _,
+                call.get_vertex_len() as _,
+            );
+        }
+    }
+}
+
+impl FramebufferRenderer {
+    pub fn init(&self, size: core::Size<i32>) {
+        self._program.use_program();
+        renderer_utility::bind_vertex_array(self._vao);
+        self.set_rendering_size(size);
     }
     pub fn draw_primitive(&self, primitive: vector::Primitive, texture: Rc<dyn graphic::Texture>) {
         let state = primitive.get_state();
@@ -81,29 +149,25 @@ impl FramebufferRenderer {
         );
         image::ImageData::export_to_file(&buffer, texture_size, path);
     }
-}
 
-impl GLRenderer for FramebufferRenderer {
-    fn get_vbo(&self) -> c_uint {
-        self._vbo
+    pub fn get_rendering_size(&self) -> core::Size<i32> {
+        self._program.get_rendering_size()
     }
-    fn get_program(&self) -> &dyn crate::GLProgram {
-        &self._program
+    pub fn set_rendering_size(&self, size: core::Size<i32>) {
+        let (width, height) = size.into();
+        crate::gl::viewport(0, 0, width as _, height as _);
+        self._program
+            .set_uniform_a_viewport(core::Rect::new(0, 0, width as _, height as _));
     }
-    fn get_attribute_locations(&self) -> &[crate::AttributeLocation] {
-        &self._attribute_locations
+    pub fn clear_color(&self, color: core::Color) {
+        let rgba: core::Rgba = color.into();
+        let (r, g, b, a) = rgba.into();
+        crate::gl::clear_color(r, g, b, a);
     }
-    fn get_color_type(&self) -> core::ColorType {
-        self._color_type
-    }
-    fn begin_render(&self) {
-        self._frame_data.borrow_mut().reset();
-    }
-    fn render(&self) {
-        self._program.use_program();
-        for call in self._frame_data.borrow().get_calls() {
-            bind_texture_to_framebuffer(self._fbo, call.get_fb_texture());
-        }
+    pub fn clear(&self) {
+        crate::gl::clear(
+            crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
+        );
     }
 }
 
@@ -132,4 +196,9 @@ fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
 
     let texture_size = texture.get_size();
     crate::gl::viewport(0, 0, texture_size.get_width(), texture_size.get_height());
+    crate::gl::clear_color(1f32, 0f32, 0f32, 1f32);
+    crate::gl::clear(
+        crate::def::ClearBufferMasks::COLOR_BUFFER_BIT
+            | crate::def::ClearBufferMasks::DEPTH_BUFFER_BIT,
+    );
 }

@@ -1,7 +1,4 @@
-use std::{
-    cell::{Cell, RefCell},
-    ffi::c_uint,
-};
+use std::{cell::RefCell, ffi::c_uint};
 
 use graphic::TextureImage;
 
@@ -53,22 +50,14 @@ impl GLRenderer for GraphicRenderer {
     }
     fn render(&self) {
         self._program.use_program();
-        bind_screen_framebuffer();
-        // self.set_rendering_size(self.get_rendering_size());
-        let rendering_size = self.get_rendering_size();
-        crate::gl::viewport(
-            0,
-            0,
-            rendering_size.get_width(),
-            rendering_size.get_height(),
-        );
+        self.set_rendering_size(self.get_rendering_size());
         let frame_data = self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
 
         renderer_utility::bind_vertex_array(self._vao);
         let vertices = frame_data.get_vertices();
         // binding vertices
-        renderer_utility::bind_buffer(self, vertices);
+        renderer_utility::bind_data(self, vertices);
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
@@ -79,6 +68,7 @@ impl GLRenderer for GraphicRenderer {
             crate::def::BlendingFactorDest::OneMinusSrcAlpha,
         );
 
+        bind_screen_framebuffer();
         for call in frame_data.get_calls() {
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);

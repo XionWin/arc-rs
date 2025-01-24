@@ -1,4 +1,4 @@
-use core::{Command, Point, Rect, Shape, Style};
+use core::{Command, Point, Rect, Shape, Size, Style};
 
 const KAPPA90: f32 = 0.5522847493f32;
 
@@ -55,12 +55,6 @@ impl RoundRectangle {
     }
 }
 
-impl RoundRectangle {
-    pub fn get_rect(&self) -> &Rect<i32> {
-        &self.rect
-    }
-}
-
 impl Shape for RoundRectangle {
     fn get_commands(&self) -> &[core::Command] {
         &self.commands
@@ -70,5 +64,8 @@ impl Shape for RoundRectangle {
     }
     fn get_rect(&self) -> Rect<i32> {
         self.rect
+    }
+    fn get_size(&self) -> Size<i32> {
+        self.rect.get_size()
     }
 }

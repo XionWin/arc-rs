@@ -1,4 +1,4 @@
-use core::{Command, Point, Rect, Shape, Style};
+use core::{Command, Point, Rect, Shape, Size, Style};
 
 #[derive(Debug)]
 pub struct Rectangle {
@@ -25,12 +25,6 @@ impl Rectangle {
     }
 }
 
-impl Rectangle {
-    pub fn get_rect(&self) -> &Rect<i32> {
-        &self.rect
-    }
-}
-
 impl Shape for Rectangle {
     fn get_commands(&self) -> &[core::Command] {
         &self.commands
@@ -40,5 +34,8 @@ impl Shape for Rectangle {
     }
     fn get_rect(&self) -> Rect<i32> {
         self.rect
+    }
+    fn get_size(&self) -> Size<i32> {
+        self.rect.get_size()
     }
 }
