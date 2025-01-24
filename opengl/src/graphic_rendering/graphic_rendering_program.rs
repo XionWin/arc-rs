@@ -63,7 +63,7 @@ impl GraphicRenderingProgram {
             &Into::<[f32; 44]>::into(value),
         );
     }
-    pub fn set_texture_id(&self, texture_id: c_uint) {
+    pub fn use_texture_id(&self, texture_id: c_uint) {
         crate::gl::uniform_1i(self._attribute_locations["aTexture"], 0i32);
         crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
     }

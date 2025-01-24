@@ -53,9 +53,8 @@ impl GLRenderer for FramebufferRenderer {
         let frag_uniforms = frame_data.get_frag_uniforms();
 
         renderer_utility::bind_vertex_array(self._vao);
-        let vertices = frame_data.get_vertices();
         // binding vertices
-        renderer_utility::bind_data(self, vertices);
+        renderer_utility::bind_data(self, frame_data.get_vertices());
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
@@ -69,13 +68,11 @@ impl GLRenderer for FramebufferRenderer {
 
         for call in frame_data.get_calls() {
             bind_texture_to_framebuffer(self._fbo, call.get_fb_texture());
-            self.clear_color(core::Color::Transparent);
-            self.clear();
 
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);
             if let Some(texture_id) = call.get_texture_id() {
-                self._program.set_texture_id(texture_id);
+                self._program.use_texture_id(texture_id);
             }
 
             let primitive_type = match call.get_call_type() {
@@ -159,16 +156,16 @@ impl FramebufferRenderer {
         self._program
             .set_uniform_a_viewport(core::Rect::new(0, 0, width as _, height as _));
     }
-    pub fn clear_color(&self, color: core::Color) {
-        let rgba: core::Rgba = color.into();
-        let (r, g, b, a) = rgba.into();
-        crate::gl::clear_color(r, g, b, a);
-    }
-    pub fn clear(&self) {
-        crate::gl::clear(
-            crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
-        );
-    }
+    // pub fn clear_color(&self, color: core::Color) {
+    //     let rgba: core::Rgba = color.into();
+    //     let (r, g, b, a) = rgba.into();
+    //     crate::gl::clear_color(r, g, b, a);
+    // }
+    // pub fn clear(&self) {
+    //     crate::gl::clear(
+    //         crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
+    //     );
+    // }
 }
 
 impl Drop for FramebufferRenderer {

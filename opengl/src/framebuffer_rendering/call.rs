@@ -33,10 +33,6 @@ impl Call {
     pub fn get_fb_texture(&self) -> &dyn graphic::Texture {
         self.fb_texture.borrow()
     }
-
-    pub fn get_fb_texture_id(&self) -> c_uint {
-        self.fb_texture.get_id()
-    }
     pub fn get_call_type(&self) -> &CallType {
         &self.call_type
     }
