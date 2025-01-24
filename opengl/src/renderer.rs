@@ -100,6 +100,16 @@ impl graphic::Renderer for Renderer {
         // );
         self._graphic_renderer.add_primitive(primitive);
     }
+
+    fn export_texture(
+        &self,
+        texture: &dyn graphic::Texture,
+        path: &str,
+        color_type: core::ColorType,
+    ) {
+        self._cache_renderer
+            .export_texture(texture, path, color_type);
+    }
 }
 
 impl Drop for Renderer {

@@ -1,4 +1,8 @@
-use std::{cell::RefCell, ffi::c_uint, rc::Rc};
+use std::{
+    cell::RefCell,
+    ffi::{c_uchar, c_uint},
+    rc::Rc,
+};
 
 use graphic::TextureImage;
 
@@ -44,6 +48,37 @@ impl FramebufferRenderer {
     }
     pub fn get_rendered_primivitive(&self) -> Vec<vector::Primitive> {
         Vec::new()
+    }
+
+    pub fn export_texture(
+        &self,
+        texture: &dyn graphic::Texture,
+        path: &str,
+        color_type: core::ColorType,
+    ) {
+        bind_texture_to_framebuffer(self._fbo, texture);
+        let texture_size = texture.get_size();
+        let mut buffer = vec![
+            0u8;
+            (texture_size.get_width()
+                * texture_size.get_height()
+                * match color_type {
+                    core::ColorType::Rgba => 4,
+                    core::ColorType::Alpha => 1,
+                }) as _
+        ];
+        crate::gl::read_pixels(
+            0,
+            0,
+            texture_size.get_width(),
+            texture_size.get_height(),
+            match color_type {
+                core::ColorType::Rgba => crate::PixelFormat::Rgba,
+                core::ColorType::Alpha => crate::PixelFormat::Alpha,
+            },
+            crate::PixelType::Byte,
+            &mut buffer,
+        );
     }
 }
 
@@ -94,6 +129,6 @@ fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
         util::print_panic!("unexpected");
     }
 
-    let size = texture.get_size();
-    crate::gl::viewport(0, 0, size.get_width(), size.get_height());
+    let texture_size = texture.get_size();
+    crate::gl::viewport(0, 0, texture_size.get_width(), texture_size.get_height());
 }

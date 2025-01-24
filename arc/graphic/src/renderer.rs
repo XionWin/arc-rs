@@ -25,4 +25,5 @@ pub trait Renderer: Debug {
     ) -> Rc<dyn Texture>;
     fn draw_primitive(&self, primitive: vector::Primitive) -> crate::TextureCache;
     fn add_primitive(&self, primitive: vector::Primitive);
+    fn export_texture(&self, texture: &dyn crate::Texture, path: &str, color_type: core::ColorType);
 }
