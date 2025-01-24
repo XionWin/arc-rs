@@ -52,7 +52,7 @@ impl core::Window for Window {
                     } => self.on_window_size_changed(core::Size::new(width, height)),
                     Event::KeyDown {
                         keycode: Some(Keycode::E),
-                        keymod: Mod::LCTRLMOD,
+                        // keymod: Mod::LCTRLMOD,
                         ..
                     } => self.export(),
                     _ => {}
