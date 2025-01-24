@@ -23,7 +23,6 @@ impl Renderer {
 
 impl graphic::Renderer for Renderer {
     fn init(&self, size: core::Size<i32>) {
-        crate::gl::enable_multisample();
         self._framebuffer_renderer.init(size);
         self._graphic_renderer.init(size);
     }

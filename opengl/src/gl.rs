@@ -14,16 +14,6 @@ where
     gl::load_with(load_func)
 }
 
-pub fn enable_multisample() {
-    unsafe {
-        gl::Enable(gl::MULTISAMPLE);
-        gl::Hint(gl::LINE_SMOOTH_HINT, gl::NICEST);
-        gl::Hint(gl::POLYGON_SMOOTH_HINT, gl::NICEST);
-        gl::Enable(gl::LINE_SMOOTH);
-        gl::Enable(gl::POLYGON_SMOOTH);
-    }
-}
-
 pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {
     unsafe { gl::ClearColor(r, g, b, a) };
 }
@@ -609,10 +599,11 @@ pub fn framebuffer_texture_2d(
 pub fn check_framebuffer_status(
     target: crate::def::FramebufferTarget,
 ) -> crate::def::FramebufferErrorCode {
-    unsafe {
-        let code = gl::CheckFramebufferStatus(target as _);
-        std::mem::transmute(code)
-    }
+    unsafe { std::mem::transmute(gl::CheckFramebufferStatus(target as _)) }
+}
+
+pub fn get_error() -> crate::def::ErrorCode {
+    unsafe { std::mem::transmute(gl::GetError()) }
 }
 
 pub fn flush() {

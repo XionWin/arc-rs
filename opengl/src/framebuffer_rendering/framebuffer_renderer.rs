@@ -19,12 +19,17 @@ pub struct FramebufferRenderer {
 
 impl FramebufferRenderer {
     pub fn new() -> Self {
+        let _program = crate::FramebufferRenderingProgram::new();
+        _program.use_program();
+        let _vao = crate::gl::gen_vertex_array();
+        let _vbo = crate::gl::gen_buffer();
+        let _fbo = crate::gl::gen_frame_buffer();
         Self {
             _color_type: core::ColorType::Rgba,
-            _vao: crate::gl::gen_vertex_array(),
-            _vbo: crate::gl::gen_buffer(),
-            _fbo: crate::gl::gen_frame_buffer(),
-            _program: crate::FramebufferRenderingProgram::new(),
+            _vao,
+            _vbo,
+            _fbo,
+            _program,
             _attribute_locations: Box::new([
                 AttributeLocation::new("aPos", 0, 2),
                 AttributeLocation::new("aCoord", 2, 2),
