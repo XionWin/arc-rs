@@ -76,9 +76,10 @@ impl FramebufferRenderer {
                 core::ColorType::Rgba => crate::PixelFormat::Rgba,
                 core::ColorType::Alpha => crate::PixelFormat::Alpha,
             },
-            crate::PixelType::Byte,
+            crate::PixelType::UnsignedByte,
             &mut buffer,
         );
+        image::ImageData::export_to_file(&buffer, texture_size, path);
     }
 }
 

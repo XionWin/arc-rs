@@ -1,4 +1,4 @@
-use std::rc::Rc;
+use std::{borrow::Borrow, rc::Rc};
 
 pub struct TextureCache {
     rect: core::Rect<i32>,
@@ -25,6 +25,10 @@ impl TextureCache {
 
     pub fn get_margin(&self) -> core::Margin<i32> {
         self.margin
+    }
+
+    pub fn get_texture(&self) -> &dyn crate::Texture {
+        self.texture.borrow()
     }
 
     pub fn get_texture_rc(&self) -> Rc<dyn crate::Texture> {

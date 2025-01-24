@@ -17,4 +17,5 @@ pub trait Graphic {
     ) -> Box<dyn Image>;
     fn load_image_from_file(&self, path: &str, image_filter: ImageFilter) -> Box<dyn Image>;
     fn add_shape(&self, shape: Box<dyn Shape>);
+    fn export_shape_cache(&self);
 }

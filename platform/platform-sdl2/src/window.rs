@@ -1,7 +1,11 @@
 use std::{borrow::Borrow, cell::RefCell};
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
-use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
+use sdl2::{
+    event::Event,
+    keyboard::{Keycode, Mod},
+    VideoSubsystem,
+};
 
 type TitleCallback = fn(&WindowParameter) -> String;
 pub struct Window {
@@ -46,6 +50,11 @@ impl core::Window for Window {
                         win_event: sdl2::event::WindowEvent::Resized(width, height),
                         ..
                     } => self.on_window_size_changed(core::Size::new(width, height)),
+                    Event::KeyDown {
+                        keycode: Some(Keycode::E),
+                        keymod: Mod::LCTRLMOD,
+                        ..
+                    } => self.export(),
                     _ => {}
                 }
             }
@@ -112,6 +121,10 @@ impl Window {
 }
 
 impl Window {
+    fn export(&self) {
+        util::print_info!("export trigered");
+        self.graphic.export_shape_cache();
+    }
     fn new_window_with_title_function(
         title_function: TitleCallback,
         width: i32,

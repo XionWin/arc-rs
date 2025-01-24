@@ -26,6 +26,17 @@ impl ImageData {
             color_type: ColorType::Rgba,
         }
     }
+
+    pub fn export_to_file(buffer: &[u8], size: core::Size<i32>, path: &str) {
+        image::save_buffer(
+            path,
+            buffer,
+            size.get_width() as _,
+            size.get_height() as _,
+            image::ExtendedColorType::Rgba8,
+        )
+        .unwrap()
+    }
 }
 
 impl core::ImageData for ImageData {
