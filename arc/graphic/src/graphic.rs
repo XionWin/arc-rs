@@ -86,33 +86,33 @@ impl core::Graphic for Graphic {
         self._shapes.borrow_mut().push(graphic_shape);
     }
     fn export_shape_cache(&self) {
-        // let mut index = 0;
-        // let shapes: &Vec<_> = &self._shapes.borrow();
-        // for shape in shapes {
-        //     let shape: &RefCell<crate::GraphicShape> = shape.borrow();
-        //     let graphic_shape: &crate::GraphicShape = &shape.borrow();
-        //     match graphic_shape.get_fill_cache() {
-        //         Some(cache) => {
-        //             self.renderer.export_texture(
-        //                 cache.get_texture(),
-        //                 &format!("cache/{}.png", index),
-        //                 core::ColorType::Rgba,
-        //             );
-        //         }
-        //         None => {}
-        //     }
-        //     index += 1;
-        // }
+        let mut index = 0;
+        let shapes: &Vec<_> = &self._shapes.borrow();
+        for shape in shapes {
+            let shape: &RefCell<crate::GraphicShape> = shape.borrow();
+            let graphic_shape: &crate::GraphicShape = &shape.borrow();
+            match graphic_shape.get_fill_cache() {
+                Some(cache) => {
+                    self.renderer.export_texture(
+                        cache.get_texture(),
+                        &format!("target/debug/cache/{}.png", index),
+                        core::ColorType::Rgba,
+                    );
+                }
+                None => {}
+            }
+            index += 1;
+        }
 
-        let texture = self.renderer.create_texture_from_file(
-            "resource/image/icon/icon96.png",
-            crate::TextureFilter::Nearest,
-        );
-        self.renderer.export_texture(
-            texture.borrow(),
-            "target/debug/cache/1.png",
-            core::ColorType::Rgba,
-        );
+        // let texture = self.renderer.create_texture_from_file(
+        //     "resource/image/icon/icon96.png",
+        //     crate::TextureFilter::Nearest,
+        // );
+        // self.renderer.export_texture(
+        //     texture.borrow(),
+        //     "target/debug/cache/1.png",
+        //     core::ColorType::Rgba,
+        // );
     }
 }
 
