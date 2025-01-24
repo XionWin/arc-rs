@@ -14,7 +14,7 @@ impl Renderer {
     {
         crate::load_with(loadfn);
         Self {
-            _framebuffer_renderer: crate::FramebufferRenderer::new(core::ColorType::Rgba),
+            _framebuffer_renderer: crate::FramebufferRenderer::new(),
             _graphic_renderer: crate::GraphicRenderer::new(),
             _textures: RefCell::new(Vec::new()),
         }

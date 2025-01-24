@@ -2,8 +2,9 @@ use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
 use graphic::TextureImage;
 
-use super::FrameData;
 use crate::{renderer_utility, AttributeLocation, GLRenderer};
+
+use super::FrameData;
 
 #[derive(Debug)]
 pub struct FramebufferRenderer {
@@ -17,9 +18,9 @@ pub struct FramebufferRenderer {
 }
 
 impl FramebufferRenderer {
-    pub fn new(color_type: core::ColorType) -> Self {
+    pub fn new() -> Self {
         Self {
-            _color_type: color_type,
+            _color_type: core::ColorType::Rgba,
             _vao: crate::gl::gen_vertex_array(),
             _vbo: crate::gl::gen_buffer(),
             _fbo: crate::gl::gen_frame_buffer(),
@@ -114,6 +115,7 @@ impl FramebufferRenderer {
             texture_id,
         );
     }
+
     pub fn get_rendered_primivitive(&self) -> Vec<vector::Primitive> {
         Vec::new()
     }
@@ -154,26 +156,29 @@ impl FramebufferRenderer {
         self._program.get_rendering_size()
     }
     pub fn set_rendering_size(&self, size: core::Size<i32>) {
+        self._program.use_program();
         let (width, height) = size.into();
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
             .set_uniform_a_viewport(core::Rect::new(0, 0, width as _, height as _));
     }
-    // pub fn clear_color(&self, color: core::Color) {
-    //     let rgba: core::Rgba = color.into();
-    //     let (r, g, b, a) = rgba.into();
-    //     crate::gl::clear_color(r, g, b, a);
-    // }
-    // pub fn clear(&self) {
-    //     crate::gl::clear(
-    //         crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
-    //     );
-    // }
+    pub fn clear_color(&self, color: core::Color) {
+        self._program.use_program();
+        let rgba: core::Rgba = color.into();
+        let (r, g, b, a) = rgba.into();
+        crate::gl::clear_color(r, g, b, a);
+    }
+    pub fn clear(&self) {
+        self._program.use_program();
+        crate::gl::clear(
+            crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
+        );
+    }
 }
 
 impl Drop for FramebufferRenderer {
     fn drop(&mut self) {
-        util::print_debug!("texture_renderer droped")
+        util::print_debug!("framebuffer_renderer droped")
     }
 }
 
