@@ -21,4 +21,5 @@ pub trait Graphic {
     fn load_image_from_file(&self, path: &str, image_filter: ImageFilter) -> Box<dyn Image>;
     fn add_shape(&self, shape: Box<dyn Shape>);
     fn export_shape_cache(&self);
+    fn check_gl_error(&self) -> String;
 }

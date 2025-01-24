@@ -120,6 +120,9 @@ impl core::Graphic for Graphic {
         //     core::ColorType::Rgba,
         // );
     }
+    fn check_gl_error(&self) -> String {
+        self.renderer.check_gl_error()
+    }
 }
 
 impl RenderingComponent for Graphic {

@@ -55,6 +55,11 @@ impl core::Window for Window {
                         // keymod: Mod::LCTRLMOD,
                         ..
                     } => self.export(),
+                    Event::KeyDown {
+                        keycode: Some(Keycode::C),
+                        // keymod: Mod::LCTRLMOD,
+                        ..
+                    } => self.check_gl_error(),
                     _ => {}
                 }
             }
@@ -121,6 +126,9 @@ impl Window {
 }
 
 impl Window {
+    fn check_gl_error(&self) {
+        util::print_debug!("gl_error: {:?}", self.graphic.check_gl_error())
+    }
     fn export(&self) {
         util::print_info!("export trigered");
         self.graphic.export_shape_cache();

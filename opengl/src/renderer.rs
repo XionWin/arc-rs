@@ -121,6 +121,9 @@ impl graphic::Renderer for Renderer {
         self._framebuffer_renderer
             .export_texture(texture, path, color_type);
     }
+    fn check_gl_error(&self) -> String {
+        format!("{:?}", crate::gl::get_error())
+    }
 }
 
 impl Drop for Renderer {
