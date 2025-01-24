@@ -1,5 +1,4 @@
 #[repr(u32)]
-#[derive(PartialEq)]
 pub enum FramebufferErrorCode {
     //
     // Summary:

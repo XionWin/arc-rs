@@ -198,10 +198,9 @@ fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
         0,
     );
 
-    if crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer)
-        != crate::def::FramebufferErrorCode::FramebufferComplete
-    {
-        util::print_panic!("unexpected");
+    match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
+        crate::FramebufferErrorCode::FramebufferComplete => {}
+        _ => util::print_panic!("unexpected"),
     }
 
     crate::gl::clear_color(0f32, 0f32, 1f32, 1f32);
