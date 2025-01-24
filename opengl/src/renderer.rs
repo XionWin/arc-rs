@@ -1,4 +1,4 @@
-use std::{cell::RefCell, rc::Rc};
+use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
 #[derive(Debug)]
 pub struct Renderer {
@@ -62,6 +62,18 @@ impl graphic::Renderer for Renderer {
         let texture = Rc::new(crate::Texture::new(size, color_type, texture_filter));
         self._textures.borrow_mut().push(texture.clone());
         texture
+    }
+
+    fn get_texture(&self, texture_id: c_uint) -> Option<Rc<dyn graphic::Texture>> {
+        match self
+            ._textures
+            .borrow()
+            .iter()
+            .find(|x| x.get_id() == texture_id)
+        {
+            Some(texture) => Some(texture.clone()),
+            None => None,
+        }
     }
 
     fn create_texture_from_file(

@@ -1,5 +1,5 @@
-use std::fmt::Debug;
 use std::rc::Rc;
+use std::{ffi::c_uint, fmt::Debug};
 
 use crate::{Texture, TextureFilter};
 
@@ -18,6 +18,7 @@ pub trait Renderer: Debug {
         color_type: core::ColorType,
         texture_filter: TextureFilter,
     ) -> Rc<dyn Texture>;
+    fn get_texture(&self, texture_id: c_uint) -> Option<Rc<dyn crate::Texture>>;
     fn create_texture_from_file(
         &self,
         path: &str,
