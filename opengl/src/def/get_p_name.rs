@@ -1,5 +1,4 @@
-pub enum GetPName
-{
+pub enum GetPName {
     CurrentColor = 2816,
     CurrentIndex = 2817,
     CurrentNormal = 2818,
@@ -425,11 +424,11 @@ pub enum GetPName
     DeviceLuidExt = 38297,
     DeviceNodeMaskExt = 38298,
     ShadingRateImagePerPrimitiveNv = 38321,
-    ShadingRateImagePaletteCountNv = 38322
+    ShadingRateImagePaletteCountNv = 38322,
 }
 
 #[allow(non_upper_case_globals)]
-impl GetPName {   
+impl GetPName {
     pub const SmoothPointSizeRange: GetPName = GetPName::PointSizeRange;
     pub const SmoothPointSizeGranularity: GetPName = GetPName::PointSizeGranularity;
     pub const SmoothLineWidthRange: GetPName = GetPName::LineWidthRange;
