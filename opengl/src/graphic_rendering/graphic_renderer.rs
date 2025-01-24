@@ -71,7 +71,6 @@ impl GLRenderer for GraphicRenderer {
             crate::def::BlendingFactorDest::OneMinusSrcAlpha,
         );
 
-        bind_screen_framebuffer();
         for call in frame_data.get_calls() {
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);
@@ -142,8 +141,4 @@ impl Drop for GraphicRenderer {
     fn drop(&mut self) {
         util::print_debug!("graphic_renderer droped")
     }
-}
-
-fn bind_screen_framebuffer() {
-    crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, 0);
 }

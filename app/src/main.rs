@@ -89,35 +89,35 @@ fn test(g: &dyn core::Graphic) {
         x += size.get_width();
     }
 
-    // let colors = [
-    //     core::Color::MidnightBlue,
-    //     core::Color::MoselleGreen,
-    //     core::Color::MoselleGreen,
-    //     core::Color::White,
-    // ];
-    // for row in 0..2 {
-    //     for column in 0..2 {
-    //         let rectangle = vector::RoundRectangle::new(
-    //             198 * ZOOM_FACTOR + column * (26 + 1) * ZOOM_FACTOR,
-    //             122 * ZOOM_FACTOR + row * (26 + 1) * ZOOM_FACTOR,
-    //             26 * ZOOM_FACTOR,
-    //             26 * ZOOM_FACTOR,
-    //             10 * ZOOM_FACTOR,
-    //             Style::new(
-    //                 Box::new(core::ColorBackground::new(
-    //                     colors[(row * 2 + column) as usize],
-    //                     core::Color::MoselleGreen,
-    //                 )),
-    //                 core::ColorBackground::new(
-    //                     core::Color::MoselleGreen,
-    //                     core::Color::MoselleGreen,
-    //                 ),
-    //                 Some(1i32),
-    //             ),
-    //         );
-    //         g.add_shape(Box::new(rectangle));
-    //     }
-    // }
+    let colors = [
+        core::Color::MidnightBlue,
+        core::Color::MoselleGreen,
+        core::Color::MoselleGreen,
+        core::Color::White,
+    ];
+    for row in 0..2 {
+        for column in 0..2 {
+            let rectangle = vector::RoundRectangle::new(
+                198 * ZOOM_FACTOR + column * (26 + 1) * ZOOM_FACTOR,
+                122 * ZOOM_FACTOR + row * (26 + 1) * ZOOM_FACTOR,
+                26 * ZOOM_FACTOR,
+                26 * ZOOM_FACTOR,
+                10 * ZOOM_FACTOR,
+                Style::new(
+                    Box::new(core::ColorBackground::new(
+                        colors[(row * 2 + column) as usize],
+                        core::Color::MoselleGreen,
+                    )),
+                    core::ColorBackground::new(
+                        core::Color::MoselleGreen,
+                        core::Color::MoselleGreen,
+                    ),
+                    Some(1i32),
+                ),
+            );
+            g.add_shape(Box::new(rectangle));
+        }
+    }
 
     // match g.get_image(5) {
     //     Some(img) => {

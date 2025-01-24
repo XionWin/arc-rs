@@ -66,17 +66,13 @@ impl GLRenderer for FramebufferRenderer {
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
-
-        // crate::gl::enable(crate::def::EnableCap::Blend);
-        // crate::gl::blend_func(
-        //     crate::def::BlendingFactorSrc::SrcAlpha,
-        //     crate::def::BlendingFactorDest::OneMinusSrcAlpha,
-        // );
         crate::gl::disable(crate::def::EnableCap::Blend);
 
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
             bind_texture_to_framebuffer(self._fbo, fb_texture);
+            self.clear_color(core::Color::Transparent);
+            self.clear();
             self.set_rendering_size(fb_texture.get_size());
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);
@@ -97,6 +93,7 @@ impl GLRenderer for FramebufferRenderer {
                 call.get_vertex_len() as _,
             );
         }
+        bind_screen_framebuffer();
     }
 }
 
@@ -155,6 +152,7 @@ impl FramebufferRenderer {
             &mut buffer,
         );
         image::ImageData::export_to_file(&buffer, texture_size, path);
+        bind_screen_framebuffer();
     }
 
     // pub fn get_rendering_size(&self) -> core::Size<i32> {
@@ -167,18 +165,18 @@ impl FramebufferRenderer {
         self._program
             .set_uniform_a_viewport(core::Rect::new(0, 0, width as _, height as _));
     }
-    // pub fn clear_color(&self, color: core::Color) {
-    //     self._program.use_program();
-    //     let rgba: core::Rgba = color.into();
-    //     let (r, g, b, a) = rgba.into();
-    //     crate::gl::clear_color(r, g, b, a);
-    // }
-    // pub fn clear(&self) {
-    //     self._program.use_program();
-    //     crate::gl::clear(
-    //         crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
-    //     );
-    // }
+    pub fn clear_color(&self, color: core::Color) {
+        self._program.use_program();
+        let rgba: core::Rgba = color.into();
+        let (r, g, b, a) = rgba.into();
+        crate::gl::clear_color(r, g, b, a);
+    }
+    pub fn clear(&self) {
+        self._program.use_program();
+        crate::gl::clear(
+            crate::ClearBufferMasks::COLOR_BUFFER_BIT | crate::ClearBufferMasks::DEPTH_BUFFER_BIT,
+        );
+    }
 }
 
 impl Drop for FramebufferRenderer {
@@ -202,10 +200,8 @@ fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
         crate::FramebufferErrorCode::FramebufferComplete => {}
         _ => util::print_panic!("unexpected"),
     }
+}
 
-    crate::gl::clear_color(0f32, 0f32, 0f32, 0f32);
-    crate::gl::clear(
-        crate::def::ClearBufferMasks::COLOR_BUFFER_BIT
-            | crate::def::ClearBufferMasks::DEPTH_BUFFER_BIT,
-    );
+fn bind_screen_framebuffer() {
+    crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, 0);
 }
