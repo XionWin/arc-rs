@@ -71,7 +71,7 @@ impl GLRenderer for FramebufferRenderer {
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
             bind_texture_to_framebuffer(self._fbo, fb_texture);
-            self.clear_color(core::Color::Transparent);
+            self.clear_color(core::Color::MagicDeepGray);
             self.clear();
             self.set_rendering_size(fb_texture.get_size());
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
