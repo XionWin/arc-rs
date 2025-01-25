@@ -310,6 +310,53 @@ pub fn gen_frame_buffer() -> c_uint {
     buffer
 }
 
+pub fn bind_framebuffer(target: crate::def::FramebufferTarget, framebuffer: c_uint) {
+    unsafe {
+        gl::BindFramebuffer(target as _, framebuffer);
+    }
+}
+
+pub fn gen_render_buffer() -> c_uint {
+    let mut buffer = 0u32;
+    unsafe {
+        gl::GenRenderbuffers(1, &mut buffer);
+    }
+    buffer
+}
+
+pub fn bind_renderbuffer(target: crate::def::RenderbufferTarget, renderbuffer: c_uint) {
+    unsafe {
+        gl::BindRenderbuffer(target as _, renderbuffer);
+    }
+}
+
+pub fn renderbuffer_storage_multisample(
+    target: crate::def::RenderbufferTarget,
+    size: c_int,
+    internal_format: crate::def::RenderbufferInternalFormat,
+    width: c_int,
+    height: c_int,
+) {
+    unsafe {
+        gl::RenderbufferStorageMultisample(target as _, size, internal_format as _, width, height);
+    }
+}
+
+pub fn framebuffer_renderbuffer(
+    target: crate::def::FramebufferTarget,
+    attachment: crate::def::FramebufferAttachment,
+    renderbuffer: c_uint,
+) {
+    unsafe {
+        gl::FramebufferRenderbuffer(
+            target as _,
+            attachment as _,
+            crate::def::RenderbufferTarget::Renderbuffer as _,
+            renderbuffer,
+        );
+    }
+}
+
 pub fn get_programiv(program_id: c_uint, param: crate::def::GetProgramParameterName) -> c_int {
     let mut buffer = 0i32;
     unsafe {
@@ -570,12 +617,6 @@ pub fn stencil_op_separate(
     zpass: crate::def::StencilOp,
 ) {
     unsafe { gl::StencilOpSeparate(face as _, fail as _, zfail as _, zpass as _) }
-}
-
-pub fn bind_framebuffer(target: crate::def::FramebufferTarget, framebuffer: c_uint) {
-    unsafe {
-        gl::BindFramebuffer(target as _, framebuffer);
-    }
 }
 
 pub fn framebuffer_texture_2d(

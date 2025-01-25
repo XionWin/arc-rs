@@ -12,6 +12,7 @@ pub struct FramebufferRenderer {
     _vao: c_uint,
     _vbo: c_uint,
     _fbo: c_uint,
+    _rbo: c_uint,
     _program: crate::FramebufferRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
@@ -24,11 +25,13 @@ impl FramebufferRenderer {
         let _vao = crate::gl::gen_vertex_array();
         let _vbo = crate::gl::gen_buffer();
         let _fbo = crate::gl::gen_frame_buffer();
+        let _rbo = crate::gl::gen_render_buffer();
         Self {
             _color_type: core::ColorType::Rgba,
             _vao,
             _vbo,
             _fbo,
+            _rbo,
             _program,
             _attribute_locations: Box::new([
                 AttributeLocation::new("aPos", 0, 2),
@@ -70,7 +73,7 @@ impl GLRenderer for FramebufferRenderer {
 
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
-            bind_texture_to_framebuffer(self._fbo, fb_texture);
+            bind_texture_to_framebuffer(self._fbo, self._rbo, fb_texture);
             self.clear_color(core::Color::MagicDeepGray);
             self.clear();
             self.set_rendering_size(fb_texture.get_size());
@@ -128,7 +131,7 @@ impl FramebufferRenderer {
         path: &str,
         color_type: core::ColorType,
     ) {
-        bind_texture_to_framebuffer(self._fbo, texture);
+        bind_texture_to_framebuffer(self._fbo, self._rbo, texture);
         let texture_size = texture.get_size();
         let mut buffer = vec![
             0u8;
@@ -185,8 +188,24 @@ impl Drop for FramebufferRenderer {
     }
 }
 
-fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
+fn bind_texture_to_framebuffer(fbo: c_uint, rbo: c_uint, texture: &dyn graphic::Texture) {
+    let texture_size = texture.get_size();
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
+    crate::gl::bind_renderbuffer(crate::def::RenderbufferTarget::Renderbuffer, rbo);
+    crate::gl::renderbuffer_storage_multisample(
+        crate::def::RenderbufferTarget::Renderbuffer,
+        4,
+        crate::def::RenderbufferInternalFormat::Rgba8,
+        texture_size.get_width(),
+        texture_size.get_height(),
+    );
+    // crate::gl::bind_renderbuffer(crate::def::RenderbufferTarget::Renderbuffer, 0);
+    // crate::gl::framebuffer_renderbuffer(
+    //     crate::def::FramebufferTarget::Framebuffer,
+    //     crate::def::FramebufferAttachment::ColorAttachment0,
+    //     rbo,
+    // );
+
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture.get_id());
     crate::gl::framebuffer_texture_2d(
         crate::def::FramebufferTarget::Framebuffer,
