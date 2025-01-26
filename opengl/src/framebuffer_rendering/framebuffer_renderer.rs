@@ -199,12 +199,11 @@ fn bind_texture_to_framebuffer(fbo: c_uint, rbo: c_uint, texture: &dyn graphic::
         texture_size.get_width(),
         texture_size.get_height(),
     );
-    // crate::gl::bind_renderbuffer(crate::def::RenderbufferTarget::Renderbuffer, 0);
-    // crate::gl::framebuffer_renderbuffer(
-    //     crate::def::FramebufferTarget::Framebuffer,
-    //     crate::def::FramebufferAttachment::ColorAttachment0,
-    //     rbo,
-    // );
+    crate::gl::framebuffer_renderbuffer(
+        crate::def::FramebufferTarget::Framebuffer,
+        crate::def::FramebufferAttachment::ColorAttachment0,
+        rbo,
+    );
 
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture.get_id());
     crate::gl::framebuffer_texture_2d(
