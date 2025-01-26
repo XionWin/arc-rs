@@ -94,7 +94,7 @@ impl graphic::Renderer for Renderer {
             self.create_texture(
                 rect.get_size(),
                 core::ColorType::Rgba,
-                graphic::TextureFilter::Nearest,
+                graphic::TextureFilter::Linear,
             ),
         );
         self._framebuffer_renderer

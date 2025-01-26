@@ -316,6 +316,34 @@ pub fn bind_framebuffer(target: crate::def::FramebufferTarget, framebuffer: c_ui
     }
 }
 
+pub fn blit_framebuffer(
+    src_x0: c_int,
+    src_y0: c_int,
+    src_x1: c_int,
+    src_y1: c_int,
+    dst_x0: c_int,
+    dst_y0: c_int,
+    dst_x1: c_int,
+    dst_y1: c_int,
+    mask: crate::def::ClearBufferMasks,
+    filter: crate::def::TextureMinFilter,
+) {
+    unsafe {
+        gl::BlitFramebuffer(
+            src_x0,
+            src_y0,
+            src_x1,
+            src_y1,
+            dst_x0,
+            dst_y0,
+            dst_x1,
+            dst_y1,
+            mask.into(),
+            filter as _,
+        );
+    }
+}
+
 pub fn gen_render_buffer() -> c_uint {
     let mut buffer = 0u32;
     unsafe {
@@ -526,6 +554,25 @@ pub fn tex_image_2d<T>(
                 std::ptr::null(),
             );
         },
+    }
+}
+
+pub fn tex_image_2d_multisample(
+    multisample_target: crate::def::Texture2dMultisampleTarget,
+    size: c_int,
+    internal_format: crate::def::RenderbufferInternalFormat,
+    width: c_int,
+    height: c_int,
+) {
+    unsafe {
+        gl::TexImage2DMultisample(
+            multisample_target as _,
+            size,
+            internal_format as _,
+            width,
+            height,
+            0,
+        );
     }
 }
 
