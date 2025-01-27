@@ -92,6 +92,7 @@ impl core::Graphic for Graphic {
         self._shapes.borrow_mut().push(graphic_shape);
     }
     fn export_shape_cache(&self) {
+        let exe_folder = util::get_exe_path().unwrap();
         let mut index = 0;
         let shapes: &Vec<_> = &self._shapes.borrow();
         for shape in shapes {
@@ -101,7 +102,7 @@ impl core::Graphic for Graphic {
                 Some(cache) => {
                     self.renderer.export_texture(
                         cache.get_texture(),
-                        &format!("target/debug/cache/{}.png", index),
+                        &format!("{}/cache/{}.png", exe_folder, index),
                         core::ColorType::Rgba,
                     );
                 }
@@ -109,16 +110,6 @@ impl core::Graphic for Graphic {
             }
             index += 1;
         }
-
-        // let texture = self.renderer.create_texture_from_file(
-        //     "resource/image/icon/icon96.png",
-        //     crate::TextureFilter::Nearest,
-        // );
-        // self.renderer.export_texture(
-        //     texture.borrow(),
-        //     "target/debug/cache/1.png",
-        //     core::ColorType::Rgba,
-        // );
     }
     fn check_gl_error(&self) -> String {
         self.renderer.check_gl_error()

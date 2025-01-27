@@ -11,8 +11,8 @@ pub struct FramebufferRenderer {
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
-    _multisample_fbo: c_uint,
     _fbo: c_uint,
+    _multisample_fbo: c_uint,
     _color_multisample_rbo: c_uint,
     // _depth_multisample_rbo: c_uint,
     _program: crate::FramebufferRenderingProgram,
@@ -26,16 +26,16 @@ impl FramebufferRenderer {
         _program.use_program();
         let _vao = crate::gl::gen_vertex_array();
         let _vbo = crate::gl::gen_buffer();
-        let _multisample_fbo = crate::gl::gen_frame_buffer();
         let _fbo = crate::gl::gen_frame_buffer();
+        let _multisample_fbo = crate::gl::gen_frame_buffer();
         let _color_multisample_rbo = crate::gl::gen_render_buffer();
         // let _depth_multisample_rbo = crate::gl::gen_render_buffer();
         Self {
             _color_type: core::ColorType::Rgba,
             _vao,
             _vbo,
-            _multisample_fbo,
             _fbo,
+            _multisample_fbo,
             _color_multisample_rbo,
             // _depth_multisample_rbo,
             _program,
