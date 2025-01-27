@@ -26,14 +26,14 @@ impl core::Graphic for Graphic {
         for graphic_shape in shapes {
             let shape: &mut crate::GraphicShape = &mut graphic_shape.as_ref().borrow_mut();
             let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());
-            if shape.get_fill_cache().is_none() {
-                shape.set_fill_cache(match fill_primitive {
-                    Some(fill_primitive) => {
-                        // util::print_debug!("fill_primitive: {}", fill_primitive);
-                        Some(self.renderer.cache_primitive(fill_primitive))
+            match fill_primitive {
+                Some(fill_primitive) => match shape.get_fill_cache() {
+                    Some(cache) => self.renderer.update_primitive(fill_primitive, cache),
+                    None => {
+                        shape.set_fill_cache(Some(self.renderer.cache_primitive(fill_primitive)));
                     }
-                    None => None,
-                });
+                },
+                None => {}
             }
 
             let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());

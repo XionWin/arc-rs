@@ -102,6 +102,11 @@ impl graphic::Renderer for Renderer {
         cache
     }
 
+    fn update_primitive(&self, primitive: vector::Primitive, cache: &graphic::TextureCache) {
+        self._framebuffer_renderer
+            .add_primitive(primitive, cache.get_texture_rc());
+    }
+
     fn add_primitive(&self, primitive: vector::Primitive) {
         // let texture = self.create_texture_from_file(
         //     "resource/image/icon/icon96.png",

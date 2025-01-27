@@ -25,6 +25,7 @@ pub trait Renderer: Debug {
         texture_filter: TextureFilter,
     ) -> Rc<dyn Texture>;
     fn cache_primitive(&self, primitive: vector::Primitive) -> crate::TextureCache;
+    fn update_primitive(&self, primitive: vector::Primitive, cache: &crate::TextureCache);
     fn add_primitive(&self, primitive: vector::Primitive);
     fn export_texture(&self, texture: &dyn crate::Texture, path: &str, color_type: core::ColorType);
     fn check_gl_error(&self) -> String;
