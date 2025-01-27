@@ -46,5 +46,5 @@ where
 }
 
 pub fn get_max_samples() -> c_int {
-    gl::get_integerv(crate::def::GetPName::MaxSamples).min(4)
+    gl::get_max_samples()
 }

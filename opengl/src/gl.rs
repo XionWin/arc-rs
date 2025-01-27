@@ -14,6 +14,10 @@ where
     gl::load_with(load_func)
 }
 
+pub fn get_max_samples() -> c_int {
+    get_integerv(crate::def::GetPName::MaxSamples).min(4)
+}
+
 pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {
     unsafe { gl::ClearColor(r, g, b, a) };
 }
