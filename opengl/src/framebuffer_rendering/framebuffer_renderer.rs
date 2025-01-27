@@ -11,8 +11,10 @@ pub struct FramebufferRenderer {
     _color_type: core::ColorType,
     _vao: c_uint,
     _vbo: c_uint,
+    _multisample_fbo: c_uint,
     _fbo: c_uint,
-    _rbo: c_uint,
+    _color_multisample_rbo: c_uint,
+    _depth_multisample_rbo: c_uint,
     _program: crate::FramebufferRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
@@ -24,14 +26,18 @@ impl FramebufferRenderer {
         _program.use_program();
         let _vao = crate::gl::gen_vertex_array();
         let _vbo = crate::gl::gen_buffer();
+        let _multisample_fbo = crate::gl::gen_frame_buffer();
         let _fbo = crate::gl::gen_frame_buffer();
-        let _rbo = crate::gl::gen_render_buffer();
+        let _color_multisample_rbo = crate::gl::gen_render_buffer();
+        let _depth_multisample_rbo = crate::gl::gen_render_buffer();
         Self {
             _color_type: core::ColorType::Rgba,
             _vao,
             _vbo,
+            _multisample_fbo,
             _fbo,
-            _rbo,
+            _color_multisample_rbo,
+            _depth_multisample_rbo,
             _program,
             _attribute_locations: Box::new([
                 AttributeLocation::new("aPos", 0, 2),
@@ -73,7 +79,13 @@ impl GLRenderer for FramebufferRenderer {
 
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
-            bind_texture_to_framebuffer(self._fbo, self._rbo, fb_texture);
+            let fb_texture_size = fb_texture.get_size();
+            bind_multisample_renderbuffer_to_framebuffer(
+                self._multisample_fbo,
+                self._color_multisample_rbo,
+                self._depth_multisample_rbo,
+                fb_texture_size,
+            );
             self.clear_color(core::Color::MagicDeepGray);
             self.clear();
             self.set_rendering_size(fb_texture.get_size());
@@ -95,6 +107,8 @@ impl GLRenderer for FramebufferRenderer {
                 call.get_vertex_offset() as _,
                 call.get_vertex_len() as _,
             );
+            bind_texture_to_framebuffer(self._fbo, fb_texture);
+            copy_framebuffer(self._multisample_fbo, self._fbo, fb_texture_size);
         }
         bind_screen_framebuffer();
     }
@@ -131,7 +145,7 @@ impl FramebufferRenderer {
         path: &str,
         color_type: core::ColorType,
     ) {
-        bind_texture_to_framebuffer(self._fbo, self._rbo, texture);
+        bind_texture_to_framebuffer(self._fbo, texture);
         let texture_size = texture.get_size();
         let mut buffer = vec![
             0u8;
@@ -188,24 +202,58 @@ impl Drop for FramebufferRenderer {
     }
 }
 
-fn bind_texture_to_framebuffer(fbo: c_uint, rbo: c_uint, texture: &dyn graphic::Texture) {
-    let texture_size = texture.get_size();
+fn bind_multisample_renderbuffer_to_framebuffer(
+    fbo: c_uint,
+    color_multisample_rbo: c_uint,
+    depth_multisample_rbo: c_uint,
+    size: core::Size<i32>,
+) {
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
-    crate::gl::bind_renderbuffer(crate::def::RenderbufferTarget::Renderbuffer, rbo);
 
-    let max_samples = crate::gl::get_integerv(crate::def::GetPName::MaxSamples);
+    let samples = crate::gl::get_integerv(crate::def::GetPName::MaxSamples).min(4);
+
+    crate::gl::bind_renderbuffer(
+        crate::def::RenderbufferTarget::Renderbuffer,
+        color_multisample_rbo,
+    );
     crate::gl::renderbuffer_storage_multisample(
         crate::def::RenderbufferTarget::Renderbuffer,
-        max_samples.min(4),
+        samples,
         crate::def::RenderbufferInternalFormat::Rgba8,
-        texture_size.get_width(),
-        texture_size.get_height(),
+        size.get_width(),
+        size.get_height(),
     );
     crate::gl::framebuffer_renderbuffer(
         crate::def::FramebufferTarget::Framebuffer,
         crate::def::FramebufferAttachment::ColorAttachment0,
-        rbo,
+        color_multisample_rbo,
     );
+
+    crate::gl::bind_renderbuffer(
+        crate::def::RenderbufferTarget::Renderbuffer,
+        depth_multisample_rbo,
+    );
+    crate::gl::renderbuffer_storage_multisample(
+        crate::def::RenderbufferTarget::Renderbuffer,
+        samples,
+        crate::def::RenderbufferInternalFormat::DepthComponent24,
+        size.get_width(),
+        size.get_height(),
+    );
+    crate::gl::framebuffer_renderbuffer(
+        crate::def::FramebufferTarget::Framebuffer,
+        crate::def::FramebufferAttachment::DepthAttachment,
+        depth_multisample_rbo,
+    );
+
+    match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
+        crate::FramebufferErrorCode::FramebufferComplete => {}
+        error_code => util::print_panic!("check_framebuffer_status error: {:?}", error_code),
+    }
+}
+
+fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
+    crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
 
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture.get_id());
     crate::gl::framebuffer_texture_2d(
@@ -218,7 +266,30 @@ fn bind_texture_to_framebuffer(fbo: c_uint, rbo: c_uint, texture: &dyn graphic::
 
     match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
         crate::FramebufferErrorCode::FramebufferComplete => {}
-        _ => util::print_panic!("unexpected"),
+        error_code => util::print_panic!("check_framebuffer_status error: {:?}", error_code),
+    }
+}
+
+fn copy_framebuffer(src_fbo: c_uint, dst_fbo: c_uint, size: core::Size<i32>) {
+    crate::gl::bind_framebuffer(crate::def::FramebufferTarget::ReadFramebuffer, src_fbo);
+    crate::gl::bind_framebuffer(crate::def::FramebufferTarget::DrawFramebuffer, dst_fbo);
+
+    crate::gl::blit_framebuffer(
+        0,
+        0,
+        size.get_width(),
+        size.get_height(),
+        0,
+        0,
+        size.get_width(),
+        size.get_height(),
+        crate::def::ClearBufferMasks::COLOR_BUFFER_BIT,
+        crate::def::BlitFramebufferFilter::Linear,
+    );
+
+    match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
+        crate::FramebufferErrorCode::FramebufferComplete => {}
+        error_code => util::print_panic!("check_framebuffer_status error: {:?}", error_code),
     }
 }
 

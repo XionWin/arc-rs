@@ -143,7 +143,7 @@ impl Window {
         //     WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
         // };
         let parameter =
-            WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(3u8, 0u8, 0u8));
+            WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8));
 
         set_gl_version(&video_subsystem, &parameter);
         let mut sdl_window = util::expect!(video_subsystem

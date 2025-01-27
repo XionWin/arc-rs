@@ -1,4 +1,5 @@
 #[repr(u32)]
+#[derive(Debug)]
 pub enum FramebufferErrorCode {
     //
     // Summary:
@@ -20,4 +21,8 @@ pub enum FramebufferErrorCode {
     // Summary:
     //     Original was GL_FramebufferUnsupported = 0X8cdd
     FramebufferUnsupported = 36061,
+    //
+    // Summary:
+    //     Original was GL_FRAMEBUFFER_INCOMPLETE_MULTISAMPLE = 0x8D56
+    FramebufferIncompleteMultisample = 36182,
 }

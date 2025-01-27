@@ -364,6 +364,17 @@ pub fn bind_renderbuffer(target: crate::def::RenderbufferTarget, renderbuffer: c
     }
 }
 
+pub fn renderbuffer_storage(
+    target: crate::def::RenderbufferTarget,
+    internal_format: crate::def::RenderbufferInternalFormat,
+    width: c_int,
+    height: c_int,
+) {
+    unsafe {
+        gl::RenderbufferStorage(target as _, internal_format as _, width, height);
+    }
+}
+
 pub fn renderbuffer_storage_multisample(
     target: crate::def::RenderbufferTarget,
     size: c_int,
