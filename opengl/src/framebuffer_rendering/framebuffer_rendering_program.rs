@@ -15,8 +15,8 @@ pub struct FramebufferRenderingProgram {
     _attribute_locations: HashMap<String, c_int>,
 }
 
-const VERTEX_SHADER_PATH: &str = "resource/shader/graphic.vert";
-const FRAGMENT_SHADER_PATH: &str = "resource/shader/graphic.frag";
+const VERTEX_SHADER_PATH: &str = "resource/shader/framebuffer.vert";
+const FRAGMENT_SHADER_PATH: &str = "resource/shader/framebuffer.frag";
 
 impl FramebufferRenderingProgram {
     pub fn new() -> Self {
