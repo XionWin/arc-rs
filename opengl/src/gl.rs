@@ -37,6 +37,12 @@ pub fn get_string(name: StringName) -> Option<String> {
     }
 }
 
+pub fn get_integerv(get_p_name: crate::def::GetPName) -> c_int {
+    let mut result = 0;
+    unsafe { gl::GetIntegerv(get_p_name as _, &mut result) }
+    result
+}
+
 pub fn enable(enale_cap: crate::def::EnableCap) {
     unsafe {
         gl::Enable(enale_cap as _);
@@ -326,7 +332,7 @@ pub fn blit_framebuffer(
     dst_x1: c_int,
     dst_y1: c_int,
     mask: crate::def::ClearBufferMasks,
-    filter: crate::def::TextureMinFilter,
+    filter: crate::def::BlitFramebufferFilter,
 ) {
     unsafe {
         gl::BlitFramebuffer(

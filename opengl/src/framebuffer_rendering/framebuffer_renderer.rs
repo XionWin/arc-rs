@@ -192,9 +192,11 @@ fn bind_texture_to_framebuffer(fbo: c_uint, rbo: c_uint, texture: &dyn graphic::
     let texture_size = texture.get_size();
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
     crate::gl::bind_renderbuffer(crate::def::RenderbufferTarget::Renderbuffer, rbo);
+
+    let max_samples = crate::gl::get_integerv(crate::def::GetPName::MaxSamples);
     crate::gl::renderbuffer_storage_multisample(
         crate::def::RenderbufferTarget::Renderbuffer,
-        4,
+        max_samples,
         crate::def::RenderbufferInternalFormat::Rgba8,
         texture_size.get_width(),
         texture_size.get_height(),
