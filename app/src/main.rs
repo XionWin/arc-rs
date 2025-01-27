@@ -71,7 +71,7 @@ fn test(g: &dyn core::Graphic) {
         }
         max_y = max_y.max(size.get_height());
 
-        let rectangle = vector::Rectangle::new(
+        let rectangle = graphic::shape::Rectangle::new(
             x,
             y,
             size.get_width(),
@@ -97,7 +97,7 @@ fn test(g: &dyn core::Graphic) {
     ];
     for row in 0..2 {
         for column in 0..2 {
-            let rectangle = vector::RoundRectangle::new(
+            let rectangle = graphic::shape::RoundRectangle::new(
                 198 * ZOOM_FACTOR + column * (26 + 1) * ZOOM_FACTOR,
                 122 * ZOOM_FACTOR + row * (26 + 1) * ZOOM_FACTOR,
                 26 * ZOOM_FACTOR,

@@ -75,6 +75,12 @@ impl GLRenderer for FramebufferRenderer {
 
         // [TEST]
         self._program.set_uniform_point_size(5i32);
+
+        // crate::gl::enable(crate::def::EnableCap::Blend);
+        // crate::gl::blend_func(
+        //     crate::def::BlendingFactorSrc::SrcAlpha,
+        //     crate::def::BlendingFactorDest::OneMinusSrcAlpha,
+        // );
         crate::gl::disable(crate::def::EnableCap::Blend);
 
         bind_multisample_renderbuffer_to_framebuffer(
@@ -87,7 +93,7 @@ impl GLRenderer for FramebufferRenderer {
             bind_multisample_renderbuffer(self._multisample_fbo);
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();
-            self.clear_color(core::Color::MagicDeepGray);
+            self.clear_color(core::Color::Transparent);
             self.clear();
             self.set_rendering_size(fb_texture.get_size());
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();

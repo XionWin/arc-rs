@@ -1,3 +1,6 @@
+pub mod shape;
+
+mod container;
 mod graphic;
 mod graphic_shape;
 mod image;
@@ -8,6 +11,7 @@ mod texture_cache;
 mod texture_compontent;
 mod texture_filter;
 
+pub use container::*;
 pub use graphic::*;
 pub use graphic_shape::*;
 pub use image::*;
