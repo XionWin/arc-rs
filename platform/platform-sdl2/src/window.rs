@@ -172,6 +172,7 @@ impl Window {
 
         let renderer = opengl::Renderer::new(|name| get_proc_address(&video_subsystem, name));
         let graphic = graphic::Graphic::new(Box::new(renderer));
+        set_multisamples(&video_subsystem);
 
         core::Graphic::init(&graphic, core::Size::new(width, height));
 
@@ -230,6 +231,10 @@ fn set_video_subsystem_attribute(video_subsystem: &VideoSubsystem) {
 
     gl_attr.set_double_buffer(true);
     gl_attr.set_multisample_buffers(1);
-    gl_attr.set_multisample_samples(4);
     gl_attr.set_accelerated_visual(true);
+}
+
+fn set_multisamples(video_subsystem: &VideoSubsystem) {
+    let gl_attr = video_subsystem.gl_attr();
+    gl_attr.set_multisample_samples(opengl::get_max_samples() as _);
 }

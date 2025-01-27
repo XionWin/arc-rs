@@ -77,15 +77,16 @@ impl GLRenderer for FramebufferRenderer {
         self._program.set_uniform_point_size(5i32);
         crate::gl::disable(crate::def::EnableCap::Blend);
 
+        bind_multisample_renderbuffer_to_framebuffer(
+            self._multisample_fbo,
+            self._color_multisample_rbo,
+            // self._depth_multisample_rbo,
+            core::Size::new(800, 480),
+        );
         for call in frame_data.get_calls() {
+            bind_multisample_renderbuffer(self._multisample_fbo);
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();
-            bind_multisample_renderbuffer_to_framebuffer(
-                self._multisample_fbo,
-                self._color_multisample_rbo,
-                // self._depth_multisample_rbo,
-                fb_texture_size,
-            );
             self.clear_color(core::Color::MagicDeepGray);
             self.clear();
             self.set_rendering_size(fb_texture.get_size());
@@ -210,7 +211,7 @@ fn bind_multisample_renderbuffer_to_framebuffer(
 ) {
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
 
-    let samples = crate::gl::get_integerv(crate::def::GetPName::MaxSamples).min(4);
+    let samples = crate::get_max_samples();
 
     crate::gl::bind_renderbuffer(
         crate::def::RenderbufferTarget::Renderbuffer,
@@ -245,6 +246,15 @@ fn bind_multisample_renderbuffer_to_framebuffer(
     //     crate::def::FramebufferAttachment::DepthAttachment,
     //     depth_multisample_rbo,
     // );
+
+    match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
+        crate::FramebufferErrorCode::FramebufferComplete => {}
+        error_code => util::print_panic!("check_framebuffer_status error: {:?}", error_code),
+    }
+}
+
+fn bind_multisample_renderbuffer(fbo: c_uint) {
+    crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
 
     match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
         crate::FramebufferErrorCode::FramebufferComplete => {}

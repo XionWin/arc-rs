@@ -15,7 +15,7 @@
             "label": "rust: remote ARM debug setup",
             "type": "shell",
             "command": "${workspaceFolder}/script/remote_debug.sh",
-            "args": [ "${workspaceFolder}", "arc-rs", "192.168.0.209", "17777" ],
+            "args": [ "${workspaceFolder}", "arc-rs", "192.168.0.206", "17777" ],
             "group": "none",
             "dependsOn": [
                 "rust: cargo build ARM",

@@ -19,6 +19,8 @@ mod renderer_utility;
 mod shader;
 mod texture;
 
+use std::ffi::c_int;
+
 pub use attribute_location::*;
 pub use call_type::*;
 pub use def::*;
@@ -41,4 +43,8 @@ where
     T: Fn(&str) -> *const std::ffi::c_void,
 {
     gl::load_with(loadfn);
+}
+
+pub fn get_max_samples() -> c_int {
+    gl::get_integerv(crate::def::GetPName::MaxSamples).min(4)
 }

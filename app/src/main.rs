@@ -2,7 +2,7 @@ use core::{Image, Style, Window};
 use std::{cell::RefCell, rc::Rc};
 
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
-    1i32
+    2i32
 } else {
     2i32
 };
@@ -95,8 +95,8 @@ fn test(g: &dyn core::Graphic) {
         core::Color::MoselleGreen,
         core::Color::White,
     ];
-    for row in 0..2 {
-        for column in 0..2 {
+    for row in 0..10 {
+        for column in 0..10 {
             let rectangle = vector::RoundRectangle::new(
                 198 * ZOOM_FACTOR + column * (26 + 1) * ZOOM_FACTOR,
                 122 * ZOOM_FACTOR + row * (26 + 1) * ZOOM_FACTOR,
