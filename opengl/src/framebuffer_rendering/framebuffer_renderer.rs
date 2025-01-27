@@ -14,7 +14,7 @@ pub struct FramebufferRenderer {
     _multisample_fbo: c_uint,
     _fbo: c_uint,
     _color_multisample_rbo: c_uint,
-    _depth_multisample_rbo: c_uint,
+    // _depth_multisample_rbo: c_uint,
     _program: crate::FramebufferRenderingProgram,
     _attribute_locations: Box<[AttributeLocation]>,
     _frame_data: RefCell<FrameData>,
@@ -29,7 +29,7 @@ impl FramebufferRenderer {
         let _multisample_fbo = crate::gl::gen_frame_buffer();
         let _fbo = crate::gl::gen_frame_buffer();
         let _color_multisample_rbo = crate::gl::gen_render_buffer();
-        let _depth_multisample_rbo = crate::gl::gen_render_buffer();
+        // let _depth_multisample_rbo = crate::gl::gen_render_buffer();
         Self {
             _color_type: core::ColorType::Rgba,
             _vao,
@@ -37,7 +37,7 @@ impl FramebufferRenderer {
             _multisample_fbo,
             _fbo,
             _color_multisample_rbo,
-            _depth_multisample_rbo,
+            // _depth_multisample_rbo,
             _program,
             _attribute_locations: Box::new([
                 AttributeLocation::new("aPos", 0, 2),
@@ -83,7 +83,7 @@ impl GLRenderer for FramebufferRenderer {
             bind_multisample_renderbuffer_to_framebuffer(
                 self._multisample_fbo,
                 self._color_multisample_rbo,
-                self._depth_multisample_rbo,
+                // self._depth_multisample_rbo,
                 fb_texture_size,
             );
             self.clear_color(core::Color::MagicDeepGray);
@@ -205,7 +205,7 @@ impl Drop for FramebufferRenderer {
 fn bind_multisample_renderbuffer_to_framebuffer(
     fbo: c_uint,
     color_multisample_rbo: c_uint,
-    depth_multisample_rbo: c_uint,
+    // depth_multisample_rbo: c_uint,
     size: core::Size<i32>,
 ) {
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
@@ -229,22 +229,22 @@ fn bind_multisample_renderbuffer_to_framebuffer(
         color_multisample_rbo,
     );
 
-    crate::gl::bind_renderbuffer(
-        crate::def::RenderbufferTarget::Renderbuffer,
-        depth_multisample_rbo,
-    );
-    crate::gl::renderbuffer_storage_multisample(
-        crate::def::RenderbufferTarget::Renderbuffer,
-        samples,
-        crate::def::RenderbufferInternalFormat::DepthComponent24,
-        size.get_width(),
-        size.get_height(),
-    );
-    crate::gl::framebuffer_renderbuffer(
-        crate::def::FramebufferTarget::Framebuffer,
-        crate::def::FramebufferAttachment::DepthAttachment,
-        depth_multisample_rbo,
-    );
+    // crate::gl::bind_renderbuffer(
+    //     crate::def::RenderbufferTarget::Renderbuffer,
+    //     depth_multisample_rbo,
+    // );
+    // crate::gl::renderbuffer_storage_multisample(
+    //     crate::def::RenderbufferTarget::Renderbuffer,
+    //     samples,
+    //     crate::def::RenderbufferInternalFormat::DepthComponent24,
+    //     size.get_width(),
+    //     size.get_height(),
+    // );
+    // crate::gl::framebuffer_renderbuffer(
+    //     crate::def::FramebufferTarget::Framebuffer,
+    //     crate::def::FramebufferAttachment::DepthAttachment,
+    //     depth_multisample_rbo,
+    // );
 
     match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
         crate::FramebufferErrorCode::FramebufferComplete => {}
@@ -284,7 +284,7 @@ fn copy_framebuffer(src_fbo: c_uint, dst_fbo: c_uint, size: core::Size<i32>) {
         size.get_width(),
         size.get_height(),
         crate::def::ClearBufferMasks::COLOR_BUFFER_BIT,
-        crate::def::BlitFramebufferFilter::Linear,
+        crate::def::BlitFramebufferFilter::Nearest,
     );
 
     match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {

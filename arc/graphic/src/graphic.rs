@@ -28,7 +28,7 @@ impl core::Graphic for Graphic {
             let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());
             match fill_primitive {
                 Some(fill_primitive) => match shape.get_fill_cache() {
-                    Some(cache) => self.renderer.update_primitive(fill_primitive, cache),
+                    Some(_cache) => { /*self.renderer.update_primitive(fill_primitive, _cache) */ }
                     None => {
                         shape.set_fill_cache(Some(self.renderer.cache_primitive(fill_primitive)));
                     }

@@ -13,7 +13,7 @@ pub trait VectorShape: Debug {
 
 impl<T: core::Shape + ?Sized> VectorShape for T {
     fn get_stroke_primitive(&self) -> Option<Primitive> {
-        get_stroke_primitive(self.get_commands(), self.get_style())
+        get_stroke_primitive(self)
     }
 
     fn get_fill_primitive(&self) -> Option<Primitive> {
@@ -21,10 +21,14 @@ impl<T: core::Shape + ?Sized> VectorShape for T {
     }
 }
 
-fn get_stroke_primitive(_commands: &[core::Command], style: &core::Style) -> Option<Primitive> {
+fn get_stroke_primitive<T>(shape: &T) -> Option<Primitive>
+where
+    T: core::Shape + ?Sized,
+{
     Some(Primitive::new(
         Box::new([]),
-        Box::new(Into::<StrokeState>::into(style)),
+        Box::new(Into::<StrokeState>::into(shape.get_style())),
+        shape.get_rect(),
     ))
 }
 
@@ -57,6 +61,7 @@ where
         Some(vertices) => Some(Primitive::new(
             Box::<[core::Vertex2]>::from(vertices),
             Box::new(Into::<FillState>::into(style)),
+            shape.get_rect(),
         )),
         None => None,
     }

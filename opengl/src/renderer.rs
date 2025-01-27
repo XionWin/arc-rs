@@ -94,7 +94,7 @@ impl graphic::Renderer for Renderer {
             self.create_texture(
                 rect.get_size(),
                 core::ColorType::Rgba,
-                graphic::TextureFilter::Linear,
+                graphic::TextureFilter::Nearest,
             ),
         );
         self._framebuffer_renderer
@@ -108,12 +108,6 @@ impl graphic::Renderer for Renderer {
     }
 
     fn add_primitive(&self, primitive: vector::Primitive) {
-        // let texture = self.create_texture_from_file(
-        //     "resource/image/icon/icon96.png",
-        //     graphic::TextureFilter::Nearest,
-        // );
-        // self._framebuffer_renderer
-        //     .draw_primitive(primitive, texture);
         self._graphic_renderer.add_primitive(primitive);
     }
 
