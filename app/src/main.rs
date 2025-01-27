@@ -118,28 +118,4 @@ fn test(g: &dyn core::Graphic) {
             g.add_shape(Box::new(rectangle));
         }
     }
-
-    // match g.get_image(5) {
-    //     Some(img) => {
-    //         let rectangle = vector::Rectangle::new(
-    //             0,
-    //             0,
-    //             400,
-    //             240,
-    //             Style::new(
-    //                 Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
-    //                     img,
-    //                     core::Rect::new(0, 0, 400, 240),
-    //                 )))),
-    //                 core::ColorBackground::new(
-    //                     core::Color::MoselleGreen,
-    //                     core::Color::MoselleGreen,
-    //                 ),
-    //                 Some(1i32),
-    //             ),
-    //         );
-    //         g.add_shape(Box::new(rectangle));
-    //     }
-    //     None => {}
-    // }
 }
