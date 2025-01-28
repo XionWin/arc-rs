@@ -28,8 +28,8 @@ impl Primitive {
         self._state.borrow()
     }
     pub fn get_rect(&self) -> core::Rect<i32> {
-        // self._rect
-        core::Rect::new(0, 0, 800, 480)
+        self._rect
+        // core::Rect::new(0, 0, 800, 480)
     }
 }
 
