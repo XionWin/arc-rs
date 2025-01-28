@@ -116,6 +116,7 @@ impl GLRenderer for FramebufferRenderer {
             );
             bind_texture_to_framebuffer(self._fbo, fb_texture);
             copy_framebuffer(self._multisample_fbo, self._fbo, fb_texture_size);
+            // copy_framebufer_to_texture(self._multisample_fbo, fb_texture);
         }
         bind_screen_framebuffer();
     }
@@ -308,6 +309,48 @@ fn copy_framebuffer(src_fbo: c_uint, dst_fbo: c_uint, size: core::Size<i32>) {
         error_code => util::print_panic!("check_framebuffer_status error: {:?}", error_code),
     }
 }
+
+// fn copy_framebufer_to_texture(fbo: c_uint, texture: &dyn graphic::Texture) {
+//     // 绑定 src_fbo
+//     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
+//     crate::gl::read_buffer(crate::def::ReadBufferMode::ColorAttachment0);
+//     match crate::gl::check_framebuffer_status(crate::def::FramebufferTarget::Framebuffer) {
+//         crate::FramebufferErrorCode::FramebufferComplete => {}
+//         error_code => util::print_panic!("check_framebuffer_status error: {:?}", error_code),
+//     }
+//     util::print_info!("1. {:?}", crate::gl::get_error());
+
+//     let texture_size = core::Size::new(64, 64); //texture.get_size();
+//     let mut buffer = vec![0u8; (texture_size.get_width() * texture_size.get_height() * 4) as _];
+
+//     crate::gl::read_pixels(
+//         0,
+//         0,
+//         texture_size.get_width(),
+//         texture_size.get_height(),
+//         crate::PixelFormat::Rgba,
+//         crate::PixelType::UnsignedByte,
+//         &mut buffer,
+//     );
+//     util::print_info!("2. {:?}", crate::gl::get_error());
+
+//     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture.get_id());
+//     util::print_info!("3. {:?}", crate::gl::get_error());
+
+//     // 将像素写入目标纹理
+//     crate::gl::tex_sub_image_2d(
+//         crate::def::TextureTarget::Texture2D,
+//         0,
+//         0,
+//         0,
+//         texture_size.get_width(),
+//         texture_size.get_height(),
+//         crate::def::PixelFormat::Rgba,
+//         crate::def::PixelType::UnsignedByte,
+//         Some(&buffer),
+//     );
+//     util::print_info!("4. {:?}", crate::gl::get_error());
+// }
 
 fn bind_screen_framebuffer() {
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, 0);

@@ -506,6 +506,12 @@ pub fn bind_texture(texture_target: crate::def::TextureTarget, texture_id: c_uin
     }
 }
 
+pub fn read_buffer(buffer_mode: crate::def::ReadBufferMode) {
+    unsafe {
+        gl::ReadBuffer(buffer_mode as _);
+    }
+}
+
 pub fn read_pixels<T>(
     x: c_int,
     y: c_int,

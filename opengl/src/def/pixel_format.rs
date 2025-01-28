@@ -1,6 +1,5 @@
 #[repr(u32)]
-pub enum PixelFormat
-{
+pub enum PixelFormat {
     //
     // Summary:
     //     [requires: ANGLE_depth_texture, or OES_depth_texture] Original was GL_UNSIGNED_SHORT
@@ -75,7 +74,7 @@ pub enum PixelFormat
     //
     // Summary:
     //     Original was GL_YCRCB_444_SGIX = 0x81BC
-    Ycrcb444Sgix = 33212
+    Ycrcb444Sgix = 33212,
 }
 
 #[allow(non_upper_case_globals)]
