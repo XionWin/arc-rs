@@ -226,7 +226,7 @@ fn bind_multisample_renderbuffer_to_framebuffer(
     );
     crate::gl::renderbuffer_storage_multisample(
         crate::def::RenderbufferTarget::Renderbuffer,
-        samples,
+        4,
         crate::def::RenderbufferInternalFormat::Rgba8,
         size.get_width(),
         size.get_height(),
