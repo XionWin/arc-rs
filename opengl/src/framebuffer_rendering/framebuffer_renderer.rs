@@ -2,7 +2,7 @@ use std::{cell::RefCell, ffi::c_uint, rc::Rc};
 
 use graphic::TextureImage;
 
-use crate::{renderer_utility, AttributeLocation, GLRenderer};
+use crate::{renderer_utility, AttributeLocation, FragUniform, GLRenderer};
 
 use super::FrameData;
 
@@ -66,7 +66,7 @@ impl GLRenderer for FramebufferRenderer {
     }
     fn render(&self) {
         self._program.use_program();
-        let frame_data = self._frame_data.borrow();
+        let frame_data = &self._frame_data.borrow();
         let frag_uniforms = frame_data.get_frag_uniforms();
 
         renderer_utility::bind_vertex_array(self._vao);
@@ -83,6 +83,24 @@ impl GLRenderer for FramebufferRenderer {
         // );
         crate::gl::disable(crate::def::EnableCap::Blend);
 
+        let is_enable_miltisample_framebuffer =
+            crate::IS_ENABLE_MILTISAMPLE_FRAMEBUFFER.read().unwrap();
+        if *is_enable_miltisample_framebuffer {
+            self.render_with_multisample_framebuffer(frame_data, frag_uniforms);
+        } else {
+            self.render_with_framebuffer(frame_data, frag_uniforms);
+        }
+
+        bind_screen_framebuffer();
+    }
+}
+
+impl FramebufferRenderer {
+    fn render_with_multisample_framebuffer(
+        &self,
+        frame_data: &FrameData,
+        frag_uniforms: &[FragUniform],
+    ) {
         bind_multisample_renderbuffer_to_framebuffer(
             self._multisample_fbo,
             self._color_multisample_rbo,
@@ -90,12 +108,12 @@ impl GLRenderer for FramebufferRenderer {
             core::Size::new(800, 480),
         );
         for call in frame_data.get_calls() {
-            bind_multisample_renderbuffer(self._multisample_fbo);
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();
+            bind_multisample_renderbuffer(self._multisample_fbo);
             self.clear_color(core::Color::Transparent);
             self.clear();
-            self.set_rendering_size(fb_texture.get_size());
+            self.set_rendering_size(fb_texture_size);
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);
             if let Some(texture_id) = call.get_texture_id() {
@@ -117,11 +135,43 @@ impl GLRenderer for FramebufferRenderer {
             bind_texture_to_framebuffer(self._fbo, fb_texture);
             copy_framebuffer(self._multisample_fbo, self._fbo, fb_texture_size);
         }
-        bind_screen_framebuffer();
     }
-}
 
-impl FramebufferRenderer {
+    fn render_with_framebuffer(&self, frame_data: &FrameData, frag_uniforms: &[FragUniform]) {
+        bind_multisample_renderbuffer_to_framebuffer(
+            self._multisample_fbo,
+            self._color_multisample_rbo,
+            // self._depth_multisample_rbo,
+            core::Size::new(800, 480),
+        );
+        for call in frame_data.get_calls() {
+            let fb_texture = call.get_fb_texture();
+            let fb_texture_size = fb_texture.get_size();
+            bind_texture_to_framebuffer(self._fbo, fb_texture);
+            self.clear_color(core::Color::Transparent);
+            self.clear();
+            self.set_rendering_size(fb_texture_size);
+            let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
+            self._program.set_uniform_frag(frag_uniform);
+            if let Some(texture_id) = call.get_texture_id() {
+                self._program.use_texture_id(texture_id);
+            }
+
+            let primitive_type = match call.get_call_type() {
+                crate::CallType::Fill => crate::def::PrimitiveType::TriangleFan,
+                crate::CallType::ConvexFill => crate::def::PrimitiveType::TriangleFan,
+                crate::CallType::Stroke => crate::def::PrimitiveType::TriangleStrip,
+                crate::CallType::Image => crate::def::PrimitiveType::TriangleFan,
+            };
+
+            crate::gl::draw_arrays(
+                primitive_type,
+                call.get_vertex_offset() as _,
+                call.get_vertex_len() as _,
+            );
+        }
+    }
+
     pub fn init(&self, size: core::Size<i32>) {
         self._program.use_program();
         renderer_utility::bind_vertex_array(self._vao);

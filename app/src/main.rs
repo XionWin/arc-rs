@@ -96,8 +96,8 @@ fn test(g: &dyn core::Graphic) {
         core::Color::MoselleGreen,
         core::Color::White,
     ];
-    for row in 0..2 {
-        for column in 0..2 {
+    for row in 0..5 {
+        for column in 0..5 {
             let rectangle = graphic::shape::RoundRectangle::new(
                 198 * ZOOM_FACTOR + column * (64 + 1) * ZOOM_FACTOR,
                 122 * ZOOM_FACTOR + row * (64 + 1) * ZOOM_FACTOR,

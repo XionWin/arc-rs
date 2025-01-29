@@ -19,7 +19,11 @@ mod renderer_utility;
 mod shader;
 mod texture;
 
-use std::ffi::c_int;
+use std::{
+    cell::Cell,
+    ffi::{c_int, c_uint},
+    sync::RwLock,
+};
 
 pub use attribute_location::*;
 pub use call_type::*;
@@ -48,3 +52,5 @@ where
 pub fn get_max_samples() -> c_int {
     gl::get_max_samples()
 }
+
+pub static IS_ENABLE_MILTISAMPLE_FRAMEBUFFER: RwLock<bool> = RwLock::new(false);
