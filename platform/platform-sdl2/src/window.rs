@@ -137,13 +137,13 @@ impl Window {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
         set_video_subsystem_attribute(&video_subsystem);
-        let parameter = if cfg!(target_arch = "aarch64") {
-            WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8))
-        } else {
-            WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
-        };
-        // let parameter =
-        //     WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8));
+        // let parameter = if cfg!(target_arch = "aarch64") {
+        //     WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(3u8, 0u8, 0u8))
+        // } else {
+        //     WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
+        // };
+        let parameter =
+            WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8));
 
         set_gl_version(&video_subsystem, &parameter);
         let mut sdl_window = util::expect!(video_subsystem

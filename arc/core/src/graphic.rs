@@ -16,9 +16,15 @@ pub trait Graphic {
         size: Size<i32>,
         color_type: crate::ColorType,
         image_filter: ImageFilter,
+        is_gen_mipmap: bool,
+    ) -> Box<dyn Image>;
+    fn load_image_from_file(
+        &self,
+        path: &str,
+        image_filter: ImageFilter,
+        is_gen_mipmap: bool,
     ) -> Box<dyn Image>;
     fn get_image(&self, texture_id: c_uint) -> Option<Rc<dyn crate::Image>>;
-    fn load_image_from_file(&self, path: &str, image_filter: ImageFilter) -> Box<dyn Image>;
     fn add_shape(&self, shape: Box<dyn Shape>);
     fn export_shape_cache(&self);
     fn check_gl_error(&self) -> String;

@@ -65,10 +65,11 @@ impl core::Graphic for Graphic {
         size: core::Size<i32>,
         color_type: core::ColorType,
         image_filter: core::ImageFilter,
+        is_gen_mipmap: bool,
     ) -> Box<dyn core::Image> {
-        let texture = self
-            .renderer
-            .create_texture(size, color_type, image_filter.into());
+        let texture =
+            self.renderer
+                .create_texture(size, color_type, image_filter.into(), is_gen_mipmap);
         Box::new(Image::new(texture))
     }
     fn get_image(&self, texture_id: c_uint) -> Option<Rc<dyn core::Image>> {
@@ -81,10 +82,11 @@ impl core::Graphic for Graphic {
         &self,
         path: &str,
         image_filter: core::ImageFilter,
+        is_gen_mipmap: bool,
     ) -> Box<dyn core::Image> {
-        let texture = self
-            .renderer
-            .create_texture_from_file(path, image_filter.into());
+        let texture =
+            self.renderer
+                .create_texture_from_file(path, image_filter.into(), is_gen_mipmap);
         Box::new(Image::new(texture))
     }
     fn add_shape(&self, shape: Box<dyn core::Shape>) {

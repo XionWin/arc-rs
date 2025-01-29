@@ -23,6 +23,7 @@ fn main() {
             image.replace(Some(g.load_image_from_file(
                 "resource/image/icon/icon96.png",
                 core::ImageFilter::Linear,
+                true,
             )));
             test(g);
         },
@@ -62,7 +63,7 @@ fn test(g: &dyn core::Graphic) {
 
     for path in &paths {
         let img: Rc<dyn Image> = g
-            .load_image_from_file(path, core::ImageFilter::Nearest)
+            .load_image_from_file(path, core::ImageFilter::Nearest, false)
             .into();
         let size = img.get_size().mul(ZOOM_FACTOR);
         if x + size.get_width() > rendering_size.get_width() {

@@ -6,6 +6,7 @@ pub struct Texture {
     size: core::Size<i32>,
     color_type: core::ColorType,
     texture_filter: graphic::TextureFilter,
+    is_gen_mipmap: bool,
 }
 
 impl Texture {
@@ -13,27 +14,30 @@ impl Texture {
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
+        is_gen_mipmap: bool,
     ) -> Self {
         let texture_id = crate::gl::gen_texture();
-        create(texture_id, size, texture_filter);
+        create(texture_id, size, texture_filter, is_gen_mipmap);
         Self {
             id: texture_id,
             size,
             color_type,
             texture_filter,
+            is_gen_mipmap,
         }
     }
 
-    pub fn load(path: &str, texture_filter: graphic::TextureFilter) -> Self {
+    pub fn load(path: &str, texture_filter: graphic::TextureFilter, is_gen_mipmap: bool) -> Self {
         use core::ImageData;
         let image_data = image::ImageData::new_from_file(path);
         let texture_id = crate::gl::gen_texture();
-        load(texture_id, &image_data, texture_filter);
+        load(texture_id, &image_data, texture_filter, is_gen_mipmap);
         Self {
             id: texture_id,
             size: image_data.get_size(),
             color_type: image_data.get_color_type(),
             texture_filter,
+            is_gen_mipmap,
         }
     }
 }
@@ -55,13 +59,22 @@ impl graphic::Texture for Texture {
         self.texture_filter
     }
 
+    fn get_is_gen_mipmap(&self) -> bool {
+        self.is_gen_mipmap
+    }
+
     fn export(&self, path: &str) {
         println!("path: {}", path);
         todo!()
     }
 }
 
-fn create(texture_id: c_uint, size: core::Size<i32>, texture_filter: graphic::TextureFilter) {
+fn create(
+    texture_id: c_uint,
+    size: core::Size<i32>,
+    texture_filter: graphic::TextureFilter,
+    is_gen_mipmap: bool,
+) {
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
 
     crate::gl::tex_image_2d::<c_uchar>(
@@ -99,13 +112,16 @@ fn create(texture_id: c_uint, size: core::Size<i32>, texture_filter: graphic::Te
         crate::def::TextureWrapMode::Repeat as _,
     );
 
-    crate::gl::generate_mipmap(crate::def::TextureTarget::Texture2D);
+    if is_gen_mipmap {
+        crate::gl::generate_mipmap(crate::def::TextureTarget::Texture2D);
+    }
 }
 
 fn load(
     texture_id: c_uint,
     image_data: &dyn core::ImageData,
     texture_filter: graphic::TextureFilter,
+    is_gen_mipmap: bool,
 ) {
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
 
@@ -144,7 +160,9 @@ fn load(
         crate::def::TextureWrapMode::Repeat as _,
     );
 
-    crate::gl::generate_mipmap(crate::def::TextureTarget::Texture2D);
+    if is_gen_mipmap {
+        crate::gl::generate_mipmap(crate::def::TextureTarget::Texture2D);
+    }
 }
 
 impl Drop for Texture {

@@ -17,12 +17,14 @@ pub trait Renderer: Debug {
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: TextureFilter,
+        is_gen_mipmap: bool,
     ) -> Rc<dyn Texture>;
     fn get_texture(&self, texture_id: c_uint) -> Option<Rc<dyn crate::Texture>>;
     fn create_texture_from_file(
         &self,
         path: &str,
         texture_filter: TextureFilter,
+        is_gen_mipmap: bool,
     ) -> Rc<dyn Texture>;
     fn cache_primitive(&self, primitive: vector::Primitive) -> crate::TextureCache;
     fn update_primitive(&self, primitive: vector::Primitive, cache: &crate::TextureCache);

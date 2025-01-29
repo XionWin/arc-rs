@@ -58,8 +58,14 @@ impl graphic::Renderer for Renderer {
         size: core::Size<i32>,
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
+        is_gen_mipmap: bool,
     ) -> Rc<dyn graphic::Texture> {
-        let texture = Rc::new(crate::Texture::new(size, color_type, texture_filter));
+        let texture = Rc::new(crate::Texture::new(
+            size,
+            color_type,
+            texture_filter,
+            is_gen_mipmap,
+        ));
         self._textures.borrow_mut().push(texture.clone());
         texture
     }
@@ -80,8 +86,9 @@ impl graphic::Renderer for Renderer {
         &self,
         path: &str,
         texture_filter: graphic::TextureFilter,
+        is_gen_mipmap: bool,
     ) -> Rc<dyn graphic::Texture> {
-        let texture = Rc::new(crate::Texture::load(path, texture_filter));
+        let texture = Rc::new(crate::Texture::load(path, texture_filter, is_gen_mipmap));
         self._textures.borrow_mut().push(texture.clone());
         texture
     }
@@ -95,6 +102,7 @@ impl graphic::Renderer for Renderer {
                 rect.get_size(),
                 core::ColorType::Rgba,
                 graphic::TextureFilter::Nearest,
+                false,
             ),
         );
         self._framebuffer_renderer

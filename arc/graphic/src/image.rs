@@ -37,6 +37,9 @@ impl core::Image for Image {
     fn get_filter(&self) -> core::ImageFilter {
         self.texture.get_texture_filter().into()
     }
+    fn get_is_gen_mipmap(&self) -> bool {
+        self.texture.get_is_gen_mipmap()
+    }
 }
 
 pub trait TextureImage {
