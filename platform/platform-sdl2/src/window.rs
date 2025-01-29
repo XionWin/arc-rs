@@ -136,14 +136,19 @@ impl Window {
     ) -> Result<Self, String> {
         let sdl_context = util::expect!(sdl2::init());
         let video_subsystem = util::expect!(sdl_context.video());
-        set_video_subsystem_attribute(&video_subsystem);
 
-        let parameter = if cfg!(target_arch = "aarch64") {
-            WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8))
+        let (parameter, is_enable_multisample) = if cfg!(target_arch = "aarch64") {
+            (
+                WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8)),
+                false,
+            )
         } else {
-            opengl::set_is_enable_multisample(true);
-            WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
+            (
+                WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8)),
+                true,
+            )
         };
+        set_video_subsystem_attribute(&video_subsystem, is_enable_multisample);
 
         set_gl_version(&video_subsystem, &parameter);
         let mut sdl_window = util::expect!(video_subsystem
@@ -172,7 +177,7 @@ impl Window {
 
         let renderer = opengl::Renderer::new(|name| get_proc_address(&video_subsystem, name));
         let graphic = graphic::Graphic::new(Box::new(renderer));
-        set_multisamples(&video_subsystem);
+        set_multisamples(&video_subsystem, is_enable_multisample);
 
         core::Graphic::init(&graphic, core::Size::new(width, height));
 
@@ -221,7 +226,7 @@ fn set_gl_version(video_subsystem: &VideoSubsystem, parameter: &WindowParameter)
     gl_attr.set_context_version(parameter.version.major, parameter.version.minor);
 }
 
-fn set_video_subsystem_attribute(video_subsystem: &VideoSubsystem) {
+fn set_video_subsystem_attribute(video_subsystem: &VideoSubsystem, is_enable_multisample: bool) {
     let gl_attr = video_subsystem.gl_attr();
 
     gl_attr.set_red_size(8);
@@ -230,15 +235,12 @@ fn set_video_subsystem_attribute(video_subsystem: &VideoSubsystem) {
     gl_attr.set_alpha_size(8);
 
     gl_attr.set_double_buffer(true);
-    gl_attr.set_multisample_buffers(if opengl::get_is_enable_multisample() {
-        1
-    } else {
-        0
-    });
+    gl_attr.set_multisample_buffers(if is_enable_multisample { 1 } else { 0 });
     gl_attr.set_accelerated_visual(true);
 }
 
-fn set_multisamples(video_subsystem: &VideoSubsystem) {
+fn set_multisamples(video_subsystem: &VideoSubsystem, is_enable_multisample: bool) {
+    opengl::set_is_enable_multisample(is_enable_multisample);
     let gl_attr = video_subsystem.gl_attr();
     gl_attr.set_multisample_samples(opengl::get_max_samples() as _);
 }

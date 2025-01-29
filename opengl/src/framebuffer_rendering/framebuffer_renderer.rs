@@ -83,9 +83,7 @@ impl GLRenderer for FramebufferRenderer {
         // );
         crate::gl::disable(crate::def::EnableCap::Blend);
 
-        let is_enable_miltisample_framebuffer =
-            crate::IS_ENABLE_MILTISAMPLE_FRAMEBUFFER.read().unwrap();
-        if *is_enable_miltisample_framebuffer {
+        if crate::get_is_enable_multisample() {
             self.render_with_multisample_framebuffer(frame_data, frag_uniforms);
         } else {
             self.render_with_framebuffer(frame_data, frag_uniforms);
