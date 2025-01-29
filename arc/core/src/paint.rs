@@ -12,7 +12,7 @@ pub struct Paint {
 }
 
 impl Paint {
-    pub fn new_from_image(image: Rc<dyn crate::Image>, view_port: crate::Rect<i32>) -> Self {
+    pub fn new_from_image(image: Rc<dyn crate::Image>, view_port: crate::Rectangle<i32>) -> Self {
         Self {
             _paint_image: Some(Rc::new(PaintImage::new(image, view_port))),
             _paint_color: PaintColor::default(),

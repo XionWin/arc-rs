@@ -235,7 +235,7 @@ impl FramebufferRenderer {
         let (width, height) = size.into();
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
-            .set_uniform_a_viewport(core::Rect::new(0, 0, width as _, height as _));
+            .set_uniform_a_viewport(core::Rectangle::new(0, 0, width as _, height as _));
     }
     pub fn clear_color(&self, color: core::Color) {
         self._program.use_program();

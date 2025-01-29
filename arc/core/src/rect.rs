@@ -1,46 +1,78 @@
-use crate::{Location, Number, Size};
+use std::ops::AddAssign;
+
+use crate::Number;
 
 #[derive(Default, Debug, Clone, Copy)]
 pub struct Rect<T>
 where
     T: Number,
 {
-    location: Location<T>,
-    size: Size<T>,
+    left: T,
+    top: T,
+    right: T,
+    bottom: T,
 }
 
 impl<T> Rect<T>
 where
     T: Number,
 {
-    pub fn new(x: T, y: T, width: T, height: T) -> Self {
+    pub fn new(left: T, top: T, right: T, bottom: T) -> Self {
         Self {
-            location: Location::new(x, y),
-            size: Size::new(width, height),
+            left,
+            top,
+            right,
+            bottom,
         }
     }
 
-    pub fn get_location(&self) -> Location<T> {
-        self.location
+    pub fn get_left(&self) -> T {
+        self.left
     }
 
-    pub fn get_size(&self) -> Size<T> {
-        self.size
+    pub fn get_top(&self) -> T {
+        self.top
     }
 
-    pub fn get_x(&self) -> T {
-        self.location.get_x()
+    pub fn get_right(&self) -> T {
+        self.right
     }
 
-    pub fn get_y(&self) -> T {
-        self.location.get_y()
+    pub fn get_bottom(&self) -> T {
+        self.bottom
     }
+}
 
-    pub fn get_width(&self) -> T {
-        self.size.get_width()
+impl<T> AddAssign for Rect<T>
+where
+    T: Number,
+{
+    fn add_assign(&mut self, rhs: Self) {
+        self.left = min(self.get_left(), rhs.get_left());
+        self.top = min(self.get_top(), rhs.get_top());
+
+        self.right = max(self.get_right(), rhs.get_right());
+        self.bottom = max(self.get_bottom(), rhs.get_bottom());
     }
+}
 
-    pub fn get_height(&self) -> T {
-        self.size.get_height()
+fn min<T>(lhs: T, rhs: T) -> T
+where
+    T: Number,
+{
+    if lhs > rhs {
+        rhs
+    } else {
+        lhs
+    }
+}
+fn max<T>(lhs: T, rhs: T) -> T
+where
+    T: Number,
+{
+    if lhs >= rhs {
+        lhs
+    } else {
+        rhs
     }
 }

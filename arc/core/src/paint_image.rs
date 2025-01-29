@@ -10,7 +10,7 @@ pub struct PaintImage {
 }
 
 impl PaintImage {
-    pub fn new(image: Rc<dyn crate::Image>, view_port: crate::Rect<i32>) -> Self {
+    pub fn new(image: Rc<dyn crate::Image>, view_port: crate::Rectangle<i32>) -> Self {
         Self {
             _image: image,
             _transform: Matrix2D::new_from_translate(
@@ -39,7 +39,7 @@ impl From<Rc<dyn crate::Image>> for PaintImage {
         let size = value.get_size();
         Self::new(
             value,
-            crate::Rect::new(0i32, 0i32, size.get_width(), size.get_height()),
+            crate::Rectangle::new(0i32, 0i32, size.get_width(), size.get_height()),
         )
     }
 }

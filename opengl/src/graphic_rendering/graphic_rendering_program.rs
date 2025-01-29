@@ -8,7 +8,7 @@ use crate::{program_utility, FragUniform, Shader};
 
 #[derive(Debug)]
 pub struct GraphicRenderingProgram {
-    viewport: Cell<core::Rect<i32>>,
+    viewport: Cell<core::Rectangle<i32>>,
     pub(crate) _program_id: c_uint,
     _vertex_shader: Shader,
     _fragment_shader: Shader,
@@ -29,7 +29,7 @@ impl GraphicRenderingProgram {
 
         let _attribute_locations = program_utility::get_attribute_locations(_program_id);
         Self {
-            viewport: Cell::new(core::Rect::default()),
+            viewport: Cell::new(core::Rectangle::default()),
             _program_id,
             _vertex_shader,
             _fragment_shader,
@@ -44,7 +44,7 @@ impl GraphicRenderingProgram {
     pub fn get_rendering_size(&self) -> core::Size<i32> {
         self.viewport.get().get_size().clone()
     }
-    pub fn set_uniform_a_viewport(&self, value: core::Rect<i32>) {
+    pub fn set_uniform_a_viewport(&self, value: core::Rectangle<i32>) {
         crate::gl::use_program(self._program_id);
         crate::gl::uniform_2f(
             self._attribute_locations["aViewport"],

@@ -80,7 +80,7 @@ fn test(g: &dyn core::Graphic) {
             Style::new(
                 Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
                     img.clone(),
-                    core::Rect::new(x, y, size.get_width(), size.get_height()),
+                    core::Rectangle::new(x, y, size.get_width(), size.get_height()),
                 )))),
                 core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),

@@ -4,14 +4,14 @@ use std::{borrow::Borrow, fmt::Display};
 pub struct Primitive {
     _vertexes: Box<[core::Vertex2]>,
     _state: Box<dyn crate::State>,
-    _rect: core::Rect<i32>,
+    _rect: core::Rectangle<i32>,
 }
 
 impl Primitive {
     pub fn new(
         vertexes: Box<[core::Vertex2]>,
         state: Box<dyn crate::State>,
-        rect: core::Rect<i32>,
+        rect: core::Rectangle<i32>,
     ) -> Self {
         Self {
             _vertexes: vertexes,
@@ -27,9 +27,9 @@ impl Primitive {
     pub fn get_state(&self) -> &dyn crate::State {
         self._state.borrow()
     }
-    pub fn get_rect(&self) -> core::Rect<i32> {
+    pub fn get_rect(&self) -> core::Rectangle<i32> {
         // self._rect
-        core::Rect::new(0, 0, 800, 480)
+        core::Rectangle::new(0, 0, 800, 480)
     }
 }
 

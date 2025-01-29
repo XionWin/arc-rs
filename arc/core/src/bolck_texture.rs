@@ -1,9 +1,9 @@
-use crate::{ImageData, Rect};
+use crate::{ImageData, Rectangle};
 
 pub struct Block<'a> {
     pub texture: &'a dyn BlockTexture<'a>,
-    pub rect: Rect<i32>,
-    pub mapping: Rect<f32>
+    pub rect: Rectangle<i32>,
+    pub mapping: Rectangle<f32>,
 }
 
 pub trait BlockTexture<'a> {

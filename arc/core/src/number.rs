@@ -10,6 +10,7 @@ pub trait Number:
     + std::ops::Sub<Output = Self>
     + std::ops::Mul<Output = Self>
     + std::ops::Div<Output = Self>
+    + std::cmp::PartialOrd
 {
     fn from_value(v: i32) -> Self;
     fn pow_i8(&self, i: i8) -> Self;

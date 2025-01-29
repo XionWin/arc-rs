@@ -1,14 +1,14 @@
 use std::{borrow::Borrow, rc::Rc};
 
 pub struct TextureCache {
-    rect: core::Rect<i32>,
+    rect: core::Rectangle<i32>,
     margin: core::Margin<i32>,
     texture: Rc<dyn crate::Texture>,
 }
 
 impl TextureCache {
     pub fn new(
-        rect: core::Rect<i32>,
+        rect: core::Rectangle<i32>,
         margin: core::Margin<i32>,
         texture: Rc<dyn crate::Texture>,
     ) -> Self {
@@ -19,7 +19,7 @@ impl TextureCache {
         }
     }
 
-    pub fn get_rect(&self) -> core::Rect<i32> {
+    pub fn get_rect(&self) -> core::Rectangle<i32> {
         self.rect
     }
 

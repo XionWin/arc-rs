@@ -1,10 +1,10 @@
-use core::{Command, Point, Rect, Shape, Size, Style};
+use core::{Command, Point, Rectangle, Shape, Size, Style};
 
 const KAPPA90: f32 = 0.5522847493f32;
 
 #[derive(Debug)]
 pub struct RoundRectangle {
-    rect: Rect<i32>,
+    rect: Rectangle<i32>,
     style: Style,
     commands: Vec<Command>,
 }
@@ -48,7 +48,7 @@ impl RoundRectangle {
         };
 
         Self {
-            rect: Rect::new(x, y, width, height),
+            rect: Rectangle::new(x, y, width, height),
             style,
             commands,
         }
@@ -62,7 +62,7 @@ impl Shape for RoundRectangle {
     fn get_style(&self) -> &Style {
         &self.style
     }
-    fn get_rect(&self) -> Rect<i32> {
+    fn get_rect(&self) -> Rectangle<i32> {
         self.rect
     }
     fn get_size(&self) -> Size<i32> {
