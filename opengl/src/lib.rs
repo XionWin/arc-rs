@@ -19,11 +19,7 @@ mod renderer_utility;
 mod shader;
 mod texture;
 
-use std::{
-    cell::Cell,
-    ffi::{c_int, c_uint},
-    sync::RwLock,
-};
+use std::{ffi::c_int, sync::RwLock};
 
 pub use attribute_location::*;
 pub use call_type::*;
@@ -49,8 +45,20 @@ where
     gl::load_with(loadfn);
 }
 
+static IS_ENABLE_MILTISAMPLE_FRAMEBUFFER: RwLock<bool> = RwLock::new(false);
+
+pub fn get_is_enable_multisample() -> bool {
+    let is_enable_miltisample_framebuffer =
+        crate::IS_ENABLE_MILTISAMPLE_FRAMEBUFFER.read().unwrap();
+    *is_enable_miltisample_framebuffer
+}
+
+pub fn set_is_enable_multisample(value: bool) {
+    let mut is_enable_miltisample_framebuffer =
+        crate::IS_ENABLE_MILTISAMPLE_FRAMEBUFFER.write().unwrap();
+    *is_enable_miltisample_framebuffer = value
+}
+
 pub fn get_max_samples() -> c_int {
     gl::get_max_samples()
 }
-
-pub static IS_ENABLE_MILTISAMPLE_FRAMEBUFFER: RwLock<bool> = RwLock::new(false);

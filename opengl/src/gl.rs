@@ -15,7 +15,11 @@ where
 }
 
 pub fn get_max_samples() -> c_int {
-    get_integerv(crate::def::GetPName::MaxSamples).min(4)
+    get_integerv(crate::def::GetPName::MaxSamples).min(if crate::get_is_enable_multisample() {
+        4
+    } else {
+        0
+    })
 }
 
 pub fn clear_color(r: f32, g: f32, b: f32, a: f32) {

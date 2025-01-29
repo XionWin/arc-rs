@@ -141,9 +141,7 @@ impl Window {
         let parameter = if cfg!(target_arch = "aarch64") {
             WindowParameter::new(crate::VideoProfile::GLES, core::Version::new(2u8, 0u8, 0u8))
         } else {
-            let mut is_enable_miltisample_framebuffer =
-                opengl::IS_ENABLE_MILTISAMPLE_FRAMEBUFFER.write().unwrap();
-            *is_enable_miltisample_framebuffer = true;
+            opengl::set_is_enable_multisample(true);
             WindowParameter::new(crate::VideoProfile::Core, core::Version::new(4u8, 0u8, 0u8))
         };
 
@@ -232,7 +230,11 @@ fn set_video_subsystem_attribute(video_subsystem: &VideoSubsystem) {
     gl_attr.set_alpha_size(8);
 
     gl_attr.set_double_buffer(true);
-    gl_attr.set_multisample_buffers(1);
+    gl_attr.set_multisample_buffers(if opengl::get_is_enable_multisample() {
+        1
+    } else {
+        0
+    });
     gl_attr.set_accelerated_visual(true);
 }
 
