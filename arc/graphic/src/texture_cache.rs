@@ -1,26 +1,26 @@
 use std::{borrow::Borrow, rc::Rc};
 
 pub struct TextureCache {
-    rect: core::Rectangle<i32>,
+    rectangle: core::Rectangle<i32>,
     margin: core::Margin<i32>,
     texture: Rc<dyn crate::Texture>,
 }
 
 impl TextureCache {
     pub fn new(
-        rect: core::Rectangle<i32>,
+        rectangle: core::Rectangle<i32>,
         margin: core::Margin<i32>,
         texture: Rc<dyn crate::Texture>,
     ) -> Self {
         Self {
-            rect,
+            rectangle: rectangle,
             margin,
             texture,
         }
     }
 
     pub fn get_rect(&self) -> core::Rectangle<i32> {
-        self.rect
+        self.rectangle
     }
 
     pub fn get_margin(&self) -> core::Margin<i32> {

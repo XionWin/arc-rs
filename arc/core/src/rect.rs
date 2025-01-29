@@ -1,6 +1,6 @@
 use std::ops::AddAssign;
 
-use crate::Number;
+use crate::{Number, Rectangle};
 
 #[derive(Default, Debug, Clone, Copy)]
 pub struct Rect<T>
@@ -53,6 +53,20 @@ where
 
         self.right = max(self.get_right(), rhs.get_right());
         self.bottom = max(self.get_bottom(), rhs.get_bottom());
+    }
+}
+
+impl<T> From<Rectangle<T>> for Rect<T>
+where
+    T: Number,
+{
+    fn from(value: Rectangle<T>) -> Self {
+        Self {
+            left: value.get_x(),
+            top: value.get_y(),
+            right: value.get_x() + value.get_width(),
+            bottom: value.get_y() + value.get_height(),
+        }
     }
 }
 

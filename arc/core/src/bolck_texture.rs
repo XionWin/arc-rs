@@ -2,7 +2,7 @@ use crate::{ImageData, Rectangle};
 
 pub struct Block<'a> {
     pub texture: &'a dyn BlockTexture<'a>,
-    pub rect: Rectangle<i32>,
+    pub rectangle: Rectangle<i32>,
     pub mapping: Rectangle<f32>,
 }
 

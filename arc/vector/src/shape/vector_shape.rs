@@ -28,7 +28,7 @@ where
     Some(Primitive::new(
         Box::new([]),
         Box::new(Into::<StrokeState>::into(shape.get_style())),
-        shape.get_rect(),
+        shape.get_rectangle(),
     ))
 }
 
@@ -61,7 +61,7 @@ where
         Some(vertices) => Some(Primitive::new(
             Box::<[core::Vertex2]>::from(vertices),
             Box::new(Into::<FillState>::into(style)),
-            shape.get_rect(),
+            shape.get_rectangle(),
         )),
         None => None,
     }

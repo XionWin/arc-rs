@@ -2,7 +2,7 @@ use core::{Command, Point, Shape, Size, Style};
 
 #[derive(Debug)]
 pub struct Rectangle {
-    rect: core::Rectangle<i32>,
+    rectangle: core::Rectangle<i32>,
     style: Style,
     commands: Vec<Command>,
 }
@@ -18,7 +18,7 @@ impl Rectangle {
         ];
 
         Self {
-            rect: core::Rectangle::new(x, y, width, height),
+            rectangle: core::Rectangle::new(x, y, width, height),
             style,
             commands,
         }
@@ -32,10 +32,13 @@ impl Shape for Rectangle {
     fn get_style(&self) -> &Style {
         &self.style
     }
-    fn get_rect(&self) -> core::Rectangle<i32> {
-        self.rect
+    fn get_rectangle(&self) -> core::Rectangle<i32> {
+        self.rectangle
     }
     fn get_size(&self) -> Size<i32> {
-        self.rect.get_size()
+        self.rectangle.get_size()
+    }
+    fn get_rect(&self) -> core::Rect<i32> {
+        self.rectangle.into()
     }
 }

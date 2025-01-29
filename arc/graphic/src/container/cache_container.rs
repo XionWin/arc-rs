@@ -6,14 +6,14 @@ use super::Container;
 
 pub struct CacheContainer {
     _shapes: Vec<Rc<dyn core::Shape>>,
-    _rect: Option<core::Rect<i32>>,
+    _rectangle: Option<core::Rect<i32>>,
 }
 
 impl Container for CacheContainer {
     fn add(&mut self, shape: Box<dyn core::Shape>) {
+        self.update_rect(shape.get_rect());
         self._shapes.push(shape.into());
     }
-
     fn get_children(&self) -> Vec<&dyn core::Shape> {
         self._shapes
             .iter()
@@ -26,7 +26,6 @@ impl Cache for CacheContainer {
     fn get_rect(&self) -> Option<core::Rect<i32>> {
         todo!()
     }
-
     fn get_cache_texture(&self) -> Option<Rc<crate::TextureCache>> {
         todo!()
     }
@@ -36,7 +35,13 @@ impl CacheContainer {
     pub fn new() -> Self {
         Self {
             _shapes: Vec::new(),
-            _rect: None,
+            _rectangle: None,
+        }
+    }
+    fn update_rect(&mut self, rect: core::Rect<i32>) {
+        match &mut self._rectangle {
+            Some(mut self_rect) => self_rect += rect,
+            None => self._rectangle = Some(rect),
         }
     }
 }
