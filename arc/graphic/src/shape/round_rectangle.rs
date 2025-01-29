@@ -1,4 +1,4 @@
-use core::{AsAny, Command, Point, Rectangle, Shape, Size, Style};
+use core::{Command, Point, Rectangle, Shape, Size, Style};
 
 use crate::{Cacheable, Drawable};
 
@@ -9,12 +9,6 @@ pub struct RoundRectangle {
     rectangle: Rectangle<i32>,
     style: Style,
     commands: Vec<Command>,
-}
-
-impl AsAny for RoundRectangle {
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
-    }
 }
 
 impl Cacheable for RoundRectangle {

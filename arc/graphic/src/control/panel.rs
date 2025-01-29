@@ -1,4 +1,3 @@
-use core::AsAny;
 use std::{borrow::Borrow, rc::Rc};
 
 use vector::VectorShape;
@@ -10,12 +9,6 @@ pub struct Panel {
     _shapes: Vec<Rc<dyn core::Shape>>,
     _cache: Option<crate::TextureCache>,
     _rect: Option<core::Rect<i32>>,
-}
-
-impl AsAny for Panel {
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
-    }
 }
 
 impl Cacheable for Panel {
