@@ -96,13 +96,22 @@ fn test(g: &dyn core::Graphic) {
         core::Color::MoselleGreen,
         core::Color::White,
     ];
-    for row in 0..5 {
-        for column in 0..5 {
+
+    let x_count = 5;
+    let y_count = 5;
+    let item_size = 64;
+    let gap_size = 2;
+    let start_x =
+        (g.get_rendering_size().get_width() - (item_size + gap_size) * ZOOM_FACTOR * x_count) / 2;
+    let start_y =
+        g.get_rendering_size().get_height() - (item_size + gap_size) * ZOOM_FACTOR * y_count;
+    for row in 0..x_count {
+        for column in 0..y_count {
             let rectangle = graphic::shape::RoundRectangle::new(
-                2 * ZOOM_FACTOR + column * (64 + 2) * ZOOM_FACTOR,
-                2 * ZOOM_FACTOR + row * (64 + 2) * ZOOM_FACTOR,
-                64 * ZOOM_FACTOR,
-                64 * ZOOM_FACTOR,
+                start_x + column * (item_size + gap_size) * ZOOM_FACTOR,
+                start_y + row * (item_size + gap_size) * ZOOM_FACTOR,
+                item_size * ZOOM_FACTOR,
+                item_size * ZOOM_FACTOR,
                 24 * ZOOM_FACTOR,
                 Style::new(
                     Box::new(core::ColorBackground::new(

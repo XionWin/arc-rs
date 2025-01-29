@@ -56,6 +56,18 @@ impl core::Window for Window {
                         // keymod: Mod::LCTRLMOD,
                         ..
                     } => self.check_gl_error(),
+
+                    Event::MouseMotion {
+                        mousestate,
+                        x,
+                        y,
+                        // keymod: Mod::LCTRLMOD,
+                        ..
+                    } => {
+                        if mousestate.left() {
+                            util::print_info!("mouse motion: {}, {}", x, y);
+                        }
+                    }
                     _ => {}
                 }
             }
