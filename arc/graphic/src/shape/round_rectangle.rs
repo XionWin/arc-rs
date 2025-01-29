@@ -1,4 +1,6 @@
-use core::{Command, Point, Rectangle, Shape, Size, Style};
+use core::{AsAny, Command, Point, Rectangle, Shape, Size, Style};
+
+use crate::Drawable;
 
 const KAPPA90: f32 = 0.5522847493f32;
 
@@ -8,6 +10,14 @@ pub struct RoundRectangle {
     style: Style,
     commands: Vec<Command>,
 }
+
+impl AsAny for RoundRectangle {
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
+}
+
+impl Drawable for RoundRectangle {}
 
 impl RoundRectangle {
     pub fn new(x: i32, y: i32, width: i32, height: i32, r: i32, style: Style) -> Self {

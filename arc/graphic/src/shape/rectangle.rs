@@ -1,4 +1,6 @@
-use core::{Command, Point, Shape, Size, Style};
+use core::{AsAny, Command, Point, Shape, Size, Style};
+
+use crate::Drawable;
 
 #[derive(Debug)]
 pub struct Rectangle {
@@ -6,6 +8,14 @@ pub struct Rectangle {
     style: Style,
     commands: Vec<Command>,
 }
+
+impl AsAny for Rectangle {
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
+}
+
+impl Drawable for Rectangle {}
 
 impl Rectangle {
     pub fn new(x: i32, y: i32, width: i32, height: i32, style: Style) -> Self {

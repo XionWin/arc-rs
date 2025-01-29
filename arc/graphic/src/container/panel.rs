@@ -1,6 +1,7 @@
+use core::AsAny;
 use std::{borrow::Borrow, rc::Rc};
 
-use crate::Cache;
+use crate::{Cache, Drawable};
 
 use super::Container;
 
@@ -9,6 +10,14 @@ pub struct Panel {
     _cache: Option<crate::TextureCache>,
     _rect: Option<core::Rect<i32>>,
 }
+
+impl AsAny for Panel {
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
+}
+
+impl Drawable for Panel {}
 
 impl Container for Panel {
     fn add(&mut self, shape: Box<dyn core::Shape>) {
