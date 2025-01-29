@@ -1,6 +1,6 @@
 use crate::TextureCache;
 
-pub trait Cache {
+pub trait Cacheable {
     fn get_rect(&self) -> Option<core::Rect<i32>>;
-    fn get_cache_texture(&self) -> Option<&TextureCache>;
+    fn get_cache(&self) -> Option<&TextureCache>;
 }

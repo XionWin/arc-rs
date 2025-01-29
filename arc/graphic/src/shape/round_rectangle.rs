@@ -1,6 +1,6 @@
 use core::{AsAny, Command, Point, Rectangle, Shape, Size, Style};
 
-use crate::Drawable;
+use crate::{Cacheable, Drawable};
 
 const KAPPA90: f32 = 0.5522847493f32;
 
@@ -17,7 +17,21 @@ impl AsAny for RoundRectangle {
     }
 }
 
-impl Drawable for RoundRectangle {}
+impl Cacheable for RoundRectangle {
+    fn get_rect(&self) -> Option<core::Rect<i32>> {
+        todo!()
+    }
+
+    fn get_cache(&self) -> Option<&crate::TextureCache> {
+        todo!()
+    }
+}
+
+impl Drawable for RoundRectangle {
+    fn get_container(&self) -> Option<&dyn crate::Container> {
+        None
+    }
+}
 
 impl RoundRectangle {
     pub fn new(x: i32, y: i32, width: i32, height: i32, r: i32, style: Style) -> Self {

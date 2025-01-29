@@ -1,10 +1,11 @@
 use core::AsAny;
 use std::{borrow::Borrow, rc::Rc};
 
-use crate::{Cache, Drawable};
+use vector::VectorShape;
 
-use super::Container;
+use crate::{Cacheable, Container, Drawable};
 
+#[derive(Debug)]
 pub struct Panel {
     _shapes: Vec<Rc<dyn core::Shape>>,
     _cache: Option<crate::TextureCache>,
@@ -17,7 +18,30 @@ impl AsAny for Panel {
     }
 }
 
-impl Drawable for Panel {}
+impl Cacheable for Panel {
+    fn get_rect(&self) -> Option<core::Rect<i32>> {
+        self._rect
+    }
+    fn get_cache(&self) -> Option<&crate::TextureCache> {
+        self._cache.as_ref()
+    }
+}
+
+impl VectorShape for Panel {
+    fn get_stroke_primitive(&self) -> Option<vector::Primitive> {
+        None
+    }
+
+    fn get_fill_primitive(&self) -> Option<vector::Primitive> {
+        None
+    }
+}
+
+impl Drawable for Panel {
+    fn get_container(&self) -> Option<&dyn Container> {
+        None
+    }
+}
 
 impl Container for Panel {
     fn add(&mut self, shape: Box<dyn core::Shape>) {
@@ -29,18 +53,6 @@ impl Container for Panel {
             .iter()
             .map(|x| Borrow::<dyn core::Shape>::borrow(x))
             .collect::<Vec<&dyn core::Shape>>()
-    }
-}
-
-impl Cache for Panel {
-    fn get_rect(&self) -> Option<core::Rect<i32>> {
-        self._rect
-    }
-    fn get_cache_texture(&self) -> Option<&crate::TextureCache> {
-        match &self._cache {
-            Some(cache) => Some(&cache),
-            None => None,
-        }
     }
 }
 

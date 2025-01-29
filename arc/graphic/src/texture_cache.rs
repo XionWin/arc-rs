@@ -1,5 +1,6 @@
 use std::{borrow::Borrow, rc::Rc};
 
+#[derive(Debug)]
 pub struct TextureCache {
     rectangle: core::Rectangle<i32>,
     margin: core::Margin<i32>,

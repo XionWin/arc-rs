@@ -1,6 +1,6 @@
 use core::{AsAny, Command, Point, Shape, Size, Style};
 
-use crate::Drawable;
+use crate::{Cacheable, Drawable};
 
 #[derive(Debug)]
 pub struct Rectangle {
@@ -15,7 +15,21 @@ impl AsAny for Rectangle {
     }
 }
 
-impl Drawable for Rectangle {}
+impl Cacheable for Rectangle {
+    fn get_rect(&self) -> Option<core::Rect<i32>> {
+        todo!()
+    }
+
+    fn get_cache(&self) -> Option<&crate::TextureCache> {
+        todo!()
+    }
+}
+
+impl Drawable for Rectangle {
+    fn get_container(&self) -> Option<&dyn crate::Container> {
+        None
+    }
+}
 
 impl Rectangle {
     pub fn new(x: i32, y: i32, width: i32, height: i32, style: Style) -> Self {
