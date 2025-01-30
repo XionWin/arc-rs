@@ -27,6 +27,24 @@ impl Drawable for RoundRectangle {
     }
 }
 
+impl Shape for RoundRectangle {
+    fn get_commands(&self) -> &[core::Command] {
+        &self.commands
+    }
+    fn get_style(&self) -> &Style {
+        &self.style
+    }
+    fn get_rectangle(&self) -> Rectangle<i32> {
+        self.rectangle
+    }
+    fn get_size(&self) -> Size<i32> {
+        self.rectangle.get_size()
+    }
+    fn get_rect(&self) -> core::Rect<i32> {
+        self.rectangle.into()
+    }
+}
+
 impl RoundRectangle {
     pub fn new(x: i32, y: i32, width: i32, height: i32, r: i32, style: Style) -> Self {
         let commands = {
@@ -70,23 +88,5 @@ impl RoundRectangle {
             style,
             commands,
         }
-    }
-}
-
-impl Shape for RoundRectangle {
-    fn get_commands(&self) -> &[core::Command] {
-        &self.commands
-    }
-    fn get_style(&self) -> &Style {
-        &self.style
-    }
-    fn get_rectangle(&self) -> Rectangle<i32> {
-        self.rectangle
-    }
-    fn get_size(&self) -> Size<i32> {
-        self.rectangle.get_size()
-    }
-    fn get_rect(&self) -> core::Rect<i32> {
-        self.rectangle.into()
     }
 }
