@@ -43,6 +43,7 @@ pub enum Color {
     White,
     Transparent,
     TrueColor { r: u8, g: u8, b: u8, a: u8 },
+    HexColor { code: u32 },
 }
 
 impl Default for Color {
@@ -89,6 +90,12 @@ impl Into<Rgba> for &Color {
                 g: *g,
                 b: *b,
                 a: *a,
+            },
+            Color::HexColor { code } => Rgba {
+                r: (code >> 8 * 3) as u8,
+                g: (code >> 8 * 2) as u8,
+                b: (code >> 8 * 1) as u8,
+                a: (code >> 8 * 0) as u8,
             },
         }
     }

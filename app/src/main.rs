@@ -97,7 +97,7 @@ fn test(g: &dyn core::Graphic) {
         core::Color::White,
     ];
 
-    let x_count = 5;
+    let x_count = 10;
     let y_count = 5;
     let item_size = 64;
     let gap_size = 2;
