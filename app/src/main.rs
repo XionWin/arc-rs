@@ -105,8 +105,8 @@ fn test(g: &dyn core::Graphic) {
         (g.get_rendering_size().get_width() - (item_size + gap_size) * ZOOM_FACTOR * x_count) / 2;
     let start_y =
         g.get_rendering_size().get_height() - (item_size + gap_size) * ZOOM_FACTOR * y_count;
-    for row in 0..x_count {
-        for column in 0..y_count {
+    for row in 0..y_count {
+        for column in 0..x_count {
             let rectangle = graphic::shape::RoundRectangle::new(
                 start_x + column * (item_size + gap_size) * ZOOM_FACTOR,
                 start_y + row * (item_size + gap_size) * ZOOM_FACTOR,
