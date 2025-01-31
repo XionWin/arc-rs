@@ -2,8 +2,7 @@ pub mod shape;
 
 mod cacheable;
 mod container;
-mod control;
-mod drawable;
+mod element;
 mod graphic;
 mod graphic_shape;
 mod image;
@@ -16,8 +15,7 @@ mod texture_filter;
 
 pub use cacheable::*;
 pub use container::*;
-pub use control::*;
-pub use drawable::*;
+pub use element::*;
 pub use graphic::*;
 pub use graphic_shape::*;
 pub use image::*;

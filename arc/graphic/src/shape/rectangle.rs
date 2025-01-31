@@ -1,6 +1,6 @@
-use core::{Command, Point, Shape, Size, Style};
+use core::{AsAny, Command, Point, Shape, Size, Style};
 
-use crate::{Cacheable, Drawable};
+use crate::{Cacheable, Element};
 
 #[derive(Debug)]
 pub struct Rectangle {
@@ -9,6 +9,14 @@ pub struct Rectangle {
     commands: Vec<Command>,
 }
 
+impl AsAny for Rectangle {
+    fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
+}
+
+impl Element for Rectangle {}
+
 impl Cacheable for Rectangle {
     fn get_rect(&self) -> Option<core::Rect<i32>> {
         todo!()
@@ -16,12 +24,6 @@ impl Cacheable for Rectangle {
 
     fn get_cache(&self) -> Option<&crate::TextureCache> {
         todo!()
-    }
-}
-
-impl Drawable for Rectangle {
-    fn get_container(&self) -> Option<&dyn crate::Container> {
-        None
     }
 }
 
