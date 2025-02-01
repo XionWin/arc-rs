@@ -1,6 +1,5 @@
 pub mod shape;
 
-mod cacheable;
 mod container;
 mod element;
 mod graphic;
@@ -13,7 +12,6 @@ mod texture_cache;
 mod texture_compontent;
 mod texture_filter;
 
-pub use cacheable::*;
 pub use container::*;
 pub use element::*;
 pub use graphic::*;

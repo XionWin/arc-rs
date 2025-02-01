@@ -1,30 +1,10 @@
-use core::{AsAny, Command, Point, Shape, Size, Style};
-
-use crate::{Cacheable, Element};
+use core::{Command, Point, Shape, Size, Style};
 
 #[derive(Debug)]
 pub struct Rectangle {
     rectangle: core::Rectangle<i32>,
     style: Style,
     commands: Vec<Command>,
-}
-
-impl AsAny for Rectangle {
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
-    }
-}
-
-impl Element for Rectangle {}
-
-impl Cacheable for Rectangle {
-    fn get_rect(&self) -> Option<core::Rect<i32>> {
-        todo!()
-    }
-
-    fn get_cache(&self) -> Option<&crate::TextureCache> {
-        todo!()
-    }
 }
 
 impl Shape for Rectangle {

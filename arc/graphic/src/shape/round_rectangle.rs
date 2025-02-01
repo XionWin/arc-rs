@@ -1,6 +1,4 @@
-use core::{AsAny, Command, Point, Rectangle, Shape, Size, Style};
-
-use crate::{Cacheable, Element};
+use core::{Command, Point, Rectangle, Shape, Size, Style};
 
 const KAPPA90: f32 = 0.5522847493f32;
 
@@ -9,24 +7,6 @@ pub struct RoundRectangle {
     rectangle: Rectangle<i32>,
     style: Style,
     commands: Vec<Command>,
-}
-
-impl AsAny for RoundRectangle {
-    fn as_any(&self) -> &dyn std::any::Any {
-        self
-    }
-}
-
-impl Element for RoundRectangle {}
-
-impl Cacheable for RoundRectangle {
-    fn get_rect(&self) -> Option<core::Rect<i32>> {
-        todo!()
-    }
-
-    fn get_cache(&self) -> Option<&crate::TextureCache> {
-        todo!()
-    }
 }
 
 impl Shape for RoundRectangle {
