@@ -92,7 +92,9 @@ fn test(g: &dyn core::Graphic) {
             .load_image_from_file("resource/image/png/2.png", core::ImageFilter::Linear, true)
             .into();
 
-        let texture_size = img.get_size().scale(MAX_ZOOM_FACTOR as f32 / 2f32);
+        let texture_size = img
+            .get_size()
+            .scale(ZOOM_FACTOR as f32 / MAX_ZOOM_FACTOR as f32);
         let rectangle = graphic::shape::Rectangle::new(
             x,
             y,
