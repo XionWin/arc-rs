@@ -89,6 +89,34 @@ fn test(g: &dyn core::Graphic) {
 
     {
         let img: Rc<dyn Image> = g
+            .load_image_from_file("resource/image/png/3.png", core::ImageFilter::Linear, true)
+            .into();
+        let texture_size = img
+            .get_size()
+            .scale(ZOOM_FACTOR as f32 / MAX_ZOOM_FACTOR as f32);
+
+        let x = rendering_size.get_width() - texture_size.get_width();
+        let y = 0i32;
+
+        let rectangle = graphic::shape::Rectangle::new(
+            x,
+            y,
+            texture_size.get_width(),
+            texture_size.get_height(),
+            Style::new(
+                Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
+                    img.clone(),
+                    core::Rectangle::new(x, y, texture_size.get_width(), texture_size.get_height()),
+                )))),
+                core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+                Some(1i32),
+            ),
+        );
+        g.add_shape(Box::new(rectangle));
+    }
+
+    {
+        let img: Rc<dyn Image> = g
             .load_image_from_file("resource/image/png/2.png", core::ImageFilter::Linear, true)
             .into();
 
