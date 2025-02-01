@@ -1,10 +1,10 @@
 use std::{borrow::Borrow, cell::RefCell, ffi::c_uint, rc::Rc};
 
-use crate::{DrawElement, Image, RenderingComponent};
+use crate::{Element, Image, RenderingComponent};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
-    _elements: RefCell<Vec<DrawElement>>,
+    _elements: RefCell<Vec<Element>>,
 }
 
 impl Graphic {
@@ -22,7 +22,7 @@ impl core::Graphic for Graphic {
     }
     fn begin_render(&self) {
         self.renderer.begin_render();
-        let shapes: &Vec<DrawElement> = &self._elements.borrow();
+        let shapes: &Vec<Element> = &self._elements.borrow();
         for element in shapes {
             if let Some(graphic_shape) = element.get_graphic_shape() {
                 let shape = graphic_shape.get_shape();

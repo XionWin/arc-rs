@@ -2,13 +2,13 @@ use std::{borrow::Borrow, cell::RefCell};
 
 use crate::{Container, GraphicShape, TextureCache};
 
-pub struct DrawElement {
+pub struct Element {
     _graphic_shape: Option<GraphicShape>,
     _cache: Option<RefCell<TextureCache>>,
     _container: Option<Box<dyn Container>>,
 }
 
-impl DrawElement {
+impl Element {
     pub fn get_graphic_shape(&self) -> Option<&GraphicShape> {
         self._graphic_shape.as_ref()
     }
@@ -23,7 +23,7 @@ impl DrawElement {
     }
 }
 
-impl From<Box<dyn core::Shape>> for DrawElement {
+impl From<Box<dyn core::Shape>> for Element {
     fn from(value: Box<dyn core::Shape>) -> Self {
         Self {
             _graphic_shape: Some(value.into()),
