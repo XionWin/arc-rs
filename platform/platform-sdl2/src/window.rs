@@ -177,9 +177,9 @@ impl Window {
         sdl_window.set_resizable(false);
         if cfg!(target_arch = "aarch64") {
             sdl_context.mouse().show_cursor(false);
-            sdl_window
-                .set_fullscreen(sdl2::video::FullscreenType::Desktop)
-                .unwrap();
+            // sdl_window
+            //     .set_fullscreen(sdl2::video::FullscreenType::Desktop)
+            //     .unwrap();
         }
         // let _ = sdl_window.set_fullscreen(sdl2::video::FullscreenType::True);
 
