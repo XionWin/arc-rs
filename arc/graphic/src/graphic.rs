@@ -1,17 +1,17 @@
 use std::{borrow::Borrow, cell::RefCell, ffi::c_uint, rc::Rc};
 
-use crate::{Image, RenderingComponent};
+use crate::{DrawElement, Image, RenderingComponent};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
-    _shapes: RefCell<Vec<Rc<RefCell<crate::GraphicShape>>>>,
+    _elements: RefCell<Vec<DrawElement>>,
 }
 
 impl Graphic {
     pub fn new(renderer: Box<dyn crate::Renderer>) -> Self {
         Self {
             renderer,
-            _shapes: RefCell::new(Vec::new()),
+            _elements: RefCell::new(Vec::new()),
         }
     }
 }
@@ -22,27 +22,29 @@ impl core::Graphic for Graphic {
     }
     fn begin_render(&self) {
         self.renderer.begin_render();
-        let shapes: &Vec<Rc<RefCell<crate::GraphicShape>>> = &self._shapes.borrow();
-        for graphic_shape in shapes {
-            let shape: &mut crate::GraphicShape = &mut graphic_shape.as_ref().borrow_mut();
-            let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());
-            match fill_primitive {
-                Some(fill_primitive) => match shape.get_fill_cache() {
-                    Some(_cache) => { /*self.renderer.update_primitive(fill_primitive, _cache) */ }
-                    None => {
-                        shape.set_fill_cache(Some(self.renderer.cache_primitive(fill_primitive)));
-                    }
-                },
-                None => {}
-            }
+        let shapes: &Vec<DrawElement> = &self._elements.borrow();
+        for element in shapes {
+            if let Some(graphic_shape) = element.get_graphic_shape() {
+                let shape = graphic_shape.get_shape();
+                let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
 
-            let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());
-            match fill_primitive {
-                Some(fill_primitive) => {
-                    self.renderer.add_primitive(fill_primitive);
+                match fill_primitive {
+                    Some(fill_primitive) => {
+                        self.renderer.add_primitive(fill_primitive);
+                    }
+                    None => {}
                 }
-                None => {}
             }
+            // let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());
+            // match fill_primitive {
+            //     Some(fill_primitive) => match shape.get_fill_cache() {
+            //         Some(_cache) => { /*self.renderer.update_primitive(fill_primitive, _cache) */ }
+            //         None => {
+            //             shape.set_fill_cache(Some(self.renderer.cache_primitive(fill_primitive)));
+            //         }
+            //     },
+            //     None => {}
+            // }
         }
     }
     fn render(&self) {
@@ -90,16 +92,14 @@ impl core::Graphic for Graphic {
         Box::new(Image::new(texture))
     }
     fn add_shape(&self, shape: Box<dyn core::Shape>) {
-        let graphic_shape = Rc::new(RefCell::new(shape.into()));
-        self._shapes.borrow_mut().push(graphic_shape);
+        self._elements.borrow_mut().push(shape.into());
     }
     fn export_shape_cache(&self) {
         let exe_folder = util::get_exe_path().unwrap();
         let mut index = 0;
-        let shapes: &Vec<_> = &self._shapes.borrow();
+        let shapes: &Vec<_> = &self._elements.borrow();
         for shape in shapes {
-            let shape: &RefCell<crate::GraphicShape> = shape.borrow();
-            let graphic_shape: &crate::GraphicShape = &shape.borrow();
+            let graphic_shape: &crate::GraphicShape = shape.get_graphic_shape().unwrap();
             match graphic_shape.get_fill_cache() {
                 Some(cache) => {
                     self.renderer.export_texture(

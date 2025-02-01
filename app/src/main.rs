@@ -95,8 +95,8 @@ fn test(g: &dyn core::Graphic) {
 
     let x_count = 8;
     let y_count = 2;
-    let item_size = 64;
-    let gap_size = 2;
+    let item_size = 80;
+    let gap_size = 4;
     let start_x =
         (g.get_rendering_size().get_width() - (item_size + gap_size) * ZOOM_FACTOR * x_count) / 2;
     let start_y =
@@ -108,7 +108,7 @@ fn test(g: &dyn core::Graphic) {
                 start_y + row * (item_size + gap_size) * ZOOM_FACTOR,
                 item_size * ZOOM_FACTOR,
                 item_size * ZOOM_FACTOR,
-                24 * ZOOM_FACTOR,
+                32 * ZOOM_FACTOR,
                 Style::new(
                     Box::new(core::ColorBackground::new(
                         colors[((row * 2 + column) % (colors.len() as i32)) as usize],
