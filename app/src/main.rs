@@ -94,7 +94,7 @@ fn test(g: &dyn core::Graphic) {
     ];
 
     let x_count = 8;
-    let y_count = 1;
+    let y_count = 2;
     let item_size = 64;
     let gap_size = 2;
     let start_x =

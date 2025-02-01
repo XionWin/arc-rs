@@ -1,7 +1,7 @@
 pub mod shape;
 
 mod container;
-mod element;
+mod draw_element;
 mod graphic;
 mod graphic_shape;
 mod image;
@@ -13,7 +13,7 @@ mod texture_compontent;
 mod texture_filter;
 
 pub use container::*;
-pub use element::*;
+pub use draw_element::*;
 pub use graphic::*;
 pub use graphic_shape::*;
 pub use image::*;
