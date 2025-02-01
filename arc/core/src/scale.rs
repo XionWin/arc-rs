@@ -26,8 +26,8 @@ where
 {
     fn default() -> Self {
         Self {
-            x: T::from_value(1),
-            y: T::from_value(1),
+            x: T::from_i32(1),
+            y: T::from_i32(1),
         }
     }
 }

@@ -1,10 +1,11 @@
 use core::{Image, Style, Window};
 use std::{cell::RefCell, rc::Rc};
 
+const MAX_ZOOM_FACTOR: i32 = 2i32;
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
     1i32
 } else {
-    2i32
+    MAX_ZOOM_FACTOR
 };
 
 fn main() {
@@ -78,6 +79,29 @@ fn test(g: &dyn core::Graphic) {
                         rendering_size.get_width(),
                         rendering_size.get_height(),
                     ),
+                )))),
+                core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+                Some(1i32),
+            ),
+        );
+        g.add_shape(Box::new(rectangle));
+    }
+
+    {
+        let img: Rc<dyn Image> = g
+            .load_image_from_file("resource/image/png/2.png", core::ImageFilter::Linear, true)
+            .into();
+
+        let texture_size = img.get_size().scale(MAX_ZOOM_FACTOR as f32 / 2f32);
+        let rectangle = graphic::shape::Rectangle::new(
+            x,
+            y,
+            texture_size.get_width(),
+            texture_size.get_height(),
+            Style::new(
+                Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
+                    img.clone(),
+                    core::Rectangle::new(x, y, texture_size.get_width(), texture_size.get_height()),
                 )))),
                 core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),

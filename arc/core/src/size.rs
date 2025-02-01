@@ -25,6 +25,20 @@ where
         self.height
     }
 
+    pub fn scale(&self, scale_factor: f32) -> Self {
+        Self {
+            width: Number::from_f32(self.width.into_f32() * scale_factor),
+            height: Number::from_f32(self.height.into_f32() * scale_factor),
+        }
+    }
+
+    pub fn scale_x_y(&self, x_scale_factor: f32, y_scale_factor: f32) -> Self {
+        Self {
+            width: Number::from_f32(self.width.into_f32() * x_scale_factor),
+            height: Number::from_f32(self.height.into_f32() * y_scale_factor),
+        }
+    }
+
     pub fn mul(&self, factor: T) -> Self {
         self * &Size::new(factor, factor)
     }
