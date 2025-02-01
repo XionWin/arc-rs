@@ -19,9 +19,9 @@ impl VectorShape for Panel {
 }
 
 impl Panel {
-    pub fn new() -> Self {
+    pub fn new(rectangle: core::Rectangle<i32>) -> Self {
         Self {
-            _position_container: PositionContainer::new(),
+            _position_container: PositionContainer::new(rectangle),
             _cache: None,
         }
     }

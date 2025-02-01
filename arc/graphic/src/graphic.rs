@@ -4,7 +4,7 @@ use crate::{Element, Image, RenderingComponent};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
-    _elements: RefCell<Vec<Element>>,
+    _elements: RefCell<Vec<RefCell<Element>>>,
 }
 
 impl Graphic {
@@ -22,8 +22,9 @@ impl core::Graphic for Graphic {
     }
     fn begin_render(&self) {
         self.renderer.begin_render();
-        let shapes: &Vec<Element> = &self._elements.borrow();
-        for element in shapes {
+        let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
+        for cell_element in shapes {
+            let element = &cell_element.borrow_mut();
             if let Some(graphic_shape) = element.get_graphic_shape() {
                 let shape = graphic_shape.get_shape();
                 let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
@@ -92,14 +93,15 @@ impl core::Graphic for Graphic {
         Box::new(Image::new(texture))
     }
     fn add_shape(&self, shape: Box<dyn core::Shape>) {
-        self._elements.borrow_mut().push(shape.into());
+        self._elements.borrow_mut().push(RefCell::new(shape.into()));
     }
     fn export_shape_cache(&self) {
         let exe_folder = util::get_exe_path().unwrap();
         let mut index = 0;
-        let shapes: &Vec<_> = &self._elements.borrow();
-        for shape in shapes {
-            let graphic_shape: &crate::GraphicShape = shape.get_graphic_shape().unwrap();
+        let elements: &Vec<_> = &self._elements.borrow();
+        for cell_element in elements {
+            let element = &cell_element.borrow();
+            let graphic_shape: &crate::GraphicShape = element.get_graphic_shape().unwrap();
             match graphic_shape.get_fill_cache() {
                 Some(cache) => {
                     self.renderer.export_texture(
