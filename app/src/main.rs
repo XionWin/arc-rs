@@ -40,54 +40,50 @@ fn main() {
 
 fn test(g: &dyn core::Graphic) {
     let rendering_size = g.get_rendering_size();
-    let mut x = 0i32;
-    let mut y = 0i32;
-    let mut max_y = 0i32;
+    let x = 0i32;
+    let y = 0i32;
 
-    let paths = std::fs::read_dir("resource/image/png/")
-        .unwrap()
-        .filter(|item| {
-            item.as_ref().unwrap().file_type().unwrap().is_file()
-                && item
-                    .as_ref()
-                    .unwrap()
-                    .file_name()
-                    .to_str()
-                    .unwrap()
-                    .contains("png")
-        })
-        .map(|item| String::from(item.as_ref().unwrap().path().to_str().unwrap()))
-        .collect::<Vec<String>>();
+    // let paths = std::fs::read_dir("resource/image/png/")
+    //     .unwrap()
+    //     .filter(|item| {
+    //         item.as_ref().unwrap().file_type().unwrap().is_file()
+    //             && item
+    //                 .as_ref()
+    //                 .unwrap()
+    //                 .file_name()
+    //                 .to_str()
+    //                 .unwrap()
+    //                 .contains("png")
+    //     })
+    //     .map(|item| String::from(item.as_ref().unwrap().path().to_str().unwrap()))
+    //     .collect::<Vec<String>>();
+    // println!("{:?}", paths);
 
-    println!("{:?}", paths);
-
-    for path in &paths {
+    {
         let img: Rc<dyn Image> = g
-            .load_image_from_file(path, core::ImageFilter::Nearest, false)
+            .load_image_from_file("resource/image/png/1.png", core::ImageFilter::Nearest, true)
             .into();
-        let size = img.get_size().mul(ZOOM_FACTOR);
-        if x + size.get_width() > rendering_size.get_width() {
-            x = 0i32;
-            y += max_y;
-        }
-        max_y = max_y.max(size.get_height());
 
         let rectangle = graphic::shape::Rectangle::new(
             x,
             y,
-            size.get_width(),
-            size.get_height(),
+            rendering_size.get_width(),
+            rendering_size.get_height(),
             Style::new(
                 Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
                     img.clone(),
-                    core::Rectangle::new(x, y, size.get_width(), size.get_height()),
+                    core::Rectangle::new(
+                        x,
+                        y,
+                        rendering_size.get_width(),
+                        rendering_size.get_height(),
+                    ),
                 )))),
                 core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),
             ),
         );
         g.add_shape(Box::new(rectangle));
-        x += size.get_width();
     }
 
     let colors = [
@@ -97,8 +93,8 @@ fn test(g: &dyn core::Graphic) {
         core::Color::White,
     ];
 
-    let x_count = 6;
-    let y_count = 2;
+    let x_count = 8;
+    let y_count = 1;
     let item_size = 64;
     let gap_size = 2;
     let start_x =
