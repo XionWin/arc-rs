@@ -24,6 +24,9 @@ impl AsAny for Image {
     fn as_mut_any(&mut self) -> &mut dyn std::any::Any {
         self
     }
+    fn box_any(self: Box<Self>) -> Box<dyn std::any::Any> {
+        self
+    }
 }
 
 impl core::Image for Image {

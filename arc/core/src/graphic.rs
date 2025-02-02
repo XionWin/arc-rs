@@ -24,9 +24,10 @@ pub trait Graphic {
         image_filter: ImageFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn Image>;
-    fn get_image(&self, texture_id: c_uint) -> Option<Rc<dyn crate::Image>>;
+    fn get_image(&self, texture_id: c_uint) -> Option<Rc<dyn Image>>;
     fn add_shape(&self, shape: Box<dyn Shape>);
-    fn add_container(&self, shape: Box<dyn Container>);
+    fn create_container(&self, rectagle: crate::Rectangle<i32>) -> Box<dyn Container>;
+    fn add_container(&self, container: Box<dyn Container>);
     fn export_shape_cache(&self);
     fn check_gl_error(&self) -> String;
 }

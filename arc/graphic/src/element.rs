@@ -50,12 +50,14 @@ impl From<Box<dyn core::Shape>> for Element {
         }
     }
 }
-impl From<Box<dyn crate::CacheableContainer>> for Element {
-    fn from(value: Box<dyn crate::CacheableContainer>) -> Self {
+
+impl From<Box<dyn core::Container>> for Element {
+    fn from(value: Box<dyn core::Container>) -> Self {
+        let container = value.box_any().downcast::<crate::Container>().unwrap();
         Self {
             _is_enabled_cache: true,
             _graphic_shape: None,
-            _container: Some(value),
+            _container: Some(container),
         }
     }
 }

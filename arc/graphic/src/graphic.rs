@@ -95,7 +95,33 @@ impl core::Graphic for Graphic {
     fn add_shape(&self, shape: Box<dyn core::Shape>) {
         self._elements.borrow_mut().push(RefCell::new(shape.into()));
     }
-    fn add_container(&self, shape: Box<dyn core::Container>) {}
+
+    fn create_container(&self, rectagle: core::Rectangle<i32>) -> Box<dyn core::Container> {
+        Box::new(crate::Container::new(
+            rectagle,
+            self.renderer.create_texture(
+                core::Size::new(100, 100),
+                core::ColorType::Rgba,
+                crate::TextureFilter::Linear,
+                false,
+            ),
+        ))
+    }
+    fn add_container(&self, container: Box<dyn core::Container>) {
+        // let container = Box::new(crate::Container::new(
+        //     core::Rectangle::new(0, 0, 100, 100),
+        //     self.renderer.create_texture(
+        //         core::Size::new(100, 100),
+        //         core::ColorType::Rgba,
+        //         crate::TextureFilter::Linear,
+        //         false,
+        //     ),
+        // ));
+
+        self._elements
+            .borrow_mut()
+            .push(RefCell::new(container.into()));
+    }
     fn export_shape_cache(&self) {
         let exe_folder = util::get_exe_path().unwrap();
         let mut index = 0;

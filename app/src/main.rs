@@ -150,4 +150,7 @@ fn test(g: &dyn core::Graphic) {
             g.add_shape(Box::new(rectangle));
         }
     }
+
+    let container = g.create_container(core::Rectangle::new(0, 0, 100, 100));
+    g.add_container(container);
 }
