@@ -1,6 +1,6 @@
 use std::{ffi::c_uint, rc::Rc};
 
-use crate::{Color, Image, ImageFilter, Shape, Size};
+use crate::{Color, Container, Image, ImageFilter, Shape, Size};
 
 pub trait Graphic {
     fn init(&self, size: crate::Size<i32>);
@@ -26,6 +26,7 @@ pub trait Graphic {
     ) -> Box<dyn Image>;
     fn get_image(&self, texture_id: c_uint) -> Option<Rc<dyn crate::Image>>;
     fn add_shape(&self, shape: Box<dyn Shape>);
+    fn add_container(&self, shape: Box<dyn Container>);
     fn export_shape_cache(&self);
     fn check_gl_error(&self) -> String;
 }

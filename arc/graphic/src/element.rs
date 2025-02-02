@@ -1,11 +1,11 @@
 use std::borrow::Borrow;
 
-use crate::{Container, GraphicShape, TextureCache};
+use crate::{CacheableContainer, GraphicShape, TextureCache};
 
 pub struct Element {
     _is_enabled_cache: bool,
     _graphic_shape: Option<GraphicShape>,
-    _container: Option<Box<dyn Container>>,
+    _container: Option<Box<dyn CacheableContainer>>,
 }
 
 impl Element {
@@ -15,13 +15,15 @@ impl Element {
     pub fn get_cache(&self) -> Option<&TextureCache> {
         match self._is_enabled_cache {
             true => match &self._container {
-                Some(container) => Some(Borrow::<dyn Container>::borrow(container).get_cache()),
+                Some(container) => {
+                    Some(Borrow::<dyn CacheableContainer>::borrow(container).get_cache())
+                }
                 None => None,
             },
             false => None,
         }
     }
-    pub fn get_container(&self) -> Option<&dyn Container> {
+    pub fn get_container(&self) -> Option<&dyn CacheableContainer> {
         match &self._container {
             Some(container) => Some(container.borrow()),
             None => None,
@@ -48,8 +50,8 @@ impl From<Box<dyn core::Shape>> for Element {
         }
     }
 }
-impl From<Box<dyn crate::Container>> for Element {
-    fn from(value: Box<dyn crate::Container>) -> Self {
+impl From<Box<dyn crate::CacheableContainer>> for Element {
+    fn from(value: Box<dyn crate::CacheableContainer>) -> Self {
         Self {
             _is_enabled_cache: true,
             _graphic_shape: None,

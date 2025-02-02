@@ -95,6 +95,7 @@ impl core::Graphic for Graphic {
     fn add_shape(&self, shape: Box<dyn core::Shape>) {
         self._elements.borrow_mut().push(RefCell::new(shape.into()));
     }
+    fn add_container(&self, shape: Box<dyn core::Container>) {}
     fn export_shape_cache(&self) {
         let exe_folder = util::get_exe_path().unwrap();
         let mut index = 0;
