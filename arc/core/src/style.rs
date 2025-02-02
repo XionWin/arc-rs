@@ -83,6 +83,9 @@ impl crate::AsAny for ColorBackground {
     fn as_any(&self) -> &dyn std::any::Any {
         self
     }
+    fn as_mut_any(&mut self) -> &mut dyn std::any::Any {
+        self
+    }
 }
 
 #[derive(Debug)]
@@ -119,6 +122,9 @@ impl ImageBackground {
 
 impl crate::AsAny for ImageBackground {
     fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
+    fn as_mut_any(&mut self) -> &mut dyn std::any::Any {
         self
     }
 }

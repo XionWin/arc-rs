@@ -50,6 +50,9 @@ impl core::AsAny for StrokeState {
     fn as_any(&self) -> &dyn std::any::Any {
         self
     }
+    fn as_mut_any(&mut self) -> &mut dyn std::any::Any {
+        self
+    }
 }
 
 impl State for StrokeState {
@@ -104,6 +107,9 @@ impl Default for FillState {
 
 impl core::AsAny for FillState {
     fn as_any(&self) -> &dyn std::any::Any {
+        self
+    }
+    fn as_mut_any(&mut self) -> &mut dyn std::any::Any {
         self
     }
 }

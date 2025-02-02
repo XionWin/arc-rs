@@ -1,7 +1,7 @@
 use core::{AsAny, Size};
 use std::{borrow::Borrow, rc::Rc};
 
-use crate::{Texture, TextureComponent};
+use crate::Texture;
 
 #[derive(Debug)]
 pub struct Image {
@@ -12,17 +12,17 @@ impl Image {
     pub fn new(texture: Rc<dyn Texture>) -> Self {
         Self { texture }
     }
+    fn get_texture(&self) -> &dyn Texture {
+        self.texture.borrow()
+    }
 }
 
 impl AsAny for Image {
     fn as_any(&self) -> &dyn std::any::Any {
         self
     }
-}
-
-impl TextureComponent for Image {
-    fn get_texture(&self) -> &dyn Texture {
-        self.texture.borrow()
+    fn as_mut_any(&mut self) -> &mut dyn std::any::Any {
+        self
     }
 }
 
@@ -49,7 +49,7 @@ pub trait TextureImage {
 impl<T: core::Image + ?Sized> TextureImage for T {
     fn get_texture(&self) -> &dyn crate::Texture {
         match self.as_any().downcast_ref::<crate::Image>() {
-            Some(image) => TextureComponent::get_texture(image),
+            Some(image) => image.get_texture(),
             None => util::print_panic!("get texture from _texture_image failed"),
         }
     }
