@@ -1,5 +1,4 @@
-use std::rc::Rc;
-use std::{ffi::c_uint, fmt::Debug};
+use std::fmt::Debug;
 
 use crate::{Texture, TextureFilter};
 
@@ -18,14 +17,13 @@ pub trait Renderer: Debug {
         color_type: core::ColorType,
         texture_filter: TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Rc<dyn Texture>;
-    fn get_texture(&self, texture_id: c_uint) -> Option<Rc<dyn crate::Texture>>;
+    ) -> Box<dyn Texture>;
     fn create_texture_from_file(
         &self,
         path: &str,
         texture_filter: TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Rc<dyn Texture>;
+    ) -> Box<dyn Texture>;
     fn cache_primitive(&self, primitive: vector::Primitive) -> crate::TextureCache;
     fn update_primitive(&self, primitive: vector::Primitive, cache: &crate::TextureCache);
     fn add_primitive(&self, primitive: vector::Primitive);

@@ -11,12 +11,12 @@ impl TextureCache {
     pub fn new(
         rectangle: core::Rectangle<i32>,
         margin: core::Margin<i32>,
-        texture: Rc<dyn crate::Texture>,
+        texture: Box<dyn crate::Texture>,
     ) -> Self {
         Self {
             rectangle: rectangle,
             margin,
-            texture,
+            texture: texture.into(),
         }
     }
 

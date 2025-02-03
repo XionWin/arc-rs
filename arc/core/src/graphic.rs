@@ -1,5 +1,3 @@
-use std::{ffi::c_uint, rc::Rc};
-
 use crate::{Color, Container, Image, ImageFilter, Shape, Size};
 
 pub trait Graphic {
@@ -24,7 +22,6 @@ pub trait Graphic {
         image_filter: ImageFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn Image>;
-    fn get_image(&self, texture_id: c_uint) -> Option<Rc<dyn Image>>;
     fn add_shape(&self, shape: Box<dyn Shape>);
     fn create_container(&self, rectagle: crate::Rectangle<i32>) -> Box<dyn Container>;
     fn add_container(&self, container: Box<dyn Container>);

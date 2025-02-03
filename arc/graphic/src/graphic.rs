@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, cell::RefCell, ffi::c_uint, rc::Rc};
+use std::{borrow::Borrow, cell::RefCell};
 
 use crate::{Element, Image, RenderingComponent};
 
@@ -74,12 +74,6 @@ impl core::Graphic for Graphic {
             self.renderer
                 .create_texture(size, color_type, image_filter.into(), is_gen_mipmap);
         Box::new(Image::new(texture))
-    }
-    fn get_image(&self, texture_id: c_uint) -> Option<Rc<dyn core::Image>> {
-        match self.renderer.get_texture(texture_id) {
-            Some(texture) => Some(Rc::new(Image::new(texture))),
-            None => None,
-        }
     }
     fn load_image_from_file(
         &self,

@@ -12,7 +12,7 @@ pub struct Container {
 }
 
 impl Container {
-    pub fn new(rectangle: core::Rectangle<i32>, texture: Rc<dyn crate::Texture>) -> Self {
+    pub fn new(rectangle: core::Rectangle<i32>, texture: Box<dyn crate::Texture>) -> Self {
         Self {
             _shapes: Vec::new(),
             _cache: crate::TextureCache::new(rectangle, core::Margin::default(), texture),

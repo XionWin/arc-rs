@@ -1,10 +1,7 @@
-use std::{cell::RefCell, ffi::c_uint, rc::Rc};
-
 #[derive(Debug)]
 pub struct Renderer {
     _framebuffer_renderer: crate::FramebufferRenderer,
     _graphic_renderer: crate::GraphicRenderer,
-    _textures: RefCell<Vec<Rc<dyn graphic::Texture>>>,
 }
 
 impl Renderer {
@@ -16,7 +13,6 @@ impl Renderer {
         Self {
             _framebuffer_renderer: crate::FramebufferRenderer::new(),
             _graphic_renderer: crate::GraphicRenderer::new(),
-            _textures: RefCell::new(Vec::new()),
         }
     }
 }
@@ -59,27 +55,13 @@ impl graphic::Renderer for Renderer {
         color_type: core::ColorType,
         texture_filter: graphic::TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Rc<dyn graphic::Texture> {
-        let texture = Rc::new(crate::Texture::new(
+    ) -> Box<dyn graphic::Texture> {
+        Box::new(crate::Texture::new(
             size,
             color_type,
             texture_filter,
             is_gen_mipmap,
-        ));
-        self._textures.borrow_mut().push(texture.clone());
-        texture
-    }
-
-    fn get_texture(&self, texture_id: c_uint) -> Option<Rc<dyn graphic::Texture>> {
-        match self
-            ._textures
-            .borrow()
-            .iter()
-            .find(|x| x.get_id() == texture_id)
-        {
-            Some(texture) => Some(texture.clone()),
-            None => None,
-        }
+        ))
     }
 
     fn create_texture_from_file(
@@ -87,10 +69,8 @@ impl graphic::Renderer for Renderer {
         path: &str,
         texture_filter: graphic::TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Rc<dyn graphic::Texture> {
-        let texture = Rc::new(crate::Texture::load(path, texture_filter, is_gen_mipmap));
-        self._textures.borrow_mut().push(texture.clone());
-        texture
+    ) -> Box<dyn graphic::Texture> {
+        Box::new(crate::Texture::load(path, texture_filter, is_gen_mipmap))
     }
 
     fn cache_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {

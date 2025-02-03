@@ -1,15 +1,15 @@
 use core::{AsAny, Size};
-use std::{borrow::Borrow, rc::Rc};
+use std::borrow::Borrow;
 
 use crate::Texture;
 
 #[derive(Debug)]
 pub struct Image {
-    texture: Rc<dyn Texture>,
+    texture: Box<dyn Texture>,
 }
 
 impl Image {
-    pub fn new(texture: Rc<dyn Texture>) -> Self {
+    pub fn new(texture: Box<dyn Texture>) -> Self {
         Self { texture }
     }
     fn get_texture(&self) -> &dyn Texture {
