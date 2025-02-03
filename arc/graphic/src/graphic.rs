@@ -129,7 +129,7 @@ impl core::Graphic for Graphic {
         for cell_element in elements {
             let element = &cell_element.borrow();
             let graphic_shape: &crate::GraphicShape = element.get_graphic_shape().unwrap();
-            match graphic_shape.get_fill_cache() {
+            match graphic_shape.get_cache() {
                 Some(cache) => {
                     self.renderer.export_texture(
                         cache.get_texture(),
