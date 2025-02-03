@@ -9,6 +9,12 @@ pub struct Element {
 }
 
 impl Element {
+    pub fn get_graphic_shape_mut(&mut self) -> Option<&mut GraphicShape> {
+        match &mut self._graphic_shape {
+            Some(graphic_shape) => Some(graphic_shape),
+            None => None,
+        }
+    }
     pub fn get_graphic_shape(&self) -> Option<&GraphicShape> {
         self._graphic_shape.as_ref()
     }

@@ -24,7 +24,7 @@ impl core::Graphic for Graphic {
         self.renderer.begin_render();
         let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
         for cell_element in shapes {
-            let element = &cell_element.borrow_mut();
+            let element = &mut cell_element.borrow_mut();
             if let Some(graphic_shape) = element.get_graphic_shape() {
                 let shape = graphic_shape.get_shape();
                 let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
@@ -36,16 +36,21 @@ impl core::Graphic for Graphic {
                     None => {}
                 }
             }
-            // let fill_primitive = vector::VectorShape::get_fill_primitive(shape.get_shape());
-            // match fill_primitive {
-            //     Some(fill_primitive) => match shape.get_fill_cache() {
-            //         Some(_cache) => { /*self.renderer.update_primitive(fill_primitive, _cache) */ }
-            //         None => {
-            //             shape.set_fill_cache(Some(self.renderer.cache_primitive(fill_primitive)));
-            //         }
-            //     },
-            //     None => {}
-            // }
+
+            if let Some(graphic_shape) = element.get_graphic_shape_mut() {
+                if graphic_shape.get_cache().is_none() {
+                    let shape = graphic_shape.get_shape_mut();
+                    let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+                    // let cache = graphic_shape.get_cache();
+                    match fill_primitive {
+                        Some(fill_primitive) => {
+                            graphic_shape
+                                .set_cache(Some(self.renderer.cache_primitive(fill_primitive)));
+                        }
+                        None => {}
+                    }
+                }
+            }
         }
     }
     fn render(&self) {

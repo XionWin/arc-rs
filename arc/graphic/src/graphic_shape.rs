@@ -1,4 +1,4 @@
-use std::borrow::Borrow;
+use std::borrow::{Borrow, BorrowMut};
 
 pub struct GraphicShape {
     _shape: Box<dyn core::Shape>,
@@ -6,6 +6,9 @@ pub struct GraphicShape {
 }
 
 impl GraphicShape {
+    pub fn get_shape_mut(&mut self) -> &mut dyn core::Shape {
+        self._shape.borrow_mut()
+    }
     pub fn get_shape(&self) -> &dyn core::Shape {
         self._shape.borrow()
     }
