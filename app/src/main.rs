@@ -137,7 +137,7 @@ fn test(g: &dyn core::Graphic) {
                 32 * ZOOM_FACTOR,
                 Style::new(
                     Box::new(core::ColorBackground::new(
-                        colors[((row * 2 + column) % (colors.len() as i32)) as usize],
+                        colors[((row * x_count + column) % (colors.len() as i32)) as usize],
                         core::Color::MoselleGreen,
                     )),
                     core::ColorBackground::new(
