@@ -128,19 +128,21 @@ impl core::Graphic for Graphic {
         let elements: &Vec<_> = &self._elements.borrow();
         for cell_element in elements {
             let element = &cell_element.borrow();
-            let graphic_shape: &crate::GraphicShape = element.get_graphic_shape().unwrap();
-            match graphic_shape.get_cache() {
-                Some(cache) => {
-                    self.renderer.export_texture(
-                        cache.get_texture(),
-                        &format!("{}/cache/{}.png", exe_folder, index),
-                        core::ColorType::Rgba,
-                    );
+            if let Some(graphic_shape) = element.get_graphic_shape() {
+                match graphic_shape.get_cache() {
+                    Some(cache) => {
+                        self.renderer.export_texture(
+                            cache.get_texture(),
+                            &format!("{}/cache/{}.png", exe_folder, index),
+                            core::ColorType::Rgba,
+                        );
+                        index += 1;
+                    }
+                    None => {}
                 }
-                None => {}
             }
-            index += 1;
         }
+        util::print_info!("exporting done, total cache count: {}", index);
     }
     fn check_gl_error(&self) -> String {
         self.renderer.check_gl_error()
