@@ -40,7 +40,6 @@ impl FramebufferRenderingProgram {
     pub fn use_program(&self) {
         crate::gl::use_program(self._program_id);
     }
-
     // pub fn get_rendering_size(&self) -> core::Size<i32> {
     //     self.viewport.get().get_size().clone()
     // }
@@ -53,11 +52,6 @@ impl FramebufferRenderingProgram {
         );
         crate::gl::uniform_2f(self._attribute_locations["aOffset"], 0f32, 0f32);
         self.viewport.replace(value);
-    }
-
-    pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {
-        crate::gl::use_program(self._program_id);
-        crate::gl::uniform_1i(self._attribute_locations["aPointSize"], value);
     }
     pub fn set_uniform_frag(&self, value: &FragUniform) {
         crate::gl::use_program(self._program_id);

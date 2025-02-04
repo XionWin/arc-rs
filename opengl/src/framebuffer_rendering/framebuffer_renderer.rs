@@ -73,14 +73,6 @@ impl GLRenderer for FramebufferRenderer {
         // binding vertices
         renderer_utility::bind_data(self, frame_data.get_vertices());
 
-        // [TEST]
-        self._program.set_uniform_point_size(5i32);
-
-        // crate::gl::enable(crate::def::EnableCap::Blend);
-        // crate::gl::blend_func(
-        //     crate::def::BlendingFactorSrc::SrcAlpha,
-        //     crate::def::BlendingFactorDest::OneMinusSrcAlpha,
-        // );
         crate::gl::disable(crate::def::EnableCap::Blend);
 
         if crate::get_is_enable_multisample() {
@@ -88,7 +80,6 @@ impl GLRenderer for FramebufferRenderer {
         } else {
             self.render_with_framebuffer(frame_data, frag_uniforms);
         }
-
         bind_screen_framebuffer();
     }
 }
@@ -144,12 +135,6 @@ impl FramebufferRenderer {
     }
 
     fn render_with_framebuffer(&self, frame_data: &FrameData, frag_uniforms: &[FragUniform]) {
-        // bind_multisample_renderbuffer_to_framebuffer(
-        //     self._multisample_fbo,
-        //     self._color_multisample_rbo,
-        //     // self._depth_multisample_rbo,
-        //     core::Size::new(800, 480),
-        // );
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();

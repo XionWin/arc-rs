@@ -61,11 +61,6 @@ impl GraphicRenderingProgram {
             offset.get_y() as _,
         );
     }
-
-    pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {
-        crate::gl::use_program(self._program_id);
-        crate::gl::uniform_1i(self._attribute_locations["aPointSize"], value);
-    }
     pub fn set_uniform_frag(&self, value: &FragUniform) {
         crate::gl::use_program(self._program_id);
         crate::gl::uniform_4fv(

@@ -62,9 +62,6 @@ impl GLRenderer for GraphicRenderer {
         // binding vertices
         renderer_utility::bind_data(self, frame_data.get_vertices());
 
-        // [TEST]
-        self._program.set_uniform_point_size(5i32);
-
         crate::gl::enable(crate::def::EnableCap::Blend);
         crate::gl::blend_func(
             crate::def::BlendingFactorSrc::SrcAlpha,
