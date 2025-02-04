@@ -37,18 +37,16 @@ impl core::Graphic for Graphic {
                 }
             }
 
-            if element.get_is_enabled_cache() {
-                if element.get_cache().is_none() {
-                    if let Some(graphic_shape) = element.get_graphic_shape_mut() {
-                        let shape = graphic_shape.get_shape_mut();
-                        let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
-                        // let cache = graphic_shape.get_cache();
-                        match fill_primitive {
-                            Some(fill_primitive) => {
-                                element.set_cache(self.renderer.cache_primitive(fill_primitive));
-                            }
-                            None => {}
+            if element.get_cache().is_none() {
+                if let Some(graphic_shape) = element.get_graphic_shape_mut() {
+                    let shape = graphic_shape.get_shape_mut();
+                    let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+                    // let cache = graphic_shape.get_cache();
+                    match fill_primitive {
+                        Some(fill_primitive) => {
+                            element.set_cache(self.renderer.cache_primitive(fill_primitive));
                         }
+                        None => {}
                     }
                 }
             }
