@@ -99,15 +99,23 @@ impl FramebufferRenderer {
         frame_data: &FrameData,
         frag_uniforms: &[FragUniform],
     ) {
-        bind_multisample_renderbuffer_to_framebuffer(
-            self._multisample_fbo,
-            self._color_multisample_rbo,
-            // self._depth_multisample_rbo,
-            core::Size::new(800, 480),
-        );
+        let mut last_texture_size = Option::<core::Size<i32>>::None;
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();
+
+            // If the fb_texture_size not change, reuse the multisample buffer
+            if last_texture_size.is_none()
+                || last_texture_size.is_some_and(|x| x != fb_texture_size)
+            {
+                bind_multisample_renderbuffer_to_framebuffer(
+                    self._multisample_fbo,
+                    self._color_multisample_rbo,
+                    // self._depth_multisample_rbo,
+                    fb_texture_size,
+                );
+                last_texture_size = Some(fb_texture_size);
+            }
             bind_multisample_renderbuffer(self._multisample_fbo);
             self.clear_color(core::Color::Transparent);
             self.clear();
@@ -136,12 +144,12 @@ impl FramebufferRenderer {
     }
 
     fn render_with_framebuffer(&self, frame_data: &FrameData, frag_uniforms: &[FragUniform]) {
-        bind_multisample_renderbuffer_to_framebuffer(
-            self._multisample_fbo,
-            self._color_multisample_rbo,
-            // self._depth_multisample_rbo,
-            core::Size::new(800, 480),
-        );
+        // bind_multisample_renderbuffer_to_framebuffer(
+        //     self._multisample_fbo,
+        //     self._color_multisample_rbo,
+        //     // self._depth_multisample_rbo,
+        //     core::Size::new(800, 480),
+        // );
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();

@@ -1,6 +1,6 @@
 use crate::Number;
 
-#[derive(Default, Debug, Clone, Copy)]
+#[derive(Default, Debug, Clone, Copy, PartialEq)]
 pub struct Size<T>
 where
     T: Number,
