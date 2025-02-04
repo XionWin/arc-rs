@@ -8,7 +8,6 @@ pub trait Graphic {
     fn set_rendering_size(&self, size: crate::Size<i32>);
     fn clear_color(&self, color: Color);
     fn clear(&self);
-
     fn create_image(
         &self,
         size: Size<i32>,
