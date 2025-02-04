@@ -90,6 +90,7 @@ impl core::Graphic for Graphic {
                 .create_texture_from_file(path, image_filter.into(), is_gen_mipmap);
         Box::new(Image::new(texture))
     }
+    fn add_element(&self, _element: Box<dyn core::Element>) {}
     fn add_shape(&self, shape: Box<dyn core::Shape>) {
         self._elements.borrow_mut().push(RefCell::new(shape.into()));
     }
