@@ -25,3 +25,15 @@ where
         self.y
     }
 }
+
+impl<T> From<crate::Location<T>> for Offset<T>
+where
+    T: Number,
+{
+    fn from(value: crate::Location<T>) -> Self {
+        Self {
+            x: value.get_x(),
+            y: value.get_y(),
+        }
+    }
+}

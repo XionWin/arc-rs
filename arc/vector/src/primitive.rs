@@ -27,9 +27,8 @@ impl Primitive {
     pub fn get_state(&self) -> &dyn crate::State {
         self._state.borrow()
     }
-    pub fn get_rect(&self) -> core::Rectangle<i32> {
-        // self._rect
-        core::Rectangle::new(0, 0, 800, 480)
+    pub fn get_rectangle(&self) -> core::Rectangle<i32> {
+        self._rectangle
     }
 }
 

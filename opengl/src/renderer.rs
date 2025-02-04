@@ -74,7 +74,7 @@ impl graphic::Renderer for Renderer {
     }
 
     fn cache_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {
-        let rect = primitive.get_rect();
+        let rect = primitive.get_rectangle();
         let cache = graphic::TextureCache::new(
             rect,
             core::Margin::default(),

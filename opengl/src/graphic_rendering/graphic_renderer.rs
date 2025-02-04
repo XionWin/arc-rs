@@ -72,6 +72,7 @@ impl GLRenderer for GraphicRenderer {
         );
 
         for call in frame_data.get_calls() {
+            self.set_rendering_offset(call.get_rectangle().get_location().into());
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
             self._program.set_uniform_frag(frag_uniform);
             if let Some(texture_id) = call.get_texture_id() {
@@ -107,6 +108,7 @@ impl GraphicRenderer {
             None => None,
         };
         self._frame_data.borrow_mut().add_call(
+            primitive.get_rectangle(),
             crate::CallType::Fill,
             primitive.get_vertices(),
             state.into(),
@@ -122,6 +124,9 @@ impl GraphicRenderer {
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
             .set_uniform_a_viewport(core::Rectangle::new(0, 0, width as _, height as _));
+    }
+    pub fn set_rendering_offset(&self, offset: core::Offset<i32>) {
+        self._program.set_uniform_a_offset(offset);
     }
     pub fn clear_color(&self, color: core::Color) {
         self._program.use_program();

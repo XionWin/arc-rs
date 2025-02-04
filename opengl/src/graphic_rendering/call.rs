@@ -4,6 +4,7 @@ use crate::CallType;
 
 #[derive(Debug)]
 pub struct Call {
+    rectangle: core::Rectangle<i32>,
     call_type: CallType,
     vertex_offset: usize,
     vertex_len: usize,
@@ -13,6 +14,7 @@ pub struct Call {
 
 impl Call {
     pub fn new(
+        rectangle: core::Rectangle<i32>,
         call_type: CallType,
         vertex_offset: usize,
         vertex_len: usize,
@@ -20,6 +22,7 @@ impl Call {
         texture_id: Option<c_uint>,
     ) -> Self {
         Self {
+            rectangle,
             call_type,
             vertex_offset,
             vertex_len,
@@ -28,6 +31,9 @@ impl Call {
         }
     }
 
+    pub fn get_rectangle(&self) -> core::Rectangle<i32> {
+        self.rectangle
+    }
     pub fn get_call_type(&self) -> &CallType {
         &self.call_type
     }

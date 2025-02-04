@@ -51,8 +51,15 @@ impl GraphicRenderingProgram {
             value.get_width() as _,
             value.get_height() as _,
         );
-        crate::gl::uniform_2f(self._attribute_locations["aOffset"], 0f32, 0f32);
         self.viewport.replace(value);
+    }
+    pub fn set_uniform_a_offset(&self, offset: core::Offset<i32>) {
+        crate::gl::use_program(self._program_id);
+        crate::gl::uniform_2f(
+            self._attribute_locations["aOffset"],
+            offset.get_x() as _,
+            offset.get_y() as _,
+        );
     }
 
     pub fn set_uniform_point_size(&self, value: std::ffi::c_int) {

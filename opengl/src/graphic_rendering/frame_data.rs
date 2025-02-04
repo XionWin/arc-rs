@@ -22,6 +22,7 @@ impl FrameData {
 
     pub fn add_call(
         &mut self,
+        rectangle: core::Rectangle<i32>,
         call_type: CallType,
         vertices: &[core::Vertex2],
         frag_uniforms: FragUniform,
@@ -38,6 +39,7 @@ impl FrameData {
         self._frag_uniforms.push(frag_uniforms);
 
         self._calls.push(Call::new(
+            rectangle,
             call_type,
             vertex_offset,
             vertex_len,
