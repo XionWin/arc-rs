@@ -3,27 +3,16 @@ use std::{borrow::Borrow, rc::Rc};
 
 use vector::VectorShape;
 
-use super::CacheableContainer;
-
 #[derive(Debug)]
 pub struct Container {
     _shapes: Vec<Rc<dyn core::Shape>>,
-    _cache: crate::TextureCache,
 }
 
 impl Container {
-    pub fn new(rectangle: core::Rectangle<i32>, texture: Box<dyn crate::Texture>) -> Self {
+    pub fn new() -> Self {
         Self {
             _shapes: Vec::new(),
-            _cache: crate::TextureCache::new(rectangle, core::Margin::default(), texture),
         }
-    }
-
-    fn update_cache(&mut self, cache: crate::TextureCache) {
-        self._cache = cache;
-    }
-    fn get_cache(&self) -> &crate::TextureCache {
-        &self._cache
     }
 }
 
@@ -59,21 +48,5 @@ impl core::Container for Container {
             .iter()
             .map(|x| Borrow::<dyn core::Shape>::borrow(x))
             .collect::<Vec<&dyn core::Shape>>()
-    }
-}
-
-impl<T: core::Container + ?Sized> CacheableContainer for T {
-    fn update_cache(&mut self, cache: crate::TextureCache) {
-        match self.as_mut_any().downcast_mut::<Container>() {
-            Some(container) => container.update_cache(cache),
-            None => util::print_panic!("get texture from _texture_image failed"),
-        }
-    }
-
-    fn get_cache(&self) -> &crate::TextureCache {
-        match self.as_any().downcast_ref::<Container>() {
-            Some(container) => container.get_cache(),
-            None => util::print_panic!("get texture from _texture_image failed"),
-        }
     }
 }

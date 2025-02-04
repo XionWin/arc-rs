@@ -23,7 +23,6 @@ pub trait Graphic {
         is_gen_mipmap: bool,
     ) -> Box<dyn Image>;
     fn add_shape(&self, shape: Box<dyn Shape>);
-    fn create_container(&self, rectagle: crate::Rectangle<i32>) -> Box<dyn Container>;
     fn add_container(&self, container: Box<dyn Container>);
     fn export_shape_cache(&self);
     fn check_gl_error(&self) -> String;

@@ -151,6 +151,7 @@ fn test(g: &dyn core::Graphic) {
         }
     }
 
-    let container = g.create_container(core::Rectangle::new(0, 0, 100, 100));
-    g.add_container(container);
+    // let container = g.create_container(core::Rectangle::new(0, 0, 100, 100));
+    let container = graphic::Container::new();
+    g.add_container(Box::new(container));
 }

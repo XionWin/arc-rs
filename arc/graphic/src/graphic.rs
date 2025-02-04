@@ -37,17 +37,18 @@ impl core::Graphic for Graphic {
                 }
             }
 
-            if let Some(graphic_shape) = element.get_graphic_shape_mut() {
-                if graphic_shape.get_cache().is_none() {
-                    let shape = graphic_shape.get_shape_mut();
-                    let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
-                    // let cache = graphic_shape.get_cache();
-                    match fill_primitive {
-                        Some(fill_primitive) => {
-                            graphic_shape
-                                .set_cache(Some(self.renderer.cache_primitive(fill_primitive)));
+            if element.get_is_enabled_cache() {
+                if element.get_cache().is_none() {
+                    if let Some(graphic_shape) = element.get_graphic_shape_mut() {
+                        let shape = graphic_shape.get_shape_mut();
+                        let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+                        // let cache = graphic_shape.get_cache();
+                        match fill_primitive {
+                            Some(fill_primitive) => {
+                                element.set_cache(self.renderer.cache_primitive(fill_primitive));
+                            }
+                            None => {}
                         }
-                        None => {}
                     }
                 }
             }
@@ -95,28 +96,7 @@ impl core::Graphic for Graphic {
         self._elements.borrow_mut().push(RefCell::new(shape.into()));
     }
 
-    fn create_container(&self, rectagle: core::Rectangle<i32>) -> Box<dyn core::Container> {
-        Box::new(crate::Container::new(
-            rectagle,
-            self.renderer.create_texture(
-                core::Size::new(100, 100),
-                core::ColorType::Rgba,
-                crate::TextureFilter::Linear,
-                false,
-            ),
-        ))
-    }
     fn add_container(&self, container: Box<dyn core::Container>) {
-        // let container = Box::new(crate::Container::new(
-        //     core::Rectangle::new(0, 0, 100, 100),
-        //     self.renderer.create_texture(
-        //         core::Size::new(100, 100),
-        //         core::ColorType::Rgba,
-        //         crate::TextureFilter::Linear,
-        //         false,
-        //     ),
-        // ));
-
         self._elements
             .borrow_mut()
             .push(RefCell::new(container.into()));
@@ -127,18 +107,16 @@ impl core::Graphic for Graphic {
         let elements: &Vec<_> = &self._elements.borrow();
         for cell_element in elements {
             let element = &cell_element.borrow();
-            if let Some(graphic_shape) = element.get_graphic_shape() {
-                match graphic_shape.get_cache() {
-                    Some(cache) => {
-                        self.renderer.export_texture(
-                            cache.get_texture(),
-                            &format!("{}/cache/{}.png", exe_folder, index),
-                            core::ColorType::Rgba,
-                        );
-                        index += 1;
-                    }
-                    None => {}
+            match element.get_cache() {
+                Some(cache) => {
+                    self.renderer.export_texture(
+                        cache.get_texture(),
+                        &format!("{}/cache/{}.png", exe_folder, index),
+                        core::ColorType::Rgba,
+                    );
+                    index += 1;
                 }
+                None => {}
             }
         }
         util::print_info!("exporting done, total cache count: {}", index);
