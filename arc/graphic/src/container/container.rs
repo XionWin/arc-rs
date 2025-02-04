@@ -5,13 +5,15 @@ use vector::VectorShape;
 
 #[derive(Debug)]
 pub struct Container {
+    _rectangle: core::Rectangle<i32>,
     _shapes: Vec<Rc<dyn core::Shape>>,
     _containers: Vec<Rc<dyn core::Container>>,
 }
 
 impl Container {
-    pub fn new() -> Self {
+    pub fn new(rectangle: core::Rectangle<i32>) -> Self {
         Self {
+            _rectangle: rectangle,
             _shapes: Vec::new(),
             _containers: Vec::new(),
         }
@@ -47,7 +49,6 @@ impl core::Container for Container {
     fn add_container(&mut self, container: Box<dyn core::Container>) {
         self._containers.push(container.into());
     }
-
     // fn get_children(&self) -> Vec<&dyn core::Shape> {
     //     self._shapes
     //         .iter()
