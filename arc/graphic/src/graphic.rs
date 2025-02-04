@@ -1,6 +1,6 @@
-use std::{borrow::Borrow, cell::RefCell};
+use std::cell::RefCell;
 
-use crate::{Element, Image, RenderingComponent};
+use crate::{Element, Image};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
@@ -121,12 +121,6 @@ impl core::Graphic for Graphic {
     }
     fn check_gl_error(&self) -> String {
         self.renderer.check_gl_error()
-    }
-}
-
-impl RenderingComponent for Graphic {
-    fn get_renderer(&self) -> &dyn crate::Renderer {
-        self.renderer.borrow()
     }
 }
 
