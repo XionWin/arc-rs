@@ -21,7 +21,6 @@ pub trait Graphic {
         image_filter: ImageFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn Image>;
-    fn add_element(&self, element: Box<dyn crate::Element>);
     fn add_shape(&self, shape: Box<dyn Shape>);
     fn add_container(&self, container: Box<dyn Container>);
     fn export_shape_cache(&self);

@@ -1,17 +1,19 @@
 use core::AsAny;
-use std::{borrow::Borrow, rc::Rc};
+use std::rc::Rc;
 
 use vector::VectorShape;
 
 #[derive(Debug)]
 pub struct Container {
     _shapes: Vec<Rc<dyn core::Shape>>,
+    _containers: Vec<Rc<dyn core::Container>>,
 }
 
 impl Container {
     pub fn new() -> Self {
         Self {
             _shapes: Vec::new(),
+            _containers: Vec::new(),
         }
     }
 }
@@ -39,14 +41,17 @@ impl VectorShape for Container {
 }
 
 impl core::Container for Container {
-    fn add(&mut self, shape: Box<dyn core::Shape>) {
+    fn add_shape(&mut self, shape: Box<dyn core::Shape>) {
         self._shapes.push(shape.into());
     }
-
-    fn get_children(&self) -> Vec<&dyn core::Shape> {
-        self._shapes
-            .iter()
-            .map(|x| Borrow::<dyn core::Shape>::borrow(x))
-            .collect::<Vec<&dyn core::Shape>>()
+    fn add_container(&mut self, container: Box<dyn core::Container>) {
+        self._containers.push(container.into());
     }
+
+    // fn get_children(&self) -> Vec<&dyn core::Shape> {
+    //     self._shapes
+    //         .iter()
+    //         .map(|x| Borrow::<dyn core::Shape>::borrow(x))
+    //         .collect::<Vec<&dyn core::Shape>>()
+    // }
 }
