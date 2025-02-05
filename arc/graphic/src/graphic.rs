@@ -25,14 +25,7 @@ impl core::Graphic for Graphic {
         let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
         for cell_element in shapes {
             let element = &mut cell_element.borrow_mut();
-
-            // if let Some(container) = element.get_container() {
-            //     if let Some(containers) = core::Container::get_containers(container) {
-            //         for element in containers {
-            //             util::print_info!("{:?}", element)
-            //         }
-            //     }
-            // }
+            begin_render_container(element);
 
             if let Some(graphic_shape) = element.get_graphic_shape() {
                 let shape = graphic_shape.get_shape();
@@ -46,19 +39,20 @@ impl core::Graphic for Graphic {
                 }
             }
 
-            if element.get_cache().is_none() {
-                if let Some(graphic_shape) = element.get_graphic_shape_mut() {
-                    let shape = graphic_shape.get_shape_mut();
-                    let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
-                    // let cache = graphic_shape.get_cache();
-                    match fill_primitive {
-                        Some(fill_primitive) => {
-                            element.set_cache(self.renderer.cache_primitive(fill_primitive));
-                        }
-                        None => {}
-                    }
-                }
-            }
+            begin_render_cached_element(self, element);
+            // if element.get_cache().is_none() {
+            //     if let Some(graphic_shape) = element.get_graphic_shape_mut() {
+            //         let shape = graphic_shape.get_shape_mut();
+            //         let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+            //         // let cache = graphic_shape.get_cache();
+            //         match fill_primitive {
+            //             Some(fill_primitive) => {
+            //                 element.set_cache(self.renderer.cache_primitive(fill_primitive));
+            //             }
+            //             None => {}
+            //         }
+            //     }
+            // }
         }
     }
     fn render(&self) {
@@ -136,5 +130,31 @@ impl core::Graphic for Graphic {
 impl Drop for Graphic {
     fn drop(&mut self) {
         util::print_debug!("arc_graphic droped")
+    }
+}
+
+fn begin_render_container(element: &crate::Element) {
+    if let Some(container) = element.get_container() {
+        if let Some(containers) = core::Container::get_containers(container) {
+            for _element in containers {
+                // util::print_info!("{:?}", element)
+            }
+        }
+    }
+}
+
+fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
+    if element.get_cache().is_none() {
+        if let Some(graphic_shape) = element.get_graphic_shape_mut() {
+            let shape = graphic_shape.get_shape_mut();
+            let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+            // let cache = graphic_shape.get_cache();
+            match fill_primitive {
+                Some(fill_primitive) => {
+                    element.set_cache(g.renderer.cache_primitive(fill_primitive));
+                }
+                None => {}
+            }
+        }
     }
 }
