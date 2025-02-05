@@ -28,7 +28,9 @@ impl core::Graphic for Graphic {
 
             // if let Some(container) = element.get_container() {
             //     if let Some(containers) = core::Container::get_containers(container) {
-            //         for element in containers {}
+            //         for element in containers {
+            //             util::print_info!("{:?}", element)
+            //         }
             //     }
             // }
 
