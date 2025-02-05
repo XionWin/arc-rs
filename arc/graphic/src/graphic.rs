@@ -25,6 +25,13 @@ impl core::Graphic for Graphic {
         let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
         for cell_element in shapes {
             let element = &mut cell_element.borrow_mut();
+
+            // if let Some(container) = element.get_container() {
+            //     if let Some(containers) = core::Container::get_containers(container) {
+            //         for element in containers {}
+            //     }
+            // }
+
             if let Some(graphic_shape) = element.get_graphic_shape() {
                 let shape = graphic_shape.get_shape();
                 let fill_primitive = vector::VectorShape::get_fill_primitive(shape);

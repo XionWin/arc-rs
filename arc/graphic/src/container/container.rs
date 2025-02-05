@@ -1,5 +1,5 @@
 use core::AsAny;
-use std::rc::Rc;
+use std::{borrow::Borrow, rc::Rc};
 
 use vector::VectorShape;
 
@@ -49,10 +49,27 @@ impl core::Container for Container {
     fn add_container(&mut self, container: Box<dyn core::Container>) {
         self._containers.push(container.into());
     }
-    // fn get_children(&self) -> Vec<&dyn core::Shape> {
-    //     self._shapes
-    //         .iter()
-    //         .map(|x| Borrow::<dyn core::Shape>::borrow(x))
-    //         .collect::<Vec<&dyn core::Shape>>()
-    // }
+
+    fn get_shapes(&self) -> Option<Vec<&dyn core::Shape>> {
+        match self._shapes.len() {
+            x if x > 0 => Some(
+                self._shapes
+                    .iter()
+                    .map(|x| Borrow::<dyn core::Shape>::borrow(x))
+                    .collect::<Vec<&dyn core::Shape>>(),
+            ),
+            _ => None,
+        }
+    }
+    fn get_containers(&self) -> Option<Vec<&dyn core::Container>> {
+        match self._containers.len() {
+            x if x > 0 => Some(
+                self._containers
+                    .iter()
+                    .map(|x| Borrow::<dyn core::Container>::borrow(x))
+                    .collect::<Vec<&dyn core::Container>>(),
+            ),
+            _ => None,
+        }
+    }
 }
