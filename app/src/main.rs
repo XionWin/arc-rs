@@ -16,12 +16,12 @@ fn main() {
     ));
     window.set_vsync(true);
 
-    let image: RefCell<Option<Box<dyn core::Texture>>> = RefCell::new(None);
+    let texture: RefCell<Option<Box<dyn core::Texture>>> = RefCell::new(None);
 
     window.run(
         |window| {
             let g = window.get_graphic();
-            image.replace(Some(g.load_texture_from_file(
+            texture.replace(Some(g.load_texture_from_file(
                 "resource/image/icon/icon96.png",
                 core::TextureFilter::Linear,
                 true,
@@ -31,7 +31,7 @@ fn main() {
         |window| {
             let _g = window.get_graphic();
 
-            match image.borrow().as_ref() {
+            match texture.borrow().as_ref() {
                 Some(_v) => {}
                 None => util::print_panic!("image is null"),
             }

@@ -169,7 +169,7 @@ impl FramebufferRenderer {
     }
     pub fn add_primitive(&self, primitive: vector::Primitive, texture: Rc<dyn Texture>) {
         let state = primitive.get_state();
-        let texture_id = match state.get_paint().try_get_paint_image() {
+        let texture_id = match state.get_paint().try_get_paint_texture() {
             Some(paint_texture) => Some(paint_texture.get_texture().get_id()),
             None => None,
         };

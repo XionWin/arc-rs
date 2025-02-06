@@ -10,9 +10,9 @@ pub struct PaintTexture {
 }
 
 impl PaintTexture {
-    pub fn new(image: Rc<dyn crate::Texture>, view_port: crate::Rectangle<i32>) -> Self {
+    pub fn new(texture: Rc<dyn crate::Texture>, view_port: crate::Rectangle<i32>) -> Self {
         Self {
-            _texture: image,
+            _texture: texture,
             _transform: Matrix2D::new_from_translate(
                 -view_port.get_x() as _,
                 -view_port.get_y() as _,

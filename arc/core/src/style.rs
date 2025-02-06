@@ -93,16 +93,16 @@ impl crate::AsAny for ColorBackground {
 
 #[derive(Debug)]
 pub struct ImageBackground {
-    image: Rc<PaintTexture>,
+    paint_texture: Rc<PaintTexture>,
     paint_color: crate::PaintColor,
 }
 
 impl Background for ImageBackground {}
 
 impl ImageBackground {
-    pub fn new(image: Rc<PaintTexture>) -> Self {
+    pub fn new(paint_texture: Rc<PaintTexture>) -> Self {
         Self {
-            image,
+            paint_texture,
             paint_color: crate::PaintColor::new_with_inner_color(crate::Color::TrueColor {
                 r: 255,
                 g: 255,
@@ -112,11 +112,17 @@ impl ImageBackground {
         }
     }
 
-    pub fn new_with_paint_color(image: Rc<PaintTexture>, paint_color: crate::PaintColor) -> Self {
-        Self { image, paint_color }
+    pub fn new_with_paint_color(
+        paint_texture: Rc<PaintTexture>,
+        paint_color: crate::PaintColor,
+    ) -> Self {
+        Self {
+            paint_texture,
+            paint_color,
+        }
     }
     pub fn get_paint_image_rc(&self) -> Rc<PaintTexture> {
-        self.image.clone()
+        self.paint_texture.clone()
     }
     pub fn get_paint_color(&self) -> crate::PaintColor {
         self.paint_color.clone()
