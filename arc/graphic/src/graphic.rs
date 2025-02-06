@@ -36,7 +36,7 @@ impl Graphic {
                 }
             }
 
-            begin_render_cached_element(self, element);
+            // begin_render_cached_element(self, element);
             // if element.get_cache().is_none() {
             //     if let Some(graphic_shape) = element.get_graphic_shape_mut() {
             //         let shape = graphic_shape.get_shape_mut();
