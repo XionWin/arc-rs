@@ -22,7 +22,7 @@ impl Graphic {
         let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
         for cell_element in shapes {
             let element = &mut cell_element.borrow_mut();
-            begin_render_container(element);
+            begin_render_element(element);
 
             if let Some(graphic_shape) = element.get_graphic_shape() {
                 let shape = graphic_shape.get_shape();
@@ -130,12 +130,22 @@ impl Drop for Graphic {
     }
 }
 
-fn begin_render_container(element: &crate::Element) {
+fn begin_render_element(element: &crate::Element) {
+    if element.get_cache().is_none() {
+        // draw its children and itself into cache
+    }
+    // add rectangle cache primitive to displayRenderer
+
+    // into next level
     if let Some(container) = element.get_container() {
-        if let Some(elements) = container.get_elements() {
-            for element in elements {
-                begin_render_container(element);
-            }
+        begin_render_container(container);
+    }
+}
+
+fn begin_render_container(container: &crate::Container) {
+    if let Some(elements) = container.get_elements() {
+        for element in elements {
+            begin_render_element(element);
         }
     }
 }
