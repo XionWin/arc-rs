@@ -1,28 +1,34 @@
 use std::{borrow::Borrow, rc::Rc};
 
+use crate::Element;
+
 #[derive(Debug)]
 pub struct Container {
     _rectangle: core::Rectangle<i32>,
-    _containers: Vec<Rc<Container>>,
+    _elements: Vec<Rc<Element>>,
 }
 
 impl Container {
     pub fn new(rectangle: core::Rectangle<i32>) -> Self {
         Self {
             _rectangle: rectangle,
-            _containers: Vec::new(),
+            _elements: Vec::new(),
         }
     }
+
     pub fn add_container(&mut self, container: Container) {
-        self._containers.push(container.into());
+        self._elements.push(Rc::new(container.into()));
     }
-    pub fn get_containers(&self) -> Option<Vec<&Container>> {
-        match self._containers.len() {
+    pub fn add_element(&mut self, element: Element) {
+        self._elements.push(Rc::new(element));
+    }
+    pub fn get_elements(&self) -> Option<Vec<&Element>> {
+        match self._elements.len() {
             x if x > 0 => Some(
-                self._containers
+                self._elements
                     .iter()
-                    .map(|x| Borrow::<Container>::borrow(x))
-                    .collect::<Vec<&Container>>(),
+                    .map(|x| Borrow::<Element>::borrow(x))
+                    .collect::<Vec<&Element>>(),
             ),
             _ => None,
         }

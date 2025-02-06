@@ -132,9 +132,9 @@ impl Drop for Graphic {
 
 fn begin_render_container(element: &crate::Element) {
     if let Some(container) = element.get_container() {
-        if let Some(containers) = container.get_containers() {
-            for _element in containers {
-                // util::print_info!("{:?}", element)
+        if let Some(elements) = container.get_elements() {
+            for element in elements {
+                begin_render_container(element);
             }
         }
     }

@@ -1,5 +1,6 @@
 use crate::{Container, GraphicShape, TextureCache};
 
+#[derive(Debug)]
 pub struct Element {
     _graphic_shape: Option<GraphicShape>,
     _container: Option<Container>,

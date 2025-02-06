@@ -1,5 +1,6 @@
 use std::borrow::{Borrow, BorrowMut};
 
+#[derive(Debug)]
 pub struct GraphicShape {
     _shape: Box<dyn core::Shape>,
     // _cache: Option<crate::TextureCache>,
