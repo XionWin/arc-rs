@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, cell::RefCell};
+use std::cell::RefCell;
 
 use crate::{fps_counter::FpsCounter, fps_limiter::FpsLimiter, WindowParameter};
 use sdl2::{event::Event, keyboard::Keycode, VideoSubsystem};
@@ -14,15 +14,15 @@ pub struct Window {
     pub(crate) fps_limiter: Option<FpsLimiter>,
     pub title_function: TitleCallback,
     pub background_color: core::Color,
-    graphic: Box<dyn core::Graphic>,
+    graphic: graphic::Graphic,
 }
 
-impl core::Window for Window {
-    fn get_graphic(&self) -> &dyn core::Graphic {
-        self.graphic.borrow()
+impl Window {
+    pub fn get_graphic(&self) -> &graphic::Graphic {
+        &self.graphic
     }
 
-    fn run<T1, T2>(&mut self, on_load: T1, on_render: T2)
+    pub fn run<T1, T2>(&mut self, on_load: T1, on_render: T2)
     where
         T1: Fn(&Self),
         T2: Fn(&Self),
@@ -82,7 +82,7 @@ impl core::Window for Window {
         }
     }
 
-    fn set_vsync(&mut self, is_vsync: bool) {
+    pub fn set_vsync(&mut self, is_vsync: bool) {
         let vsync_result = sdl2::VideoSubsystem::gl_set_swap_interval(
             &self.video_subsystem,
             if is_vsync {
@@ -100,7 +100,7 @@ impl core::Window for Window {
         }
     }
 
-    fn begin_render(&self) {
+    pub fn begin_render(&self) {
         self.get_graphic().begin_render();
         self.fps_counter.borrow_mut().update(|fps| {
             util::print_debug!("fps: {fps:.0}");
@@ -109,11 +109,11 @@ impl core::Window for Window {
         self.get_graphic().clear();
     }
 
-    fn render(&self) {
+    pub fn render(&self) {
         self.get_graphic().render();
     }
 
-    fn swap_buffers(&self) {
+    pub fn swap_buffers(&self) {
         self.sdl_window.gl_swap_window();
     }
 }
@@ -191,7 +191,7 @@ impl Window {
         let graphic = graphic::Graphic::new(Box::new(renderer));
         set_multisamples(&video_subsystem, is_enable_multisample);
 
-        core::Graphic::init(&graphic, core::Size::new(width, height));
+        graphic.init(core::Size::new(width, height));
 
         let window = Window {
             parameter,
@@ -203,7 +203,7 @@ impl Window {
             fps_limiter: None,
             title_function,
             background_color: core::Color::MagicDeepGray,
-            graphic: Box::new(graphic),
+            graphic: graphic,
         };
         Ok(window)
     }

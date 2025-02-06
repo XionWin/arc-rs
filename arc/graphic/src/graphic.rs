@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 
-use crate::{Element, Image};
+use crate::{Container, Element, Image};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
@@ -14,13 +14,10 @@ impl Graphic {
             _elements: RefCell::new(Vec::new()),
         }
     }
-}
-
-impl core::Graphic for Graphic {
-    fn init(&self, size: core::Size<i32>) {
+    pub fn init(&self, size: core::Size<i32>) {
         self.renderer.init(size);
     }
-    fn begin_render(&self) {
+    pub fn begin_render(&self) {
         self.renderer.begin_render();
         let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
         for cell_element in shapes {
@@ -55,22 +52,22 @@ impl core::Graphic for Graphic {
             // }
         }
     }
-    fn render(&self) {
+    pub fn render(&self) {
         self.renderer.render();
     }
-    fn get_rendering_size(&self) -> core::Size<i32> {
+    pub fn get_rendering_size(&self) -> core::Size<i32> {
         self.renderer.get_rendering_size()
     }
-    fn set_rendering_size(&self, size: core::Size<i32>) {
+    pub fn set_rendering_size(&self, size: core::Size<i32>) {
         self.renderer.set_rendering_size(size);
     }
-    fn clear_color(&self, color: core::Color) {
+    pub fn clear_color(&self, color: core::Color) {
         self.renderer.clear_color(color);
     }
-    fn clear(&self) {
+    pub fn clear(&self) {
         self.renderer.clear();
     }
-    fn create_image(
+    pub fn create_image(
         &self,
         size: core::Size<i32>,
         color_type: core::ColorType,
@@ -82,7 +79,7 @@ impl core::Graphic for Graphic {
                 .create_texture(size, color_type, image_filter.into(), is_gen_mipmap);
         Box::new(Image::new(texture))
     }
-    fn load_image_from_file(
+    pub fn load_image_from_file(
         &self,
         path: &str,
         image_filter: core::ImageFilter,
@@ -93,16 +90,16 @@ impl core::Graphic for Graphic {
                 .create_texture_from_file(path, image_filter.into(), is_gen_mipmap);
         Box::new(Image::new(texture))
     }
-    fn add_shape(&self, shape: Box<dyn core::Shape>) {
+    pub fn add_shape(&self, shape: Box<dyn core::Shape>) {
         self._elements.borrow_mut().push(RefCell::new(shape.into()));
     }
 
-    fn add_container(&self, container: Box<dyn core::Container>) {
+    pub fn add_container(&self, container: Container) {
         self._elements
             .borrow_mut()
             .push(RefCell::new(container.into()));
     }
-    fn export_shape_cache(&self) {
+    pub fn export_shape_cache(&self) {
         let exe_folder = util::get_exe_path().unwrap();
         let mut index = 0;
         let elements: &Vec<_> = &self._elements.borrow();
@@ -122,7 +119,7 @@ impl core::Graphic for Graphic {
         }
         util::print_info!("exporting done, total cache count: {}", index);
     }
-    fn check_gl_error(&self) -> String {
+    pub fn check_gl_error(&self) -> String {
         self.renderer.check_gl_error()
     }
 }
@@ -135,7 +132,7 @@ impl Drop for Graphic {
 
 fn begin_render_container(element: &crate::Element) {
     if let Some(container) = element.get_container() {
-        if let Some(containers) = core::Container::get_containers(container) {
+        if let Some(containers) = container.get_containers() {
             for _element in containers {
                 // util::print_info!("{:?}", element)
             }

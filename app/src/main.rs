@@ -1,4 +1,4 @@
-use core::{Image, Style, Window};
+use core::{Image, Style};
 use std::{cell::RefCell, rc::Rc};
 
 const MAX_ZOOM_FACTOR: i32 = 2i32;
@@ -39,7 +39,7 @@ fn main() {
     );
 }
 
-fn test(g: &dyn core::Graphic) {
+fn test(g: &graphic::Graphic) {
     let rendering_size = g.get_rendering_size();
     let x = 0i32;
     let y = 0i32;
@@ -152,9 +152,8 @@ fn test(g: &dyn core::Graphic) {
     }
 
     let mut container = graphic::Container::new(core::Rectangle::new(0, 0, 100, 100));
-    use core::Container;
-    container.add_container(Box::new(graphic::Container::new(core::Rectangle::new(
+    container.add_container(graphic::Container::new(core::Rectangle::new(
         10, 10, 10, 10,
-    ))));
-    g.add_container(Box::new(container));
+    )));
+    g.add_container(container);
 }
