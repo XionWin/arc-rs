@@ -138,10 +138,10 @@ fn begin_render_element(g: &Graphic, element: &mut crate::Element) {
     // add rectangle cache primitive to displayRenderer
 
     // into next level
-    if let Some(container) = element.get_container() {
-        if let Some(elements) = container.get_elements() {
+    if let Some(container) = element.get_container_mut() {
+        if let Some(elements) = container.get_elements_mut() {
             for element in elements {
-                // begin_render_element(g, element);
+                begin_render_element(g, element);
             }
         }
     }
