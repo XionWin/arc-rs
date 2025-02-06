@@ -1,7 +1,6 @@
 #[repr(u32)]
 #[derive(Debug, Clone, Copy)]
-pub enum TextureMinFilter
-{
+pub enum TextureMinFilter {
     Nearest = 9728,
     Linear = 9729,
     NearestMipmapNearest = 9984,
@@ -18,11 +17,11 @@ pub enum TextureMinFilter
     LinearClipmapNearestSgix = 33871,
 }
 
-impl From<graphic::TextureFilter> for TextureMinFilter {
-    fn from(value: graphic::TextureFilter) -> Self {
+impl From<core::TextureFilter> for TextureMinFilter {
+    fn from(value: core::TextureFilter) -> Self {
         match value {
-            graphic::TextureFilter::Nearest => TextureMinFilter::Nearest,
-            graphic::TextureFilter::Linear => TextureMinFilter::Linear,
+            core::TextureFilter::Nearest => TextureMinFilter::Nearest,
+            core::TextureFilter::Linear => TextureMinFilter::Linear,
         }
     }
 }

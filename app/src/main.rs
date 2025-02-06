@@ -1,4 +1,4 @@
-use core::{Image, Style};
+use core::{Style, Texture};
 use std::{cell::RefCell, rc::Rc};
 
 const MAX_ZOOM_FACTOR: i32 = 2i32;
@@ -16,14 +16,14 @@ fn main() {
     ));
     window.set_vsync(true);
 
-    let image: RefCell<Option<Box<dyn core::Image>>> = RefCell::new(None);
+    let image: RefCell<Option<Box<dyn core::Texture>>> = RefCell::new(None);
 
     window.run(
         |window| {
             let g = window.get_graphic();
-            image.replace(Some(g.load_image_from_file(
+            image.replace(Some(g.load_texture_from_file(
                 "resource/image/icon/icon96.png",
-                core::ImageFilter::Linear,
+                core::TextureFilter::Linear,
                 true,
             )));
             test(g);
@@ -61,8 +61,12 @@ fn test(g: &graphic::Graphic) {
     // println!("{:?}", paths);
 
     {
-        let img: Rc<dyn Image> = g
-            .load_image_from_file("resource/image/png/1.png", core::ImageFilter::Nearest, true)
+        let img: Rc<dyn Texture> = g
+            .load_texture_from_file(
+                "resource/image/png/1.png",
+                core::TextureFilter::Nearest,
+                true,
+            )
             .into();
 
         let rectangle = graphic::shape::Rectangle::new(
@@ -71,15 +75,17 @@ fn test(g: &graphic::Graphic) {
             rendering_size.get_width(),
             rendering_size.get_height(),
             Style::new(
-                Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
-                    img.clone(),
-                    core::Rectangle::new(
-                        x,
-                        y,
-                        rendering_size.get_width(),
-                        rendering_size.get_height(),
+                Box::new(core::ImageBackground::new(Rc::new(
+                    core::PaintTexture::new(
+                        img.clone(),
+                        core::Rectangle::new(
+                            x,
+                            y,
+                            rendering_size.get_width(),
+                            rendering_size.get_height(),
+                        ),
                     ),
-                )))),
+                ))),
                 core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),
             ),
@@ -88,8 +94,12 @@ fn test(g: &graphic::Graphic) {
     }
 
     {
-        let img: Rc<dyn Image> = g
-            .load_image_from_file("resource/image/png/2.png", core::ImageFilter::Linear, true)
+        let img: Rc<dyn Texture> = g
+            .load_texture_from_file(
+                "resource/image/png/2.png",
+                core::TextureFilter::Linear,
+                true,
+            )
             .into();
 
         let texture_size = img
@@ -101,10 +111,17 @@ fn test(g: &graphic::Graphic) {
             texture_size.get_width(),
             texture_size.get_height(),
             Style::new(
-                Box::new(core::ImageBackground::new(Rc::new(core::PaintImage::new(
-                    img.clone(),
-                    core::Rectangle::new(x, y, texture_size.get_width(), texture_size.get_height()),
-                )))),
+                Box::new(core::ImageBackground::new(Rc::new(
+                    core::PaintTexture::new(
+                        img.clone(),
+                        core::Rectangle::new(
+                            x,
+                            y,
+                            texture_size.get_width(),
+                            texture_size.get_height(),
+                        ),
+                    ),
+                ))),
                 core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),
             ),

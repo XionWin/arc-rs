@@ -1,6 +1,5 @@
+use core::Texture;
 use std::{cell::RefCell, ffi::c_uint, rc::Rc};
-
-use graphic::TextureImage;
 
 use crate::{renderer_utility, AttributeLocation, FragUniform, GLRenderer};
 
@@ -168,10 +167,10 @@ impl FramebufferRenderer {
         renderer_utility::bind_vertex_array(self._vao);
         self.set_rendering_size(size);
     }
-    pub fn add_primitive(&self, primitive: vector::Primitive, texture: Rc<dyn graphic::Texture>) {
+    pub fn add_primitive(&self, primitive: vector::Primitive, texture: Rc<dyn Texture>) {
         let state = primitive.get_state();
         let texture_id = match state.get_paint().try_get_paint_image() {
-            Some(paint_image) => Some(paint_image.get_image().get_texture().get_id()),
+            Some(paint_texture) => Some(paint_texture.get_texture().get_id()),
             None => None,
         };
         self._frame_data.borrow_mut().add_call(
@@ -187,12 +186,7 @@ impl FramebufferRenderer {
         Vec::new()
     }
 
-    pub fn export_texture(
-        &self,
-        texture: &dyn graphic::Texture,
-        path: &str,
-        color_type: core::ColorType,
-    ) {
+    pub fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: core::ColorType) {
         bind_texture_to_framebuffer(self._fbo, texture);
         let texture_size = texture.get_size();
         let mut buffer = vec![
@@ -302,7 +296,7 @@ fn bind_multisample_renderbuffer(fbo: c_uint) {
     check_framebuffer_status();
 }
 
-fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn graphic::Texture) {
+fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn Texture) {
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
 
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture.get_id());

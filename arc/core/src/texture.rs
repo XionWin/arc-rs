@@ -1,7 +1,6 @@
-use core::{ColorType, Size};
 use std::{ffi::c_uint, fmt::Debug};
 
-use crate::TextureFilter;
+use crate::{ColorType, Size, TextureFilter};
 
 pub trait Texture: Debug {
     fn get_id(&self) -> c_uint;
@@ -9,5 +8,4 @@ pub trait Texture: Debug {
     fn get_color_type(&self) -> ColorType;
     fn get_texture_filter(&self) -> TextureFilter;
     fn get_is_gen_mipmap(&self) -> bool;
-    fn export(&self, path: &str);
 }

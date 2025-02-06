@@ -1,3 +1,4 @@
+use core::Texture;
 use std::{ffi::c_uint, rc::Rc};
 
 use crate::{CallType, FragUniform};
@@ -22,7 +23,7 @@ impl FrameData {
 
     pub fn add_call(
         &mut self,
-        fb_texture: Rc<dyn graphic::Texture>,
+        fb_texture: Rc<dyn Texture>,
         call_type: CallType,
         vertices: &[core::Vertex2],
         frag_uniforms: FragUniform,

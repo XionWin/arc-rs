@@ -1,10 +1,10 @@
 #[derive(Debug, Clone, Copy)]
-pub enum ImageFilter {
+pub enum TextureFilter {
     Linear,
     Nearest,
 }
 
-impl Default for ImageFilter {
+impl Default for TextureFilter {
     fn default() -> Self {
         Self::Linear
     }

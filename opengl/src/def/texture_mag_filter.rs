@@ -1,7 +1,6 @@
 #[repr(u32)]
 #[derive(Debug, Clone, Copy)]
-pub enum TextureMagFilter
-{
+pub enum TextureMagFilter {
     Nearest = 9728,
     Linear = 9729,
     LinearDetailSgis = 32919,
@@ -13,15 +12,14 @@ pub enum TextureMagFilter
     Filter4Sgis = 33094,
     PixelTexGenQCeilingSgix = 33156,
     PixelTexGenQRoundSgix = 33157,
-    PixelTexGenQFloorSgix = 33158
+    PixelTexGenQFloorSgix = 33158,
 }
 
-impl From<graphic::TextureFilter> for TextureMagFilter {
-    fn from(value: graphic::TextureFilter) -> Self {
+impl From<core::TextureFilter> for TextureMagFilter {
+    fn from(value: core::TextureFilter) -> Self {
         match value {
-            graphic::TextureFilter::Nearest => TextureMagFilter::Nearest,
-            graphic::TextureFilter::Linear => TextureMagFilter::Linear,
+            core::TextureFilter::Nearest => TextureMagFilter::Nearest,
+            core::TextureFilter::Linear => TextureMagFilter::Linear,
         }
     }
 }
-

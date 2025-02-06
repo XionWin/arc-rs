@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 
-use crate::{Container, Element, Image};
+use crate::{Container, Element};
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
@@ -67,28 +67,28 @@ impl Graphic {
     pub fn clear(&self) {
         self.renderer.clear();
     }
-    pub fn create_image(
+    pub fn create_texture(
         &self,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        image_filter: core::ImageFilter,
+        image_filter: core::TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Box<dyn core::Image> {
+    ) -> Box<dyn core::Texture> {
         let texture =
             self.renderer
                 .create_texture(size, color_type, image_filter.into(), is_gen_mipmap);
-        Box::new(Image::new(texture))
+        texture
     }
-    pub fn load_image_from_file(
+    pub fn load_texture_from_file(
         &self,
         path: &str,
-        image_filter: core::ImageFilter,
+        image_filter: core::TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Box<dyn core::Image> {
+    ) -> Box<dyn core::Texture> {
         let texture =
             self.renderer
                 .create_texture_from_file(path, image_filter.into(), is_gen_mipmap);
-        Box::new(Image::new(texture))
+        texture
     }
     pub fn add_shape(&self, shape: Box<dyn core::Shape>) {
         self._elements.borrow_mut().push(RefCell::new(shape.into()));

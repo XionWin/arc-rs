@@ -1,3 +1,5 @@
+use core::{Texture, TextureFilter};
+
 #[derive(Debug)]
 pub struct Renderer {
     _framebuffer_renderer: crate::FramebufferRenderer,
@@ -53,9 +55,9 @@ impl graphic::Renderer for Renderer {
         &self,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        texture_filter: graphic::TextureFilter,
+        texture_filter: TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Box<dyn graphic::Texture> {
+    ) -> Box<dyn Texture> {
         Box::new(crate::Texture::new(
             size,
             color_type,
@@ -67,9 +69,9 @@ impl graphic::Renderer for Renderer {
     fn create_texture_from_file(
         &self,
         path: &str,
-        texture_filter: graphic::TextureFilter,
+        texture_filter: TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Box<dyn graphic::Texture> {
+    ) -> Box<dyn Texture> {
         Box::new(crate::Texture::load(path, texture_filter, is_gen_mipmap))
     }
 
@@ -81,7 +83,7 @@ impl graphic::Renderer for Renderer {
             self.create_texture(
                 rect.get_size(),
                 core::ColorType::Rgba,
-                graphic::TextureFilter::Nearest,
+                TextureFilter::Nearest,
                 false,
             ),
         );
@@ -99,12 +101,7 @@ impl graphic::Renderer for Renderer {
         self._graphic_renderer.add_primitive(primitive);
     }
 
-    fn export_texture(
-        &self,
-        texture: &dyn graphic::Texture,
-        path: &str,
-        color_type: core::ColorType,
-    ) {
+    fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: core::ColorType) {
         self._framebuffer_renderer
             .export_texture(texture, path, color_type);
     }

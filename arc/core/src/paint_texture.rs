@@ -3,16 +3,16 @@ use std::{borrow::Borrow, rc::Rc};
 use crate::Matrix2D;
 
 #[derive(Debug)]
-pub struct PaintImage {
-    _image: Rc<dyn crate::Image>,
+pub struct PaintTexture {
+    _texture: Rc<dyn crate::Texture>,
     _transform: Matrix2D,
     _extent: crate::Extent<i32>,
 }
 
-impl PaintImage {
-    pub fn new(image: Rc<dyn crate::Image>, view_port: crate::Rectangle<i32>) -> Self {
+impl PaintTexture {
+    pub fn new(image: Rc<dyn crate::Texture>, view_port: crate::Rectangle<i32>) -> Self {
         Self {
-            _image: image,
+            _texture: image,
             _transform: Matrix2D::new_from_translate(
                 -view_port.get_x() as _,
                 -view_port.get_y() as _,
@@ -21,8 +21,8 @@ impl PaintImage {
         }
     }
 
-    pub fn get_image(&self) -> &dyn crate::Image {
-        self._image.borrow()
+    pub fn get_texture(&self) -> &dyn crate::Texture {
+        self._texture.borrow()
     }
 
     pub fn get_transform(&self) -> &Matrix2D {
@@ -34,8 +34,8 @@ impl PaintImage {
     }
 }
 
-impl From<Rc<dyn crate::Image>> for PaintImage {
-    fn from(value: Rc<dyn crate::Image>) -> Self {
+impl From<Rc<dyn crate::Texture>> for PaintTexture {
+    fn from(value: Rc<dyn crate::Texture>) -> Self {
         let size = value.get_size();
         Self::new(
             value,

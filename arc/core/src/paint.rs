@@ -1,10 +1,10 @@
 use std::rc::Rc;
 
-use crate::{PaintColor, PaintImage};
+use crate::{PaintColor, PaintTexture};
 
 #[derive(Debug)]
 pub struct Paint {
-    _paint_image: Option<Rc<PaintImage>>,
+    _paint_image: Option<Rc<PaintTexture>>,
     _paint_color: PaintColor,
     _radius: f32,
     _feather: f32,
@@ -12,16 +12,16 @@ pub struct Paint {
 }
 
 impl Paint {
-    pub fn new_from_image(image: Rc<dyn crate::Image>, view_port: crate::Rectangle<i32>) -> Self {
+    pub fn new_from_image(image: Rc<dyn crate::Texture>, view_port: crate::Rectangle<i32>) -> Self {
         Self {
-            _paint_image: Some(Rc::new(PaintImage::new(image, view_port))),
+            _paint_image: Some(Rc::new(PaintTexture::new(image, view_port))),
             _paint_color: PaintColor::default(),
             _radius: 0f32,
             _feather: 1f32,
             _alpha: 1f32,
         }
     }
-    pub fn try_get_paint_image(&self) -> Option<&PaintImage> {
+    pub fn try_get_paint_image(&self) -> Option<&PaintTexture> {
         match &self._paint_image {
             Some(x) => Some(x),
             None => None,

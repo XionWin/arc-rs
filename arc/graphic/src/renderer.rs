@@ -1,6 +1,5 @@
+use core::{Texture, TextureFilter};
 use std::fmt::Debug;
-
-use crate::{Texture, TextureFilter};
 
 pub trait Renderer: Debug {
     fn init(&self, size: core::Size<i32>);
@@ -27,6 +26,6 @@ pub trait Renderer: Debug {
     fn cache_primitive(&self, primitive: vector::Primitive) -> crate::TextureCache;
     fn update_primitive(&self, primitive: vector::Primitive, cache: &crate::TextureCache);
     fn add_primitive(&self, primitive: vector::Primitive);
-    fn export_texture(&self, texture: &dyn crate::Texture, path: &str, color_type: core::ColorType);
+    fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: core::ColorType);
     fn check_gl_error(&self) -> String;
 }

@@ -1,3 +1,4 @@
+use core::TextureFilter;
 use std::ffi::{c_uchar, c_uint};
 
 #[derive(Debug)]
@@ -5,7 +6,7 @@ pub struct Texture {
     id: c_uint,
     size: core::Size<i32>,
     color_type: core::ColorType,
-    texture_filter: graphic::TextureFilter,
+    texture_filter: TextureFilter,
     is_gen_mipmap: bool,
 }
 
@@ -13,7 +14,7 @@ impl Texture {
     pub fn new(
         size: core::Size<i32>,
         color_type: core::ColorType,
-        texture_filter: graphic::TextureFilter,
+        texture_filter: TextureFilter,
         is_gen_mipmap: bool,
     ) -> Self {
         let texture_id = crate::gl::gen_texture();
@@ -27,7 +28,7 @@ impl Texture {
         }
     }
 
-    pub fn load(path: &str, texture_filter: graphic::TextureFilter, is_gen_mipmap: bool) -> Self {
+    pub fn load(path: &str, texture_filter: TextureFilter, is_gen_mipmap: bool) -> Self {
         use core::ImageData;
         let image_data = image::ImageData::new_from_file(path);
         let texture_id = crate::gl::gen_texture();
@@ -42,7 +43,7 @@ impl Texture {
     }
 }
 
-impl graphic::Texture for Texture {
+impl core::Texture for Texture {
     fn get_id(&self) -> c_uint {
         self.id
     }
@@ -55,24 +56,19 @@ impl graphic::Texture for Texture {
         self.color_type
     }
 
-    fn get_texture_filter(&self) -> graphic::TextureFilter {
+    fn get_texture_filter(&self) -> TextureFilter {
         self.texture_filter
     }
 
     fn get_is_gen_mipmap(&self) -> bool {
         self.is_gen_mipmap
     }
-
-    fn export(&self, path: &str) {
-        println!("path: {}", path);
-        todo!()
-    }
 }
 
 fn create(
     texture_id: c_uint,
     size: core::Size<i32>,
-    texture_filter: graphic::TextureFilter,
+    texture_filter: TextureFilter,
     is_gen_mipmap: bool,
 ) {
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
@@ -89,7 +85,7 @@ fn create(
         None,
     );
 
-    let texture_filter = Into::<graphic::TextureFilter>::into(texture_filter);
+    let texture_filter: TextureFilter = Into::<TextureFilter>::into(texture_filter);
     crate::gl::tex_parameter_i(
         crate::def::TextureTarget::Texture2D,
         crate::def::TextureParameterName::TextureMagFilter,
@@ -120,7 +116,7 @@ fn create(
 fn load(
     texture_id: c_uint,
     image_data: &dyn core::ImageData,
-    texture_filter: graphic::TextureFilter,
+    texture_filter: TextureFilter,
     is_gen_mipmap: bool,
 ) {
     crate::gl::bind_texture(crate::def::TextureTarget::Texture2D, texture_id);
@@ -137,7 +133,7 @@ fn load(
         Some(image_data.get_value()),
     );
 
-    let texture_filter = Into::<graphic::TextureFilter>::into(texture_filter);
+    let texture_filter = Into::<TextureFilter>::into(texture_filter);
     crate::gl::tex_parameter_i(
         crate::def::TextureTarget::Texture2D,
         crate::def::TextureParameterName::TextureMagFilter,

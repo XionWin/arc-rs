@@ -1,6 +1,6 @@
 use std::{borrow::Borrow, fmt::Debug, rc::Rc};
 
-use crate::PaintImage;
+use crate::PaintTexture;
 
 #[derive(Debug)]
 pub struct Style {
@@ -93,14 +93,14 @@ impl crate::AsAny for ColorBackground {
 
 #[derive(Debug)]
 pub struct ImageBackground {
-    image: Rc<PaintImage>,
+    image: Rc<PaintTexture>,
     paint_color: crate::PaintColor,
 }
 
 impl Background for ImageBackground {}
 
 impl ImageBackground {
-    pub fn new(image: Rc<PaintImage>) -> Self {
+    pub fn new(image: Rc<PaintTexture>) -> Self {
         Self {
             image,
             paint_color: crate::PaintColor::new_with_inner_color(crate::Color::TrueColor {
@@ -112,10 +112,10 @@ impl ImageBackground {
         }
     }
 
-    pub fn new_with_paint_color(image: Rc<PaintImage>, paint_color: crate::PaintColor) -> Self {
+    pub fn new_with_paint_color(image: Rc<PaintTexture>, paint_color: crate::PaintColor) -> Self {
         Self { image, paint_color }
     }
-    pub fn get_paint_image_rc(&self) -> Rc<PaintImage> {
+    pub fn get_paint_image_rc(&self) -> Rc<PaintTexture> {
         self.image.clone()
     }
     pub fn get_paint_color(&self) -> crate::PaintColor {
