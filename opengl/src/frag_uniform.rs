@@ -161,14 +161,14 @@ fn from_stroke_state(state: &vector::StrokeState) -> FragUniform {
 
 fn from_fill_state(state: &vector::FillState) -> FragUniform {
     match state.get_paint().try_get_paint_texture() {
-        Some(paint_image) => FragUniform {
+        Some(paint_texture) => FragUniform {
             _type: FragUniformType::FillTexture.into(),
             _font_type: 0f32, // DEFAULT
             _radius: state.get_paint().get_radius(),
             _feather: state.get_paint().get_feather(),
             _stroke_multiple: f32::MAX,
             _stroke_threshold: 0f32, // DEFAULT
-            _extent: paint_image.get_extent(),
+            _extent: paint_texture.get_extent(),
             _scissor_matrix: match state.get_scissor() {
                 Some(x) => x.get_transform().into(),
                 None => crate::Matrix4x3::zero(),
@@ -178,7 +178,7 @@ fn from_fill_state(state: &vector::FillState) -> FragUniform {
                 None => core::Extent::default(),
             },
             _scissor_scale: core::Scale::default(), // DEFAULT
-            _paint_matrix: paint_image.get_transform().into(),
+            _paint_matrix: paint_texture.get_transform().into(),
             _inner_color: state.get_paint().get_color().get_inner_color(),
             _outer_color: state.get_paint().get_color().get_outer_color(),
         },

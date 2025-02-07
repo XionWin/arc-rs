@@ -66,10 +66,10 @@ impl From<&dyn crate::Background> for Paint {
                 _feather: 0f32,
                 _alpha: 0f32,
             },
-            None => match value.downcast_ref::<crate::ImageBackground>() {
-                Some(image_background) => Self {
-                    _paint_texture: Some(image_background.get_paint_image_rc()),
-                    _paint_color: image_background.get_paint_color(),
+            None => match value.downcast_ref::<crate::TextureBackground>() {
+                Some(texture_background) => Self {
+                    _paint_texture: Some(texture_background.get_paint_texture_rc()),
+                    _paint_color: texture_background.get_paint_color(),
                     _radius: 0f32,
                     _feather: 0f32,
                     _alpha: 0f32,

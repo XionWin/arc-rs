@@ -92,14 +92,14 @@ impl crate::AsAny for ColorBackground {
 }
 
 #[derive(Debug)]
-pub struct ImageBackground {
+pub struct TextureBackground {
     paint_texture: Rc<PaintTexture>,
     paint_color: crate::PaintColor,
 }
 
-impl Background for ImageBackground {}
+impl Background for TextureBackground {}
 
-impl ImageBackground {
+impl TextureBackground {
     pub fn new(paint_texture: Rc<PaintTexture>) -> Self {
         Self {
             paint_texture,
@@ -121,7 +121,7 @@ impl ImageBackground {
             paint_color,
         }
     }
-    pub fn get_paint_image_rc(&self) -> Rc<PaintTexture> {
+    pub fn get_paint_texture_rc(&self) -> Rc<PaintTexture> {
         self.paint_texture.clone()
     }
     pub fn get_paint_color(&self) -> crate::PaintColor {
@@ -129,7 +129,7 @@ impl ImageBackground {
     }
 }
 
-impl crate::AsAny for ImageBackground {
+impl crate::AsAny for TextureBackground {
     fn as_any(&self) -> &dyn std::any::Any {
         self
     }

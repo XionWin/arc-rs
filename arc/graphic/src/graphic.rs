@@ -71,23 +71,23 @@ impl Graphic {
         &self,
         size: core::Size<i32>,
         color_type: core::ColorType,
-        image_filter: core::TextureFilter,
+        texture_filter: core::TextureFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn core::Texture> {
         let texture =
             self.renderer
-                .create_texture(size, color_type, image_filter.into(), is_gen_mipmap);
+                .create_texture(size, color_type, texture_filter.into(), is_gen_mipmap);
         texture
     }
     pub fn load_texture_from_file(
         &self,
         path: &str,
-        image_filter: core::TextureFilter,
+        texture_filter: core::TextureFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn core::Texture> {
         let texture =
             self.renderer
-                .create_texture_from_file(path, image_filter.into(), is_gen_mipmap);
+                .create_texture_from_file(path, texture_filter.into(), is_gen_mipmap);
         texture
     }
     pub fn add_shape(&self, shape: Box<dyn core::Shape>) {

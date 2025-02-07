@@ -61,7 +61,7 @@ fn test(g: &graphic::Graphic) {
     // println!("{:?}", paths);
 
     {
-        let img: Rc<dyn Texture> = g
+        let tex: Rc<dyn Texture> = g
             .load_texture_from_file(
                 "resource/image/png/1.png",
                 core::TextureFilter::Nearest,
@@ -75,9 +75,9 @@ fn test(g: &graphic::Graphic) {
             rendering_size.get_width(),
             rendering_size.get_height(),
             Style::new(
-                Box::new(core::ImageBackground::new(Rc::new(
+                Box::new(core::TextureBackground::new(Rc::new(
                     core::PaintTexture::new(
-                        img.clone(),
+                        tex.clone(),
                         core::Rectangle::new(
                             x,
                             y,
@@ -94,7 +94,7 @@ fn test(g: &graphic::Graphic) {
     }
 
     {
-        let img: Rc<dyn Texture> = g
+        let tex: Rc<dyn Texture> = g
             .load_texture_from_file(
                 "resource/image/png/2.png",
                 core::TextureFilter::Linear,
@@ -102,7 +102,7 @@ fn test(g: &graphic::Graphic) {
             )
             .into();
 
-        let texture_size = img
+        let texture_size = tex
             .get_size()
             .scale(ZOOM_FACTOR as f32 / MAX_ZOOM_FACTOR as f32);
         let rectangle = graphic::shape::Rectangle::new(
@@ -111,9 +111,9 @@ fn test(g: &graphic::Graphic) {
             texture_size.get_width(),
             texture_size.get_height(),
             Style::new(
-                Box::new(core::ImageBackground::new(Rc::new(
+                Box::new(core::TextureBackground::new(Rc::new(
                     core::PaintTexture::new(
-                        img.clone(),
+                        tex.clone(),
                         core::Rectangle::new(
                             x,
                             y,
