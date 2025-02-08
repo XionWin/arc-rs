@@ -164,6 +164,7 @@ fn test(g: &graphic::Graphic) {
                     Some(1i32),
                 ),
             );
+
             g.add_shape(Box::new(rectangle));
         }
     }

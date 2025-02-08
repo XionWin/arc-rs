@@ -21,7 +21,7 @@ impl TextureCache {
         }
     }
 
-    pub fn get_rect(&self) -> core::Rectangle<i32> {
+    pub fn get_rectangle(&self) -> core::Rectangle<i32> {
         self.rectangle
     }
 

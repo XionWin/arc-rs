@@ -52,7 +52,7 @@ where
         None => None,
     };
 
-    let style = FillState::new(
+    let fill_state = FillState::new(
         Into::<core::Paint>::into(shape.get_style().get_background()),
         core::Matrix2D::default(),
     );
@@ -60,7 +60,7 @@ where
     match vertices {
         Some(vertices) => Some(Primitive::new(
             Box::<[core::Vertex2]>::from(vertices),
-            Box::new(Into::<FillState>::into(style)),
+            Box::new(Into::<FillState>::into(fill_state)),
             shape.get_rectangle(),
         )),
         None => None,

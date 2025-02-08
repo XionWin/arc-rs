@@ -24,6 +24,16 @@ impl Paint {
             _alpha: 1f32,
         }
     }
+
+    pub fn new_from_colors(inner_color: crate::Color, outer_color: crate::Color) -> Self {
+        Self {
+            _paint_texture: None,
+            _paint_color: PaintColor::new(inner_color, outer_color),
+            _radius: 0f32,
+            _feather: 1f32,
+            _alpha: 1f32,
+        }
+    }
     pub fn try_get_paint_texture(&self) -> Option<&PaintTexture> {
         match &self._paint_texture {
             Some(x) => Some(x),

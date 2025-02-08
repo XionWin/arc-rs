@@ -1,4 +1,5 @@
-use std::cell::RefCell;
+use core::Rect;
+use std::{cell::RefCell, rc::Rc};
 
 use crate::{Container, Element};
 
@@ -23,21 +24,24 @@ impl Graphic {
         for cell_element in shapes {
             let element = &mut cell_element.borrow_mut();
 
-            recur_element_mut(element, &mut |element| {
-                begin_render_cached_element(self, element)
-            });
+            // if let Some(graphic_shape) = element.get_graphic_shape() {
+            //     let shape = graphic_shape.get_shape();
+            //     let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
 
-            if let Some(graphic_shape) = element.get_graphic_shape() {
-                let shape = graphic_shape.get_shape();
-                let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+            //     match fill_primitive {
+            //         Some(fill_primitive) => {
+            //             self.renderer.add_primitive(fill_primitive);
+            //         }
+            //         None => {}
+            //     }
+            // }
 
-                match fill_primitive {
-                    Some(fill_primitive) => {
-                        self.renderer.add_primitive(fill_primitive);
-                    }
-                    None => {}
+            recurse_element_mut(element, &mut |element| {
+                begin_render_cached_element(self, element);
+                if let Some(cache) = element.get_cache() {
+                    self.renderer.add_primitive(get_cache_primitive(cache));
                 }
-            }
+            });
         }
     }
     pub fn render(&self) {
@@ -93,7 +97,7 @@ impl Graphic {
 
         for cell in elements {
             let element = &cell.borrow();
-            recur_element(element, &mut |element| {
+            recurse_element(element, &mut |element| {
                 export_element_cache(self, element, &exe_folder)
             });
         }
@@ -112,7 +116,7 @@ impl Drop for Graphic {
     }
 }
 
-fn recur_element<T>(element: &crate::Element, func: &mut T)
+fn recurse_element<T>(element: &crate::Element, func: &mut T)
 where
     T: FnMut(&crate::Element),
 {
@@ -120,7 +124,7 @@ where
     if let Some(container) = element.get_container() {
         if let Some(elements) = container.get_elements() {
             for element in elements {
-                recur_element(element, func);
+                recurse_element(element, func);
             }
         }
     }
@@ -128,7 +132,7 @@ where
     func(element);
 }
 
-fn recur_element_mut<T>(element: &mut crate::Element, func: &mut T)
+fn recurse_element_mut<T>(element: &mut crate::Element, func: &mut T)
 where
     T: FnMut(&mut crate::Element),
 {
@@ -136,7 +140,7 @@ where
     if let Some(container) = element.get_container_mut() {
         if let Some(elements) = container.get_elements_mut() {
             for element in elements {
-                recur_element_mut(element, func);
+                recurse_element_mut(element, func);
             }
         }
     }
@@ -158,6 +162,73 @@ fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
             }
         }
     }
+}
+
+// fn begin_render_children_element(g: &Graphic, element: &mut crate::Element) {
+//     if element.get_cache().is_none() {
+//         if let Some(graphic_shape) = element.get_graphic_shape_mut() {
+//             let shape = graphic_shape.get_shape_mut();
+//             let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+//             // let cache = graphic_shape.get_cache();
+//             match fill_primitive {
+//                 Some(fill_primitive) => {
+//                     element.set_cache(g.renderer.cache_primitive(fill_primitive));
+//                 }
+//                 None => {}
+//             }
+//         }
+//     }
+// }
+
+fn get_cache_primitive(cache: &crate::TextureCache) -> vector::Primitive {
+    let rectangle: core::Rectangle<i32> = cache.get_rectangle();
+    let rectangle = core::Rectangle::new(
+        rectangle.get_x() / 2,
+        rectangle.get_y() / 2,
+        rectangle.get_width(),
+        rectangle.get_height(),
+    );
+    let rect: Rect<i32> = rectangle.into();
+    let vertexes = Box::new([
+        core::Vertex2::new(rect.get_left() as f32, rect.get_top() as f32, 0.5f32, 1f32),
+        core::Vertex2::new(
+            rect.get_left() as f32,
+            rect.get_bottom() as f32,
+            0.5f32,
+            1f32,
+        ),
+        core::Vertex2::new(
+            rect.get_right() as f32,
+            rect.get_bottom() as f32,
+            0.5f32,
+            1f32,
+        ),
+        core::Vertex2::new(rect.get_right() as f32, rect.get_top() as f32, 0.5f32, 1f32),
+    ]);
+
+    let style: core::Style = core::Style::new(
+        Box::new(core::TextureBackground::new(Rc::new(
+            core::PaintTexture::new(cache.get_texture_rc(), rectangle),
+        ))),
+        core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+        Some(1i32),
+    );
+
+    // let style: core::Style = core::Style::new(
+    //     Box::new(core::ColorBackground::new(
+    //         core::Color::MoselleGreen,
+    //         core::Color::MidnightBlue,
+    //     )),
+    //     core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+    //     Some(1i32),
+    // );
+
+    let state = vector::FillState::new(
+        Into::<core::Paint>::into(style.get_background()),
+        core::Matrix2D::default(),
+    );
+
+    vector::Primitive::new(vertexes, Box::new(state), rectangle)
 }
 
 fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &str) {
