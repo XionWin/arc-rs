@@ -23,7 +23,7 @@ impl Graphic {
         for cell_element in shapes {
             let element = &mut cell_element.borrow_mut();
 
-            recur_element(element, &mut |element| {
+            recur_element_mut(element, &mut |element| {
                 begin_render_cached_element(self, element)
             });
 
@@ -91,9 +91,10 @@ impl Graphic {
         let exe_folder = util::get_exe_path().unwrap();
         let mut index = 0;
         let elements: &Vec<_> = &self._elements.borrow();
-        for cell_element in elements {
-            let element = &cell_element.borrow();
-            match element.get_cache() {
+
+        for cell in elements {
+            let element = &cell.borrow();
+            recur_element(element, &mut |element| match element.get_cache() {
                 Some(cache) => {
                     self.renderer.export_texture(
                         cache.get_texture(),
@@ -103,10 +104,12 @@ impl Graphic {
                     index += 1;
                 }
                 None => {}
-            }
+            });
         }
+
         util::print_info!("exporting done, total cache count: {}", index);
     }
+
     pub fn check_gl_error(&self) -> String {
         self.renderer.check_gl_error()
     }
@@ -117,8 +120,23 @@ impl Drop for Graphic {
         util::print_debug!("arc_graphic droped")
     }
 }
+fn recur_element<T>(element: &crate::Element, func: &mut T)
+where
+    T: FnMut(&crate::Element),
+{
+    // into next level
+    if let Some(container) = element.get_container() {
+        if let Some(elements) = container.get_elements() {
+            for element in elements {
+                recur_element(element, func);
+            }
+        }
+    }
+    // execute func for current element
+    func(element);
+}
 
-fn recur_element<T>(element: &mut crate::Element, func: &mut T)
+fn recur_element_mut<T>(element: &mut crate::Element, func: &mut T)
 where
     T: FnMut(&mut crate::Element),
 {
@@ -126,7 +144,7 @@ where
     if let Some(container) = element.get_container_mut() {
         if let Some(elements) = container.get_elements_mut() {
             for element in elements {
-                recur_element(element, func);
+                recur_element_mut(element, func);
             }
         }
     }
