@@ -22,7 +22,9 @@ impl Graphic {
         let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
         for cell_element in shapes {
             let element = &mut cell_element.borrow_mut();
-            begin_render_element(self, element);
+            recurse_element(element, &mut |element| {
+                begin_render_cached_element(self, element)
+            });
 
             if let Some(graphic_shape) = element.get_graphic_shape() {
                 let shape = graphic_shape.get_shape();
@@ -130,21 +132,20 @@ impl Drop for Graphic {
     }
 }
 
-fn begin_render_element(g: &Graphic, element: &mut crate::Element) {
-    if element.get_cache().is_none() {
-        // draw its children and itself into cache
-        begin_render_cached_element(g, element);
-    }
-    // add rectangle cache primitive to displayRenderer
-
+fn recurse_element<T>(element: &mut crate::Element, func: &mut T)
+where
+    T: FnMut(&mut crate::Element),
+{
     // into next level
     if let Some(container) = element.get_container_mut() {
         if let Some(elements) = container.get_elements_mut() {
             for element in elements {
-                begin_render_element(g, element);
+                recurse_element(element, func);
             }
         }
     }
+    // execute func for current element
+    func(element);
 }
 
 fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
