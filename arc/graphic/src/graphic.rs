@@ -89,25 +89,16 @@ impl Graphic {
     }
     pub fn export_shape_cache(&self) {
         let exe_folder = util::get_exe_path().unwrap();
-        let mut index = 0;
         let elements: &Vec<_> = &self._elements.borrow();
 
         for cell in elements {
             let element = &cell.borrow();
-            recur_element(element, &mut |element| match element.get_cache() {
-                Some(cache) => {
-                    self.renderer.export_texture(
-                        cache.get_texture(),
-                        &format!("{}/cache/{}.png", exe_folder, index),
-                        core::ColorType::Rgba,
-                    );
-                    index += 1;
-                }
-                None => {}
+            recur_element(element, &mut |element| {
+                export_element_cache(self, element, &exe_folder)
             });
         }
 
-        util::print_info!("exporting done, total cache count: {}", index);
+        util::print_info!("exporting done");
     }
 
     pub fn check_gl_error(&self) -> String {
@@ -120,6 +111,7 @@ impl Drop for Graphic {
         util::print_debug!("arc_graphic droped")
     }
 }
+
 fn recur_element<T>(element: &crate::Element, func: &mut T)
 where
     T: FnMut(&crate::Element),
@@ -165,5 +157,22 @@ fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
                 None => {}
             }
         }
+    }
+}
+
+fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &str) {
+    match element.get_cache() {
+        Some(cache) => {
+            g.renderer.export_texture(
+                cache.get_texture(),
+                &format!(
+                    "{}/cache/{}.png",
+                    export_folder,
+                    cache.get_texture().get_id()
+                ),
+                core::ColorType::Rgba,
+            );
+        }
+        None => {}
     }
 }
