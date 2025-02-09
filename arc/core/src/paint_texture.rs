@@ -13,10 +13,7 @@ impl PaintTexture {
     pub fn new(texture: Rc<dyn crate::Texture>, view_port: crate::Rectangle<i32>) -> Self {
         Self {
             _texture: texture,
-            _transform: Matrix2D::new_from_translate(
-                -view_port.get_x() as _,
-                -view_port.get_y() as _,
-            ),
+            _transform: Matrix2D::default(),
             _extent: crate::Extent::new(view_port.get_width(), view_port.get_height()),
         }
     }

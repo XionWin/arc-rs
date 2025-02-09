@@ -1,4 +1,3 @@
-use core::Rect;
 use std::{cell::RefCell, rc::Rc};
 
 use crate::{Container, Element};
@@ -182,28 +181,16 @@ fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
 
 fn get_cache_primitive(cache: &crate::TextureCache) -> vector::Primitive {
     let rectangle: core::Rectangle<i32> = cache.get_rectangle();
-    let rectangle = core::Rectangle::new(
-        rectangle.get_x() / 2,
-        rectangle.get_y() / 2,
-        rectangle.get_width(),
-        rectangle.get_height(),
-    );
-    let rect: Rect<i32> = rectangle.into();
     let vertexes = Box::new([
-        core::Vertex2::new(rect.get_left() as f32, rect.get_top() as f32, 0.5f32, 1f32),
+        core::Vertex2::new(0f32, 0f32, 0.5f32, 1f32),
+        core::Vertex2::new(0f32 as f32, rectangle.get_height() as f32, 0.5f32, 1f32),
         core::Vertex2::new(
-            rect.get_left() as f32,
-            rect.get_bottom() as f32,
+            rectangle.get_width() as f32,
+            rectangle.get_height() as f32,
             0.5f32,
             1f32,
         ),
-        core::Vertex2::new(
-            rect.get_right() as f32,
-            rect.get_bottom() as f32,
-            0.5f32,
-            1f32,
-        ),
-        core::Vertex2::new(rect.get_right() as f32, rect.get_top() as f32, 0.5f32, 1f32),
+        core::Vertex2::new(rectangle.get_width() as f32, 0f32, 0.5f32, 1f32),
     ]);
 
     let style: core::Style = core::Style::new(

@@ -182,10 +182,6 @@ impl FramebufferRenderer {
         );
     }
 
-    pub fn get_rendered_primivitive(&self) -> Vec<vector::Primitive> {
-        Vec::new()
-    }
-
     pub fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: core::ColorType) {
         bind_texture_to_framebuffer(self._fbo, texture);
         let texture_size = texture.get_size();
