@@ -1,12 +1,7 @@
-use core::{
-    Color, ColorBackground, ColorType, Matrix2D, Paint, PaintTexture, Rectangle, Shape, Size,
-    Style, Texture, TextureBackground, TextureFilter, Vertex2,
-};
-use std::{cell::RefCell, rc::Rc};
+use core::{Color, ColorType, Size, Texture, TextureFilter};
+use std::cell::RefCell;
 
-use vector::Primitive;
-
-use crate::{Container, Element};
+use crate::Element;
 
 pub struct Graphic {
     renderer: Box<dyn crate::Renderer>,
@@ -182,45 +177,45 @@ impl Drop for Graphic {
 //     }
 // }
 
-fn get_cache_primitive(cache: &crate::TextureCache) -> Primitive {
-    let rectangle: Rectangle<i32> = cache.get_rectangle();
-    let vertexes = Box::new([
-        Vertex2::new(0f32, 0f32, 0.5f32, 1f32),
-        Vertex2::new(0f32 as f32, rectangle.get_height() as f32, 0.5f32, 1f32),
-        Vertex2::new(
-            rectangle.get_width() as f32,
-            rectangle.get_height() as f32,
-            0.5f32,
-            1f32,
-        ),
-        Vertex2::new(rectangle.get_width() as f32, 0f32, 0.5f32, 1f32),
-    ]);
+// fn get_cache_primitive(cache: &crate::TextureCache) -> Primitive {
+//     let rectangle: Rectangle<i32> = cache.get_rectangle();
+//     let vertexes = Box::new([
+//         Vertex2::new(0f32, 0f32, 0.5f32, 1f32),
+//         Vertex2::new(0f32 as f32, rectangle.get_height() as f32, 0.5f32, 1f32),
+//         Vertex2::new(
+//             rectangle.get_width() as f32,
+//             rectangle.get_height() as f32,
+//             0.5f32,
+//             1f32,
+//         ),
+//         Vertex2::new(rectangle.get_width() as f32, 0f32, 0.5f32, 1f32),
+//     ]);
 
-    let style = Style::new(
-        Box::new(TextureBackground::new(Rc::new(PaintTexture::new(
-            cache.get_texture_rc(),
-            rectangle,
-        )))),
-        ColorBackground::new(Color::MoselleGreen, Color::MoselleGreen),
-        Some(1i32),
-    );
+//     let style = Style::new(
+//         Box::new(TextureBackground::new(Rc::new(PaintTexture::new(
+//             cache.get_texture_rc(),
+//             rectangle,
+//         )))),
+//         ColorBackground::new(Color::MoselleGreen, Color::MoselleGreen),
+//         Some(1i32),
+//     );
 
-    // let style: Style = Style::new(
-    //     Box::new(ColorBackground::new(
-    //         Color::MoselleGreen,
-    //         Color::MidnightBlue,
-    //     )),
-    //     ColorBackground::new(Color::MoselleGreen, Color::MoselleGreen),
-    //     Some(1i32),
-    // );
+//     // let style: Style = Style::new(
+//     //     Box::new(ColorBackground::new(
+//     //         Color::MoselleGreen,
+//     //         Color::MidnightBlue,
+//     //     )),
+//     //     ColorBackground::new(Color::MoselleGreen, Color::MoselleGreen),
+//     //     Some(1i32),
+//     // );
 
-    let state = vector::FillState::new(
-        Into::<Paint>::into(style.get_background()),
-        Matrix2D::default(),
-    );
+//     let state = vector::FillState::new(
+//         Into::<Paint>::into(style.get_background()),
+//         Matrix2D::default(),
+//     );
 
-    Primitive::new(vertexes, Box::new(state), rectangle)
-}
+//     Primitive::new(vertexes, Box::new(state), rectangle)
+// }
 
 // fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &str) {
 //     match element.get_cache() {
