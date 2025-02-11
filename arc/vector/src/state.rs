@@ -1,19 +1,5 @@
+use core::State;
 use std::fmt::Debug;
-
-pub trait State: core::AsAny + Debug {
-    fn get_paint(&self) -> &core::Paint;
-    fn get_transform(&self) -> &core::Matrix2D;
-    fn get_scissor(&self) -> Option<&core::Scissor>;
-}
-
-impl dyn State {
-    pub fn downcast_ref<T>(&self) -> Option<&T>
-    where
-        T: State,
-    {
-        self.as_any().downcast_ref::<T>()
-    }
-}
 
 #[derive(Debug)]
 pub struct StrokeState {

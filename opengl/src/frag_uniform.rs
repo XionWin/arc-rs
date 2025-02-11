@@ -1,4 +1,4 @@
-use vector::State;
+use core::State;
 
 #[repr(u32)]
 pub enum FragUniformType {
@@ -53,8 +53,8 @@ pub const DEFAULT_MONOCHROME_FRAG_UNIFORM: FragUniform = FragUniform {
     _outer_color: core::Color::White,
 };
 
-impl From<&dyn vector::State> for FragUniform {
-    fn from(state: &dyn vector::State) -> Self {
+impl From<&dyn State> for FragUniform {
+    fn from(state: &dyn State) -> Self {
         match state.downcast_ref::<vector::StrokeState>() {
             Some(x) => from_stroke_state(x),
             None => match state.downcast_ref::<vector::FillState>() {

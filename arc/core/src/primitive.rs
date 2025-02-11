@@ -2,16 +2,16 @@ use std::{borrow::Borrow, fmt::Display};
 
 #[derive(Debug)]
 pub struct Primitive {
-    _vertexes: Box<[core::Vertex2]>,
+    _vertexes: Box<[crate::Vertex2]>,
     _state: Box<dyn crate::State>,
-    _rectangle: core::Rectangle<i32>,
+    _rectangle: crate::Rectangle<i32>,
 }
 
 impl Primitive {
     pub fn new(
-        vertexes: Box<[core::Vertex2]>,
+        vertexes: Box<[crate::Vertex2]>,
         state: Box<dyn crate::State>,
-        rectangle: core::Rectangle<i32>,
+        rectangle: crate::Rectangle<i32>,
     ) -> Self {
         Self {
             _vertexes: vertexes,
@@ -20,14 +20,14 @@ impl Primitive {
         }
     }
 
-    pub fn get_vertices(&self) -> &[core::Vertex2] {
+    pub fn get_vertices(&self) -> &[crate::Vertex2] {
         self._vertexes.borrow()
     }
 
     pub fn get_state(&self) -> &dyn crate::State {
         self._state.borrow()
     }
-    pub fn get_rectangle(&self) -> core::Rectangle<i32> {
+    pub fn get_rectangle(&self) -> crate::Rectangle<i32> {
         self._rectangle
     }
 }

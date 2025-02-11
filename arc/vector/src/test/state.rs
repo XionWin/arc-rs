@@ -1,6 +1,7 @@
+use core::State;
 use std::borrow::Borrow;
 
-use crate::{FillState, State, StrokeState};
+use crate::{FillState, StrokeState};
 
 #[test]
 pub fn test() {

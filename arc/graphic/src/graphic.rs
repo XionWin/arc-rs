@@ -179,7 +179,7 @@ fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
 //     }
 // }
 
-fn get_cache_primitive(cache: &crate::TextureCache) -> vector::Primitive {
+fn get_cache_primitive(cache: &crate::TextureCache) -> core::Primitive {
     let rectangle: core::Rectangle<i32> = cache.get_rectangle();
     let vertexes = Box::new([
         core::Vertex2::new(0f32, 0f32, 0.5f32, 1f32),
@@ -215,7 +215,7 @@ fn get_cache_primitive(cache: &crate::TextureCache) -> vector::Primitive {
         core::Matrix2D::default(),
     );
 
-    vector::Primitive::new(vertexes, Box::new(state), rectangle)
+    core::Primitive::new(vertexes, Box::new(state), rectangle)
 }
 
 fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &str) {

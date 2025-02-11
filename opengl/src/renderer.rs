@@ -72,7 +72,7 @@ impl graphic::Renderer for Renderer {
         Box::new(crate::Texture::load(path, texture_filter, is_gen_mipmap))
     }
 
-    fn cache_primitive(&self, primitive: vector::Primitive) -> graphic::TextureCache {
+    fn cache_primitive(&self, primitive: core::Primitive) -> graphic::TextureCache {
         let rect = primitive.get_rectangle();
         let cache = graphic::TextureCache::new(
             rect,
@@ -89,12 +89,12 @@ impl graphic::Renderer for Renderer {
         cache
     }
 
-    fn update_primitive(&self, primitive: vector::Primitive, cache: &graphic::TextureCache) {
+    fn update_primitive(&self, primitive: core::Primitive, cache: &graphic::TextureCache) {
         self._framebuffer_renderer
             .add_primitive(primitive, cache.get_texture_rc());
     }
 
-    fn add_primitive(&self, primitive: vector::Primitive) {
+    fn add_primitive(&self, primitive: core::Primitive) {
         self._graphic_renderer.add_primitive(primitive);
     }
 

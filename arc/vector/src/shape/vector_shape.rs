@@ -1,9 +1,9 @@
-use core::Vertex2;
+use core::{Primitive, Vertex2};
 use std::{cell::RefCell, fmt::Debug, rc::Rc};
 
 use crate::{
     def::{Point, PointFlag},
-    FillState, Primitive, StrokeState,
+    FillState, StrokeState,
 };
 
 pub trait VectorShape: Debug {

@@ -23,9 +23,9 @@ pub trait Renderer: Debug {
         texture_filter: TextureFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn Texture>;
-    fn cache_primitive(&self, primitive: vector::Primitive) -> crate::TextureCache;
-    fn update_primitive(&self, primitive: vector::Primitive, cache: &crate::TextureCache);
-    fn add_primitive(&self, primitive: vector::Primitive);
+    fn cache_primitive(&self, primitive: core::Primitive) -> crate::TextureCache;
+    fn update_primitive(&self, primitive: core::Primitive, cache: &crate::TextureCache);
+    fn add_primitive(&self, primitive: core::Primitive);
     fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: core::ColorType);
     fn check_gl_error(&self) -> String;
 }

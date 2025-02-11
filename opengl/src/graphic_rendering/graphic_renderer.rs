@@ -96,7 +96,7 @@ impl GraphicRenderer {
         renderer_utility::bind_vertex_array(self._vao);
         self.set_rendering_size(size);
     }
-    pub fn add_primitive(&self, primitive: vector::Primitive) {
+    pub fn add_primitive(&self, primitive: core::Primitive) {
         let state = primitive.get_state();
         let texture_id = match state.get_paint().try_get_paint_texture() {
             Some(paint_texture) => Some(paint_texture.get_texture().get_id()),
