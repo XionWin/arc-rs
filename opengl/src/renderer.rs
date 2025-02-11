@@ -1,4 +1,7 @@
-use core::{Texture, TextureFilter};
+use {
+    core::{Color, ColorType, Margin, Size, Texture, TextureFilter},
+    vector::Primitive,
+};
 
 #[derive(Debug)]
 pub struct Renderer {
@@ -20,7 +23,7 @@ impl Renderer {
 }
 
 impl graphic::Renderer for Renderer {
-    fn init(&self, size: core::Size<i32>) {
+    fn init(&self, size: Size<i32>) {
         self._framebuffer_renderer.init(size);
         self._graphic_renderer.init(size);
     }
@@ -34,14 +37,14 @@ impl graphic::Renderer for Renderer {
         self._framebuffer_renderer.render();
         self._graphic_renderer.render();
     }
-    fn get_rendering_size(&self) -> core::Size<i32> {
+    fn get_rendering_size(&self) -> Size<i32> {
         self._graphic_renderer.get_rendering_size()
     }
-    fn set_rendering_size(&self, size: core::Size<i32>) {
+    fn set_rendering_size(&self, size: Size<i32>) {
         self._framebuffer_renderer.set_rendering_size(size);
         self._graphic_renderer.set_rendering_size(size);
     }
-    fn clear_color(&self, color: core::Color) {
+    fn clear_color(&self, color: Color) {
         self._graphic_renderer.clear_color(color);
     }
     fn clear(&self) {
@@ -50,8 +53,8 @@ impl graphic::Renderer for Renderer {
 
     fn create_texture(
         &self,
-        size: core::Size<i32>,
-        color_type: core::ColorType,
+        size: Size<i32>,
+        color_type: ColorType,
         texture_filter: TextureFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn Texture> {
@@ -72,14 +75,14 @@ impl graphic::Renderer for Renderer {
         Box::new(crate::Texture::load(path, texture_filter, is_gen_mipmap))
     }
 
-    fn cache_primitive(&self, primitive: core::Primitive) -> graphic::TextureCache {
+    fn cache_primitive(&self, primitive: Primitive) -> graphic::TextureCache {
         let rect = primitive.get_rectangle();
         let cache = graphic::TextureCache::new(
             rect,
-            core::Margin::default(),
+            Margin::default(),
             self.create_texture(
                 rect.get_size(),
-                core::ColorType::Rgba,
+                ColorType::Rgba,
                 TextureFilter::Nearest,
                 false,
             ),
@@ -89,16 +92,16 @@ impl graphic::Renderer for Renderer {
         cache
     }
 
-    fn update_primitive(&self, primitive: core::Primitive, cache: &graphic::TextureCache) {
+    fn update_primitive(&self, primitive: Primitive, cache: &graphic::TextureCache) {
         self._framebuffer_renderer
             .add_primitive(primitive, cache.get_texture_rc());
     }
 
-    fn add_primitive(&self, primitive: core::Primitive) {
+    fn add_primitive(&self, primitive: Primitive) {
         self._graphic_renderer.add_primitive(primitive);
     }
 
-    fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: core::ColorType) {
+    fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: ColorType) {
         self._framebuffer_renderer
             .export_texture(texture, path, color_type);
     }

@@ -1,5 +1,6 @@
-use core::Texture;
+use core::{Color, ColorType, Rectangle, Rgba, Size, Texture};
 use std::{cell::RefCell, ffi::c_uint, rc::Rc};
+use vector::Primitive;
 
 use crate::{renderer_utility, AttributeLocation, FragUniform, GLRenderer};
 
@@ -7,7 +8,7 @@ use super::FrameData;
 
 #[derive(Debug)]
 pub struct FramebufferRenderer {
-    _color_type: core::ColorType,
+    _color_type: ColorType,
     _vao: c_uint,
     _vbo: c_uint,
     _fbo: c_uint,
@@ -30,7 +31,7 @@ impl FramebufferRenderer {
         let _color_multisample_rbo = crate::gl::gen_render_buffer();
         // let _depth_multisample_rbo = crate::gl::gen_render_buffer();
         Self {
-            _color_type: core::ColorType::Rgba,
+            _color_type: ColorType::Rgba,
             _vao,
             _vbo,
             _fbo,
@@ -57,7 +58,7 @@ impl GLRenderer for FramebufferRenderer {
     fn get_attribute_locations(&self) -> &[crate::AttributeLocation] {
         &self._attribute_locations
     }
-    fn get_color_type(&self) -> core::ColorType {
+    fn get_color_type(&self) -> ColorType {
         self._color_type
     }
     fn begin_render(&self) {
@@ -89,7 +90,7 @@ impl FramebufferRenderer {
         frame_data: &FrameData,
         frag_uniforms: &[FragUniform],
     ) {
-        let mut last_texture_size = Option::<core::Size<i32>>::None;
+        let mut last_texture_size = Option::<Size<i32>>::None;
         for call in frame_data.get_calls() {
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();
@@ -107,7 +108,7 @@ impl FramebufferRenderer {
                 last_texture_size = Some(fb_texture_size);
             }
             bind_multisample_renderbuffer(self._multisample_fbo);
-            self.clear_color(core::Color::Transparent);
+            self.clear_color(Color::Transparent);
             self.clear();
             self.set_rendering_size(fb_texture_size);
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
@@ -138,7 +139,7 @@ impl FramebufferRenderer {
             let fb_texture = call.get_fb_texture();
             let fb_texture_size = fb_texture.get_size();
             bind_texture_to_framebuffer(self._fbo, fb_texture);
-            self.clear_color(core::Color::Transparent);
+            self.clear_color(Color::Transparent);
             self.clear();
             self.set_rendering_size(fb_texture_size);
             let frag_uniform = frag_uniforms.get(call.get_uniform_offset()).unwrap();
@@ -162,12 +163,12 @@ impl FramebufferRenderer {
         }
     }
 
-    pub fn init(&self, size: core::Size<i32>) {
+    pub fn init(&self, size: Size<i32>) {
         self._program.use_program();
         renderer_utility::bind_vertex_array(self._vao);
         self.set_rendering_size(size);
     }
-    pub fn add_primitive(&self, primitive: core::Primitive, texture: Rc<dyn Texture>) {
+    pub fn add_primitive(&self, primitive: Primitive, texture: Rc<dyn Texture>) {
         let state = primitive.get_state();
         let texture_id = match state.get_paint().try_get_paint_texture() {
             Some(paint_texture) => Some(paint_texture.get_texture().get_id()),
@@ -182,7 +183,7 @@ impl FramebufferRenderer {
         );
     }
 
-    pub fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: core::ColorType) {
+    pub fn export_texture(&self, texture: &dyn Texture, path: &str, color_type: ColorType) {
         bind_texture_to_framebuffer(self._fbo, texture);
         let texture_size = texture.get_size();
         let mut buffer = vec![
@@ -190,8 +191,8 @@ impl FramebufferRenderer {
             (texture_size.get_width()
                 * texture_size.get_height()
                 * match color_type {
-                    core::ColorType::Rgba => 4,
-                    core::ColorType::Alpha => 1,
+                    ColorType::Rgba => 4,
+                    ColorType::Alpha => 1,
                 }) as _
         ];
         crate::gl::read_pixels(
@@ -200,8 +201,8 @@ impl FramebufferRenderer {
             texture_size.get_width(),
             texture_size.get_height(),
             match color_type {
-                core::ColorType::Rgba => crate::PixelFormat::Rgba,
-                core::ColorType::Alpha => crate::PixelFormat::Alpha,
+                ColorType::Rgba => crate::PixelFormat::Rgba,
+                ColorType::Alpha => crate::PixelFormat::Alpha,
             },
             crate::PixelType::UnsignedByte,
             &mut buffer,
@@ -210,19 +211,19 @@ impl FramebufferRenderer {
         bind_screen_framebuffer();
     }
 
-    // pub fn get_rendering_size(&self) -> core::Size<i32> {
+    // pub fn get_rendering_size(&self) -> Size<i32> {
     //     self._program.get_rendering_size()
     // }
-    pub fn set_rendering_size(&self, size: core::Size<i32>) {
+    pub fn set_rendering_size(&self, size: Size<i32>) {
         self._program.use_program();
         let (width, height) = size.into();
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
-            .set_uniform_a_viewport(core::Rectangle::new(0, 0, width as _, height as _));
+            .set_uniform_a_viewport(Rectangle::new(0, 0, width as _, height as _));
     }
-    pub fn clear_color(&self, color: core::Color) {
+    pub fn clear_color(&self, color: Color) {
         self._program.use_program();
-        let rgba: core::Rgba = color.into();
+        let rgba: Rgba = color.into();
         let (r, g, b, a) = rgba.into();
         crate::gl::clear_color(r, g, b, a);
     }
@@ -244,7 +245,7 @@ fn bind_multisample_renderbuffer_to_framebuffer(
     fbo: c_uint,
     color_multisample_rbo: c_uint,
     // depth_multisample_rbo: c_uint,
-    size: core::Size<i32>,
+    size: Size<i32>,
 ) {
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::Framebuffer, fbo);
 
@@ -307,7 +308,7 @@ fn bind_texture_to_framebuffer(fbo: c_uint, texture: &dyn Texture) {
     check_framebuffer_status();
 }
 
-fn copy_framebuffer(src_fbo: c_uint, dst_fbo: c_uint, size: core::Size<i32>) {
+fn copy_framebuffer(src_fbo: c_uint, dst_fbo: c_uint, size: Size<i32>) {
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::ReadFramebuffer, src_fbo);
     crate::gl::bind_framebuffer(crate::def::FramebufferTarget::DrawFramebuffer, dst_fbo);
 

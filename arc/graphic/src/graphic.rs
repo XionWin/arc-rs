@@ -1,4 +1,10 @@
+use core::{
+    Color, ColorBackground, ColorType, Matrix2D, Paint, PaintTexture, Rectangle, Shape, Size,
+    Style, Texture, TextureBackground, TextureFilter, Vertex2,
+};
 use std::{cell::RefCell, rc::Rc};
+
+use vector::Primitive;
 
 use crate::{Container, Element};
 
@@ -14,7 +20,7 @@ impl Graphic {
             _elements: RefCell::new(Vec::new()),
         }
     }
-    pub fn init(&self, size: core::Size<i32>) {
+    pub fn init(&self, size: Size<i32>) {
         self.renderer.init(size);
     }
     pub fn begin_render(&self) {
@@ -46,13 +52,13 @@ impl Graphic {
     pub fn render(&self) {
         self.renderer.render();
     }
-    pub fn get_rendering_size(&self) -> core::Size<i32> {
+    pub fn get_rendering_size(&self) -> Size<i32> {
         self.renderer.get_rendering_size()
     }
-    pub fn set_rendering_size(&self, size: core::Size<i32>) {
+    pub fn set_rendering_size(&self, size: Size<i32>) {
         self.renderer.set_rendering_size(size);
     }
-    pub fn clear_color(&self, color: core::Color) {
+    pub fn clear_color(&self, color: Color) {
         self.renderer.clear_color(color);
     }
     pub fn clear(&self) {
@@ -60,11 +66,11 @@ impl Graphic {
     }
     pub fn create_texture(
         &self,
-        size: core::Size<i32>,
-        color_type: core::ColorType,
-        texture_filter: core::TextureFilter,
+        size: Size<i32>,
+        color_type: ColorType,
+        texture_filter: TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Box<dyn core::Texture> {
+    ) -> Box<dyn Texture> {
         let texture =
             self.renderer
                 .create_texture(size, color_type, texture_filter.into(), is_gen_mipmap);
@@ -73,15 +79,15 @@ impl Graphic {
     pub fn load_texture_from_file(
         &self,
         path: &str,
-        texture_filter: core::TextureFilter,
+        texture_filter: TextureFilter,
         is_gen_mipmap: bool,
-    ) -> Box<dyn core::Texture> {
+    ) -> Box<dyn Texture> {
         let texture =
             self.renderer
                 .create_texture_from_file(path, texture_filter.into(), is_gen_mipmap);
         texture
     }
-    pub fn add_shape(&self, shape: Box<dyn core::Shape>) {
+    pub fn add_shape(&self, shape: Box<dyn Shape>) {
         self._elements.borrow_mut().push(RefCell::new(shape.into()));
     }
 
@@ -179,43 +185,44 @@ fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
 //     }
 // }
 
-fn get_cache_primitive(cache: &crate::TextureCache) -> core::Primitive {
-    let rectangle: core::Rectangle<i32> = cache.get_rectangle();
+fn get_cache_primitive(cache: &crate::TextureCache) -> Primitive {
+    let rectangle: Rectangle<i32> = cache.get_rectangle();
     let vertexes = Box::new([
-        core::Vertex2::new(0f32, 0f32, 0.5f32, 1f32),
-        core::Vertex2::new(0f32 as f32, rectangle.get_height() as f32, 0.5f32, 1f32),
-        core::Vertex2::new(
+        Vertex2::new(0f32, 0f32, 0.5f32, 1f32),
+        Vertex2::new(0f32 as f32, rectangle.get_height() as f32, 0.5f32, 1f32),
+        Vertex2::new(
             rectangle.get_width() as f32,
             rectangle.get_height() as f32,
             0.5f32,
             1f32,
         ),
-        core::Vertex2::new(rectangle.get_width() as f32, 0f32, 0.5f32, 1f32),
+        Vertex2::new(rectangle.get_width() as f32, 0f32, 0.5f32, 1f32),
     ]);
 
-    let style: core::Style = core::Style::new(
-        Box::new(core::TextureBackground::new(Rc::new(
-            core::PaintTexture::new(cache.get_texture_rc(), rectangle),
-        ))),
-        core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+    let style = Style::new(
+        Box::new(TextureBackground::new(Rc::new(PaintTexture::new(
+            cache.get_texture_rc(),
+            rectangle,
+        )))),
+        ColorBackground::new(Color::MoselleGreen, Color::MoselleGreen),
         Some(1i32),
     );
 
-    // let style: core::Style = core::Style::new(
-    //     Box::new(core::ColorBackground::new(
-    //         core::Color::MoselleGreen,
-    //         core::Color::MidnightBlue,
+    // let style: Style = Style::new(
+    //     Box::new(ColorBackground::new(
+    //         Color::MoselleGreen,
+    //         Color::MidnightBlue,
     //     )),
-    //     core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+    //     ColorBackground::new(Color::MoselleGreen, Color::MoselleGreen),
     //     Some(1i32),
     // );
 
     let state = vector::FillState::new(
-        Into::<core::Paint>::into(style.get_background()),
-        core::Matrix2D::default(),
+        Into::<Paint>::into(style.get_background()),
+        Matrix2D::default(),
     );
 
-    core::Primitive::new(vertexes, Box::new(state), rectangle)
+    Primitive::new(vertexes, Box::new(state), rectangle)
 }
 
 fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &str) {
@@ -228,7 +235,7 @@ fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &s
                     export_folder,
                     cache.get_texture().get_id()
                 ),
-                core::ColorType::Rgba,
+                ColorType::Rgba,
             );
         }
         None => {}

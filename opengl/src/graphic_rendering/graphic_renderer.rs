@@ -1,12 +1,13 @@
-use std::{cell::RefCell, ffi::c_uint};
-
 use crate::{renderer_utility, AttributeLocation, GLRenderer};
+use core::{Color, ColorType, Offset, Rectangle, Rgba, Size};
+use std::{cell::RefCell, ffi::c_uint};
+use vector::Primitive;
 
 use super::FrameData;
 
 #[derive(Debug)]
 pub struct GraphicRenderer {
-    _color_type: core::ColorType,
+    _color_type: ColorType,
     _vao: c_uint,
     _vbo: c_uint,
     _program: crate::GraphicRenderingProgram,
@@ -21,7 +22,7 @@ impl GraphicRenderer {
         let _vao = crate::gl::gen_vertex_array();
         let _vbo = crate::gl::gen_buffer();
         Self {
-            _color_type: core::ColorType::Rgba,
+            _color_type: ColorType::Rgba,
             _vao,
             _vbo,
             _program,
@@ -44,7 +45,7 @@ impl GLRenderer for GraphicRenderer {
     fn get_attribute_locations(&self) -> &[crate::AttributeLocation] {
         &self._attribute_locations
     }
-    fn get_color_type(&self) -> core::ColorType {
+    fn get_color_type(&self) -> ColorType {
         self._color_type
     }
     fn begin_render(&self) {
@@ -91,12 +92,12 @@ impl GLRenderer for GraphicRenderer {
 }
 
 impl GraphicRenderer {
-    pub fn init(&self, size: core::Size<i32>) {
+    pub fn init(&self, size: Size<i32>) {
         self._program.use_program();
         renderer_utility::bind_vertex_array(self._vao);
         self.set_rendering_size(size);
     }
-    pub fn add_primitive(&self, primitive: core::Primitive) {
+    pub fn add_primitive(&self, primitive: Primitive) {
         let state = primitive.get_state();
         let texture_id = match state.get_paint().try_get_paint_texture() {
             Some(paint_texture) => Some(paint_texture.get_texture().get_id()),
@@ -110,22 +111,22 @@ impl GraphicRenderer {
             texture_id,
         );
     }
-    pub fn get_rendering_size(&self) -> core::Size<i32> {
+    pub fn get_rendering_size(&self) -> Size<i32> {
         self._program.get_rendering_size()
     }
-    pub fn set_rendering_size(&self, size: core::Size<i32>) {
+    pub fn set_rendering_size(&self, size: Size<i32>) {
         self._program.use_program();
         let (width, height) = size.into();
         crate::gl::viewport(0, 0, width as _, height as _);
         self._program
-            .set_uniform_a_viewport(core::Rectangle::new(0, 0, width as _, height as _));
+            .set_uniform_a_viewport(Rectangle::new(0, 0, width as _, height as _));
     }
-    pub fn set_rendering_offset(&self, offset: core::Offset<i32>) {
+    pub fn set_rendering_offset(&self, offset: Offset<i32>) {
         self._program.set_uniform_a_offset(offset);
     }
-    pub fn clear_color(&self, color: core::Color) {
+    pub fn clear_color(&self, color: Color) {
         self._program.use_program();
-        let rgba: core::Rgba = color.into();
+        let rgba: Rgba = color.into();
         let (r, g, b, a) = rgba.into();
         crate::gl::clear_color(r, g, b, a);
     }
