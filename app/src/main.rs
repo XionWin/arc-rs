@@ -1,5 +1,8 @@
-use core::{Style, Texture};
-use std::{cell::RefCell, rc::Rc};
+// use core::{Style, Texture};
+// use std::{cell::RefCell, rc::Rc};
+
+use core::Style;
+use std::cell::RefCell;
 
 const MAX_ZOOM_FACTOR: i32 = 2i32;
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
@@ -40,9 +43,9 @@ fn main() {
 }
 
 fn test(g: &graphic::Graphic) {
-    let rendering_size = g.get_rendering_size();
-    let x = 0i32;
-    let y = 0i32;
+    // let rendering_size = g.get_rendering_size();
+    // let x = 0i32;
+    // let y = 0i32;
 
     // let paths = std::fs::read_dir("resource/image/png/")
     //     .unwrap()
@@ -60,74 +63,74 @@ fn test(g: &graphic::Graphic) {
     //     .collect::<Vec<String>>();
     // println!("{:?}", paths);
 
-    {
-        let tex: Rc<dyn Texture> = g
-            .load_texture_from_file(
-                "resource/image/png/1.png",
-                core::TextureFilter::Nearest,
-                true,
-            )
-            .into();
+    // {
+    //     let tex: Rc<dyn Texture> = g
+    //         .load_texture_from_file(
+    //             "resource/image/png/1.png",
+    //             core::TextureFilter::Nearest,
+    //             true,
+    //         )
+    //         .into();
 
-        let rectangle = graphic::shape::Rectangle::new(
-            x,
-            y,
-            rendering_size.get_width(),
-            rendering_size.get_height(),
-            Style::new(
-                Box::new(core::TextureBackground::new(Rc::new(
-                    core::PaintTexture::new(
-                        tex.clone(),
-                        core::Rectangle::new(
-                            x,
-                            y,
-                            rendering_size.get_width(),
-                            rendering_size.get_height(),
-                        ),
-                    ),
-                ))),
-                core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
-                Some(1i32),
-            ),
-        );
-        g.add_shape(Box::new(rectangle));
-    }
+    //     let rectangle = graphic::shape::Rectangle::new(
+    //         x,
+    //         y,
+    //         rendering_size.get_width(),
+    //         rendering_size.get_height(),
+    //         Style::new(
+    //             Box::new(core::TextureBackground::new(Rc::new(
+    //                 core::PaintTexture::new(
+    //                     tex.clone(),
+    //                     core::Rectangle::new(
+    //                         x,
+    //                         y,
+    //                         rendering_size.get_width(),
+    //                         rendering_size.get_height(),
+    //                     ),
+    //                 ),
+    //             ))),
+    //             core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+    //             Some(1i32),
+    //         ),
+    //     );
+    //     g.add_shape(Box::new(rectangle));
+    // }
 
-    {
-        let tex: Rc<dyn Texture> = g
-            .load_texture_from_file(
-                "resource/image/png/2.png",
-                core::TextureFilter::Linear,
-                true,
-            )
-            .into();
+    // {
+    //     let tex: Rc<dyn Texture> = g
+    //         .load_texture_from_file(
+    //             "resource/image/png/2.png",
+    //             core::TextureFilter::Linear,
+    //             true,
+    //         )
+    //         .into();
 
-        let texture_size = tex
-            .get_size()
-            .scale(ZOOM_FACTOR as f32 / MAX_ZOOM_FACTOR as f32);
-        let rectangle = graphic::shape::Rectangle::new(
-            x,
-            y,
-            texture_size.get_width(),
-            texture_size.get_height(),
-            Style::new(
-                Box::new(core::TextureBackground::new(Rc::new(
-                    core::PaintTexture::new(
-                        tex.clone(),
-                        core::Rectangle::new(
-                            x,
-                            y,
-                            texture_size.get_width(),
-                            texture_size.get_height(),
-                        ),
-                    ),
-                ))),
-                core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
-                Some(1i32),
-            ),
-        );
-        g.add_shape(Box::new(rectangle));
-    }
+    //     let texture_size = tex
+    //         .get_size()
+    //         .scale(ZOOM_FACTOR as f32 / MAX_ZOOM_FACTOR as f32);
+    //     let rectangle = graphic::shape::Rectangle::new(
+    //         x,
+    //         y,
+    //         texture_size.get_width(),
+    //         texture_size.get_height(),
+    //         Style::new(
+    //             Box::new(core::TextureBackground::new(Rc::new(
+    //                 core::PaintTexture::new(
+    //                     tex.clone(),
+    //                     core::Rectangle::new(
+    //                         x,
+    //                         y,
+    //                         texture_size.get_width(),
+    //                         texture_size.get_height(),
+    //                     ),
+    //                 ),
+    //             ))),
+    //             core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
+    //             Some(1i32),
+    //         ),
+    //     );
+    //     g.add_shape(Box::new(rectangle));
+    // }
 
     let colors = [
         core::Color::MidnightBlue,
