@@ -27,26 +27,29 @@ impl Graphic {
         self.renderer.begin_render();
         let shapes: &Vec<RefCell<Element>> = &self._elements.borrow();
         for cell_element in shapes {
-            let element = &mut cell_element.borrow_mut();
+            let element: &mut Element = &mut cell_element.borrow_mut();
 
-            // if let Some(graphic_shape) = element.get_graphic_shape() {
-            //     let shape = graphic_shape.get_shape();
-            //     let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+            match element {
+                Element::GraphicShape(graphic_shape) => {
+                    let shape = graphic_shape.get_shape();
+                    let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
 
-            //     match fill_primitive {
-            //         Some(fill_primitive) => {
-            //             self.renderer.add_primitive(fill_primitive);
-            //         }
-            //         None => {}
-            //     }
-            // }
-
-            recurse_element_mut(element, &mut |element| {
-                begin_render_cached_element(self, element);
-                if let Some(cache) = element.get_cache() {
-                    self.renderer.add_primitive(get_cache_primitive(cache));
+                    match fill_primitive {
+                        Some(fill_primitive) => {
+                            self.renderer.add_primitive(fill_primitive);
+                        }
+                        None => {}
+                    }
                 }
-            });
+                Element::Container(_container) => {}
+            }
+
+            // recurse_element_mut(element, &mut |element| {
+            //     begin_render_cached_element(self, element);
+            //     if let Some(cache) = element.get_cache() {
+            //         self.renderer.add_primitive(get_cache_primitive(cache));
+            //     }
+            // });
         }
     }
     pub fn render(&self) {
@@ -87,25 +90,19 @@ impl Graphic {
                 .create_texture_from_file(path, texture_filter.into(), is_gen_mipmap);
         texture
     }
-    pub fn add_shape(&self, shape: Box<dyn Shape>) {
-        self._elements.borrow_mut().push(RefCell::new(shape.into()));
-    }
-
-    pub fn add_container(&self, container: Container) {
-        self._elements
-            .borrow_mut()
-            .push(RefCell::new(container.into()));
+    pub fn add(&self, item: impl Into<Element>) {
+        self._elements.borrow_mut().push(RefCell::new(item.into()));
     }
     pub fn export_shape_cache(&self) {
-        let exe_folder = util::get_exe_path().unwrap();
-        let elements: &Vec<_> = &self._elements.borrow();
+        // let exe_folder = util::get_exe_path().unwrap();
+        // let elements: &Vec<_> = &self._elements.borrow();
 
-        for cell in elements {
-            let element = &cell.borrow();
-            recurse_element(element, &mut |element| {
-                export_element_cache(self, element, &exe_folder)
-            });
-        }
+        // for cell in elements {
+        //     let element = &cell.borrow();
+        //     recurse_element(element, &mut |element| {
+        //         export_element_cache(self, element, &exe_folder)
+        //     });
+        // }
 
         util::print_info!("exporting done");
     }
@@ -121,53 +118,53 @@ impl Drop for Graphic {
     }
 }
 
-fn recurse_element<T>(element: &crate::Element, func: &mut T)
-where
-    T: FnMut(&crate::Element),
-{
-    // into next level
-    if let Some(container) = element.get_container() {
-        if let Some(elements) = container.get_elements() {
-            for element in elements {
-                recurse_element(element, func);
-            }
-        }
-    }
-    // execute func for current element
-    func(element);
-}
+// fn recurse_element<T>(element: &crate::Element, func: &mut T)
+// where
+//     T: FnMut(&crate::Element),
+// {
+//     // into next level
+//     if let Some(container) = element.get_container() {
+//         if let Some(elements) = container.get_elements() {
+//             for element in elements {
+//                 recurse_element(element, func);
+//             }
+//         }
+//     }
+//     // execute func for current element
+//     func(element);
+// }
 
-fn recurse_element_mut<T>(element: &mut crate::Element, func: &mut T)
-where
-    T: FnMut(&mut crate::Element),
-{
-    // into next level
-    if let Some(container) = element.get_container_mut() {
-        if let Some(elements) = container.get_elements_mut() {
-            for element in elements {
-                recurse_element_mut(element, func);
-            }
-        }
-    }
-    // execute func for current element
-    func(element);
-}
+// fn recurse_element_mut<T>(element: &mut crate::Element, func: &mut T)
+// where
+//     T: FnMut(&mut crate::Element),
+// {
+//     // into next level
+//     if let Some(container) = element.get_container_mut() {
+//         if let Some(elements) = container.get_elements_mut() {
+//             for element in elements {
+//                 recurse_element_mut(element, func);
+//             }
+//         }
+//     }
+//     // execute func for current element
+//     func(element);
+// }
 
-fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
-    if element.get_cache().is_none() {
-        if let Some(graphic_shape) = element.get_graphic_shape_mut() {
-            let shape = graphic_shape.get_shape_mut();
-            let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
-            // let cache = graphic_shape.get_cache();
-            match fill_primitive {
-                Some(fill_primitive) => {
-                    element.set_cache(g.renderer.cache_primitive(fill_primitive));
-                }
-                None => {}
-            }
-        }
-    }
-}
+// fn begin_render_cached_element(g: &Graphic, element: &mut crate::Element) {
+//     if element.get_cache().is_none() {
+//         if let Some(graphic_shape) = element.get_graphic_shape_mut() {
+//             let shape = graphic_shape.get_shape_mut();
+//             let fill_primitive = vector::VectorShape::get_fill_primitive(shape);
+//             // let cache = graphic_shape.get_cache();
+//             match fill_primitive {
+//                 Some(fill_primitive) => {
+//                     element.set_cache(g.renderer.cache_primitive(fill_primitive));
+//                 }
+//                 None => {}
+//             }
+//         }
+//     }
+// }
 
 // fn begin_render_children_element(g: &Graphic, element: &mut crate::Element) {
 //     if element.get_cache().is_none() {
@@ -225,19 +222,19 @@ fn get_cache_primitive(cache: &crate::TextureCache) -> Primitive {
     Primitive::new(vertexes, Box::new(state), rectangle)
 }
 
-fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &str) {
-    match element.get_cache() {
-        Some(cache) => {
-            g.renderer.export_texture(
-                cache.get_texture(),
-                &format!(
-                    "{}/cache/{}.png",
-                    export_folder,
-                    cache.get_texture().get_id()
-                ),
-                ColorType::Rgba,
-            );
-        }
-        None => {}
-    }
-}
+// fn export_element_cache(g: &Graphic, element: &crate::Element, export_folder: &str) {
+//     match element.get_cache() {
+//         Some(cache) => {
+//             g.renderer.export_texture(
+//                 cache.get_texture(),
+//                 &format!(
+//                     "{}/cache/{}.png",
+//                     export_folder,
+//                     cache.get_texture().get_id()
+//                 ),
+//                 ColorType::Rgba,
+//             );
+//         }
+//         None => {}
+//     }
+// }

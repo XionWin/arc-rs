@@ -72,7 +72,7 @@ fn test(g: &graphic::Graphic) {
             )
             .into();
 
-        let rectangle = graphic::shape::Rectangle::new(
+        let shape: Box<dyn core::Shape> = Box::new(graphic::shape::Rectangle::new(
             x,
             y,
             rendering_size.get_width(),
@@ -92,8 +92,8 @@ fn test(g: &graphic::Graphic) {
                 core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),
             ),
-        );
-        g.add_shape(Box::new(rectangle));
+        ));
+        g.add(shape);
     }
 
     {
@@ -108,7 +108,7 @@ fn test(g: &graphic::Graphic) {
         let texture_size = tex
             .get_size()
             .scale(ZOOM_FACTOR as f32 / MAX_ZOOM_FACTOR as f32);
-        let rectangle = graphic::shape::Rectangle::new(
+        let shape: Box<dyn core::Shape> = Box::new(graphic::shape::Rectangle::new(
             x,
             y,
             texture_size.get_width(),
@@ -128,8 +128,8 @@ fn test(g: &graphic::Graphic) {
                 core::ColorBackground::new(core::Color::MoselleGreen, core::Color::MoselleGreen),
                 Some(1i32),
             ),
-        );
-        g.add_shape(Box::new(rectangle));
+        ));
+        g.add(shape);
     }
 
     let colors = [
@@ -149,7 +149,7 @@ fn test(g: &graphic::Graphic) {
         g.get_rendering_size().get_height() - (item_size + gap_size) * ZOOM_FACTOR * y_count;
     for row in 0..y_count {
         for column in 0..x_count {
-            let rectangle = graphic::shape::RoundRectangle::new(
+            let shape: Box<dyn core::Shape> = Box::new(graphic::shape::RoundRectangle::new(
                 start_x + column * (item_size + gap_size) * ZOOM_FACTOR,
                 start_y + row * (item_size + gap_size) * ZOOM_FACTOR,
                 item_size * ZOOM_FACTOR,
@@ -166,8 +166,8 @@ fn test(g: &graphic::Graphic) {
                     ),
                     Some(1i32),
                 ),
-            );
-            g.add_shape(Box::new(rectangle));
+            ));
+            g.add(shape);
         }
     }
 
@@ -175,5 +175,5 @@ fn test(g: &graphic::Graphic) {
     container.add_container(graphic::Container::new(core::Rectangle::new(
         10, 10, 10, 10,
     )));
-    g.add_container(container);
+    g.add(container);
 }

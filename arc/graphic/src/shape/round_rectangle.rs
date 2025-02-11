@@ -1,5 +1,7 @@
 use core::{Command, Point, Rectangle, Shape, Size, Style};
 
+use crate::{Element, GraphicShape};
+
 const KAPPA90: f32 = 0.5522847493f32;
 
 #[derive(Debug)]
