@@ -26,7 +26,6 @@ impl Element {
     pub fn get_container_mut(&mut self) -> Option<&mut Container> {
         self._container.as_mut()
     }
-
     pub fn set_cache(&mut self, cache: TextureCache) {
         self._cache = Some(cache)
     }
