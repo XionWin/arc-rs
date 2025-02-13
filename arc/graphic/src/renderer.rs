@@ -18,7 +18,7 @@ pub trait Renderer: Debug {
         texture_filter: TextureFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn Texture>;
-    fn create_texture_from_file(
+    fn load_texture(
         &self,
         path: &str,
         texture_filter: TextureFilter,

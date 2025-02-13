@@ -8,7 +8,7 @@ const MAX_ZOOM_FACTOR: i32 = 2i32;
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
     1i32
 } else {
-    MAX_ZOOM_FACTOR
+    1i32
 };
 
 fn main() {
@@ -24,7 +24,8 @@ fn main() {
     window.run(
         |window| {
             let g = window.get_graphic();
-            texture.replace(Some(g.load_texture_from_file(
+
+            texture.replace(Some(g.load_texture(
                 "resource/image/icon/icon96.png",
                 core::TextureFilter::Linear,
                 true,
@@ -65,7 +66,7 @@ fn test(g: &graphic::Graphic) {
 
     {
         let tex: Rc<dyn Texture> = g
-            .load_texture_from_file(
+            .load_texture(
                 "resource/image/png/1.png",
                 core::TextureFilter::Nearest,
                 true,
@@ -98,7 +99,7 @@ fn test(g: &graphic::Graphic) {
 
     {
         let tex: Rc<dyn Texture> = g
-            .load_texture_from_file(
+            .load_texture(
                 "resource/image/png/2.png",
                 core::TextureFilter::Linear,
                 true,

@@ -74,15 +74,15 @@ impl Graphic {
                 .create_texture(size, color_type, texture_filter.into(), is_gen_mipmap);
         texture
     }
-    pub fn load_texture_from_file(
+    pub fn load_texture(
         &self,
         path: &str,
         texture_filter: TextureFilter,
         is_gen_mipmap: bool,
     ) -> Box<dyn Texture> {
-        let texture =
-            self.renderer
-                .create_texture_from_file(path, texture_filter.into(), is_gen_mipmap);
+        let texture = self
+            .renderer
+            .load_texture(path, texture_filter.into(), is_gen_mipmap);
         texture
     }
     pub fn add(&self, item: impl Into<Element>) {

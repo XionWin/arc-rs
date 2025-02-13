@@ -66,7 +66,7 @@ impl graphic::Renderer for Renderer {
         ))
     }
 
-    fn create_texture_from_file(
+    fn load_texture(
         &self,
         path: &str,
         texture_filter: TextureFilter,
