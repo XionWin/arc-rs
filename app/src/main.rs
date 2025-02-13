@@ -1,9 +1,6 @@
 use core::{Style, Texture};
 use std::{cell::RefCell, rc::Rc};
 
-// use core::Style;
-// use std::cell::RefCell;
-
 const MAX_ZOOM_FACTOR: i32 = 2i32;
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
     1i32
