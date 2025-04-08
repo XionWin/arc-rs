@@ -5,7 +5,7 @@ const MAX_ZOOM_FACTOR: i32 = 2i32;
 const ZOOM_FACTOR: i32 = if cfg!(target_arch = "aarch64") {
     1i32
 } else {
-    1i32
+    MAX_ZOOM_FACTOR
 };
 
 fn main() {
@@ -14,11 +14,13 @@ fn main() {
         800 * ZOOM_FACTOR,
         480 * ZOOM_FACTOR
     ));
+
     window.set_vsync(true);
 
     let texture: RefCell<Option<Box<dyn core::Texture>>> = RefCell::new(None);
 
-    window.run(
+    platform_sdl2::Window::run(
+        &mut window,
         |window| {
             let g = window.get_graphic();
 
